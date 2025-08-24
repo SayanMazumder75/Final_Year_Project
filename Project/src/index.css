@@ -3,7 +3,7 @@ body{
     margin: 0px;
     padding: 0px;
 }
-.navbar{
+/* .navbar{
     height: 60px;
     background-color: rgba(128, 128, 128, 0.808);
     padding-top: 5px;
@@ -20,4 +20,4 @@ body{
 .navbar nav ul li .nav:hover{
     background-color: #fff;
     color: rgb(210, 99, 99);
-}
+} */

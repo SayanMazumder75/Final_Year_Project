@@ -5,16 +5,18 @@ import { Link, useLocation } from "react-router-dom";
 const Sidebar = () => { 
   const location = useLocation();
   const [open, setOpen] = useState(false); // toggle sidebar on mobile
+  // Position of the side bar will be fixed on the left side of the screen and no scroll bar will be there
+
+
 
   const menuItems = [
-    { name: "Dashboard", path: "/", icon: <Home size={18} /> },
-    { name: "Users", path: "/Users", icon: <UsersRound  size={18} /> },
-    { name: "Sell Vehicles", path: "/Sell_Vehicles", icon: <Car size={18} /> },
-    { name: "Rental Vehicles", path: "/Rental_Vehicles", icon: <Car size={18} /> },
-    { name: "Payments", path: "/Payments", icon: <IndianRupee  size={18} /> },
-    { name: "Reports", path: "/Reports", icon: <MessageSquareWarning  size={18} /> },
-    { name: "Setting", path: "/Setting", icon: <Settings size={18} /> },
-    { name: "Profile", path: "/Profile", icon: <UserPen size={18} /> },
+    { name: "Dashboard", path: "/", icon: <Home size={15} /> },
+    { name: "Users", path: "/Users", icon: <UsersRound  size={15} /> },
+    { name: "Sell Vehicles", path: "/Sell_Vehicles", icon: <Car size={15} /> },
+    { name: "Rental Vehicles", path: "/Rental_Vehicles", icon: <Car size={15} /> },
+    { name: "Payments", path: "/Payments", icon: <IndianRupee  size={15} /> },
+    { name: "Setting", path: "/Setting", icon: <Settings size={15} /> },
+    { name: "Profile", path: "/Profile", icon: <UserPen size={15} /> },
 
   ];
 
@@ -23,6 +25,7 @@ const Sidebar = () => {
       {/* Hamburger for mobile */}
       <button
         className="md:hidden p-3 text-white bg-zinc-800 fixed top-4 left-4 z-50 rounded-lg"
+
         onClick={() => setOpen(!open)}
       >
         <Menu size={18} />
@@ -31,19 +34,19 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full bg-violet-400 p-2 z-40 transform transition-transform duration-500 
+        className={`fixed top-0 left-0 md:h-102 bg-violet-400 p-1 z-40 transform transition-transform duration-500 
         ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:w-40 `}
       >
         {/* Logo */} 
         <h1 className="text-xl font-bold text-black text-center"> Admin</h1>
 
         {/* Menu */}
-        <nav className="space-y-2">
+        <nav className="space-y-0.5 mt-3 flex flex-col">
           {menuItems.map((item, index) => (
             <Link
               key={index}
               to={item.path}
-              className={`flex items-center gap-3 p-3 ${
+              className={`flex items-center gap-2 p-2 ${
                 location.pathname === item.path
                   ? "bg-zinc-700 text-yellow-300"
                   : "hover:bg-zinc-700"
@@ -58,7 +61,7 @@ const Sidebar = () => {
 
         {/* Footer */}
         <div className="mt-auto pt-6 border-t border-zinc-700">
-          <p className="text-sm text-gray-400"> 2025 Sayan</p>
+          <p className="text-sm text-red-700"> Owner</p>
         </div>
       </aside>
 

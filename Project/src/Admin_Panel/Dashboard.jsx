@@ -26,7 +26,7 @@ const DashboardCards = () => {
           <p className="text-3xl font-bold mt-3 drop-shadow-lg relative z-10 group-hover:translate-y-[-6px] transition-transform duration-300">
             {card.value}
           </p>
-                    <div className="absolute top-0 left-[-50%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
+          <div className="absolute top-0 left-[-50%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
 
         </div>
       ))}

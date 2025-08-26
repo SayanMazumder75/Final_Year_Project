@@ -34,8 +34,8 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 md:h-102 bg-violet-400 p-1 z-40 transform transition-transform duration-500 
-        ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:w-40 `}
+        className={`fixed top-0 left-0 md:h-102 bg-violet-400 p-1 z-40  md:text-sm transform transition-transform duration-500 
+        ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:w-30 `}
       >
         {/* Logo */} 
         <h1 className="text-xl font-bold text-black text-center"> Admin</h1>

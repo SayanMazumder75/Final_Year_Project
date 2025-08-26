@@ -11,7 +11,7 @@ const Rental_Vehicles = () =>{
   </div>
 
   {/* Content - scrollable */}
-  <div className="md:flex-1 md:ml-40 md:overflow-y-auto md:h-screen">
+  <div className="md:flex-1 md:ml-30 md:overflow-y-auto md:h-screen">
     <Car_Rental />
   </div>
         </div>

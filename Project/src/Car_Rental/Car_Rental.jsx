@@ -18,7 +18,7 @@ export default function Car_Rental() {
 
       {/* Popular Cars Section */}
       <section className="py-16 px-6 md:px-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">Popular Cars</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center text-white">Popular Cars</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
             { name: "Toyota Corolla", price: "$45/day", img: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=800&q=80" },

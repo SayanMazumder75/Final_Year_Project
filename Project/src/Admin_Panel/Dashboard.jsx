@@ -1,58 +1,147 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Header from "./Header";
 import Sidebar from "./Sidebar";
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  BarChart,
+  Bar,
+  ResponsiveContainer,
+} from "recharts";
 
-const DashboardCards = () => {
-  const cards = [
-    { title: "Cars in Stock", value: "120", gradient: "bg-blue-500" },
-    { title: "Cars Sold (This Month)", value: "45", gradient: "bg-green-500" },
-    { title: "Leads / Enquiries", value: "87", gradient: "bg-yellow-500" },
-    { title: "Revenue", value: "₹2.3 Cr", gradient: "bg-purple-500" },
-  ];
+export default function Dashboard() {
+  const [open, setOpen] = useState(false); // sidebar toggle
+
+  // Dummy Data (replace later with DB data)
+  const [growthData, setGrowthData] = useState([
+    { month: "Jan", growth: 40 },
+    { month: "Feb", growth: 55 },
+    { month: "Mar", growth: 75 },
+    { month: "Apr", growth: 50 },
+    { month: "May", growth: 90 },
+  ]);
+
+  const [salesData, setSalesData] = useState([
+    { month: "Jan", sales: 120 },
+    { month: "Feb", sales: 150 },
+    { month: "Mar", sales: 200 },
+    { month: "Apr", sales: 170 },
+    { month: "May", sales: 220 },
+  ]);
+
+  // Simulate fetching from DB (replace with API call)
+  useEffect(() => {
+    // Example API call in real case
+    // fetch("/api/dashboard").then(res => res.json()).then(data => setGrowthData(data.growth))
+  }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {cards.map((card, idx) => (
-        <div
-          key={idx}
-         className={`group relative p-6 rounded-2xl text-white shadow-2xl overflow-hidden 
-          bg-gradient-to-br ${card.gradient} transform transition-all duration-500 
-          hover:rotate-x-6 hover:rotate-y-6 hover:scale-105 
-          hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]`}        >
-         {/* Glow border effect */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-r from-white/20 to-transparent blur-2xl"></div>
-           <h2 className="text-lg font-semibold relative z-10 group-hover:translate-y-[-4px] transition-transform duration-300">
-            {card.title}
-          </h2>
-          <p className="text-3xl font-bold mt-3 drop-shadow-lg relative z-10 group-hover:translate-y-[-6px] transition-transform duration-300">
-            {card.value}
-          </p>
-          <div className="absolute top-0 left-[-50%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
+    <div className="min-h-screen flex bg-gray-50">
+      {/* Sidebar */}
+      <div className="md:sticky md:top-0 h-screen">
+        <Sidebar open={open} setOpen={setOpen} />
+      </div>
 
+      {/* Overlay (mobile only) */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
+          onClick={() => setOpen(false)}
+        ></div>
+      )}
+
+      {/* Main Area */}
+      <div
+        className={`flex-1 flex flex-col transition-opacity duration-300 ${
+          open
+            ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
+            : "opacity-100"
+        }`}
+      >
+        {/* Header */}
+        {!open && (
+          <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">
+            <Header />
+          </div>
+        )}
+
+        {/* Dashboard Content */}
+        <div className="p-4">
+          <main className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Left Section */}
+            <div className="space-y-6">
+              {/* Car Model */}
+              <div className="bg-white rounded-lg shadow-md p-5">
+                <h2 className="text-xl font-semibold mb-3">Car Model</h2>
+                <div className="h-32 flex items-center justify-center text-gray-400 car-model-box">
+                  Car model data (DB connect here)
+                </div>
+              </div>
+
+              {/* Ordered Cars */}
+              <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
+                <h2 className="text-lg font-semibold">Ordered Cars</h2>
+              </div>
+            </div>
+
+            {/* Right Section */}
+            <div className="space-y-6">
+              {/* Available Cars */}
+              <div className="bg-white rounded-lg shadow-md p-5">
+                <h2 className="text-xl font-semibold mb-3">Available Cars</h2>
+                <div className="h-32 flex items-center justify-center text-gray-400 available-cars-box">
+                  Available cars data (DB connect here)
+                </div>
+              </div>
+            </div>
+          </main>
         </div>
-      ))}
+
+        {/* Company Growth Graph */}
+        <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
+          <h2 className="text-lg font-semibold">Company Growth</h2>
+          <div className="w-full h-64 growth-graph">
+            <ResponsiveContainer>
+              <LineChart data={growthData}>
+                <Line
+                  type="monotone"
+                  dataKey="growth"
+                  stroke="#3b82f6"
+                  strokeWidth={3}
+                />
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Last 5 Months Sales */}
+        <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
+          <h2 className="text-lg font-semibold">Last 5 Months Sales</h2>
+          <div className="w-full h-64 sales-graph">
+            <ResponsiveContainer>
+              <BarChart data={salesData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Bar
+                  dataKey="sales"
+                  fill="#10b981"
+                  radius={[6, 6, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-const Dashboard = () =>{
-  return(
-        
-    <div className="flex relative min-h-screen bg-gradient-to-br from-gray-950 via-slate-900 to-blue-950" >
-    
-      <Sidebar />
-        {/* Main Content */}
-          <div className="flex-1 p-6 relative z-10">
-            <h2 className="text-2xl font-bold mb-6 text-center text-white">
-              Dashboard Overview
-            </h2>
-            <DashboardCards />
-            <div className="h-1 w-full bg-blue-950 rounded-full my-8"></div>
-
-          </div>
-    </div>
-    
-  )
 }
-
-
-export default Dashboard 

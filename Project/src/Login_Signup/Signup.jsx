@@ -47,9 +47,9 @@ export default function Signup() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-blue-950 to-slate-900 p-4 sm:p-6">
-      <div className="flex flex-col md:flex-row w-full max-w-6xl bg-white/10 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+       <div className="flex flex-col md:flex-row w-full max-w-6xl bg-white/10 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden h-screen md:h-[80vh]">
         {/* Left: Sliding Images */}
-        <div className="w-full md:w-1/2 relative h-64 md:h-auto">
+        <div className="  w-full md:w-1/2 relative h-64 md:h-full">
           <img
             src={images[current]}
             alt="slide"
@@ -74,7 +74,7 @@ export default function Signup() {
         </div>
 
         {/* Right: Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-8">
+        <div className="w-full md:w-1/2 p-6 sm:p-8 overflow-y-auto">
           <h2 className="text-2xl sm:text-4xl font-bold text-center text-white mb-2 tracking-tight">
             Create Account
           </h2>

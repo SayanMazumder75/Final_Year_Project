@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './Admin_Panel/Dashboard';
 import Profile from "./Admin_Panel/Profile";
 import Setting from "./Admin_Panel/Setting";
-import Users from './Admin_Panel/users';
+import Users from './Admin_Panel/Users';
 import Sell_Vehicles from './Admin_Panel/Sell_Vehicles';
 import Rental_Vehicles from './Admin_Panel/Rental_Vehicles';
 import Payments from './Admin_Panel/Payments';

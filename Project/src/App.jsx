@@ -8,7 +8,7 @@ import Sell_Vehicles from './Admin_Panel/Sell_Vehicles';
 import Rental_Vehicles from './Admin_Panel/Rental_Vehicles';
 import Payments from './Admin_Panel/Payments';
 import Reports from './Admin_Panel/Reports';
-import Car_Rental from './Car_Rental/Car_Rental';
+import User_Dashboard from './User_Dashboard/User_Dashboard';
 import Signup from './Login_Signup/Signup';
 import Login from './Login_Signup/Login';
 function App() {
@@ -25,7 +25,7 @@ function App() {
             <Route path="/Rental_Vehicles" element={<Rental_Vehicles />} />
             <Route path="/Payments" element={<Payments />} />
             <Route path="/Reports" element={<Reports />} />
-            <Route path="/Car_Rental" element={<Car_Rental />} />
+            <Route path="/User_Dashboard" element={<User_Dashboard />} />
             <Route path="/Signup" element={<Signup />} />
             <Route path="/Login" element={<Login/>}/>
             {/* <Route path="/Profile" element={<Profile />} />

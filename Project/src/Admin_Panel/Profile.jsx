@@ -11,7 +11,7 @@ const Profile = () =>{
                 {/* Content for Sell Vehicles page */}
                 <p>This is the Sell Vehicles page content.</p>
             </div>
-            </container>
+        </container>
     
     )
 }

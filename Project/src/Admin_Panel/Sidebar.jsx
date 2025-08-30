@@ -32,6 +32,14 @@ const Sidebar = () => {
         
       </button>
 
+     {open && (
+  <div
+    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
+    onClick={() => setOpen(false)}
+  ></div>
+)}
+
+
       {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 md:h-102 bg-violet-400 p-1 z-40  md:text-sm transform transition-transform duration-500 

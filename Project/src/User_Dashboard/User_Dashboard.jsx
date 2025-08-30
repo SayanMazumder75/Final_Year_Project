@@ -1,11 +1,16 @@
 import React from "react"; 
+import Header from "../Admin_Panel/Header";
 import { Calendar, MapPin, Car, Clock } from "lucide-react"; 
 import rental from './rental.jpg'; 
 import rental2 from './rental2.jpg'; 
 
-export default function Car_Rental() {
+export default function User_Dashboard() {
   return (
     <div className="w-full sm:w-2/3 md:w-1/2 lg:w-3/3 xl:w-1/3 2xl:w-1/2 mx-auto">
+            <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">
+              <Header />
+            </div>
+
       <section
         className="relative w-full h-64 bg-gray-100 flex items-start justify-center"
         style={{ backgroundImage: `url(${rental})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
@@ -18,7 +23,7 @@ export default function Car_Rental() {
 
       {/* Popular Cars Section */}
       <section className="py-16 px-6 md:px-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">Popular Cars</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center text-white">Popular Cars</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
             { name: "Toyota Corolla", price: "$45/day", img: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=800&q=80" },

@@ -17,8 +17,10 @@ import {
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false); // sidebar toggle
+  const [successMessage, setSuccessMessage] = useState("");
+  const [preview, setPreview] = useState(null);
 
-  // Dummy Data (replace later with DB data)
+  // Dummy Growth Data
   const [growthData, setGrowthData] = useState([
     { month: "Jan", growth: 40 },
     { month: "Feb", growth: 55 },
@@ -27,6 +29,7 @@ export default function Dashboard() {
     { month: "May", growth: 90 },
   ]);
 
+  // Dummy Sales Data
   const [salesData, setSalesData] = useState([
     { month: "Jan", sales: 120 },
     { month: "Feb", sales: 150 },
@@ -42,7 +45,7 @@ export default function Dashboard() {
     { month: "Dec", sales: 420 },
   ]);
 
-  // Available Car
+  // Available Cars
   const [cars, setCars] = useState([
     { id: 1, model: "Tesla Model 3", year: 2023, price: 100000 },
     { id: 2, model: "BMW X5", year: 2022, price: 130000 },
@@ -51,10 +54,30 @@ export default function Dashboard() {
 
   const [newCar, setNewCar] = useState({ model: "", year: "", price: "" });
 
+  // Dummy Orders by Customers
+  const [orders, setOrders] = useState([
+    { id: 1, customer: "John Doe", car: "Tesla Model 3", date: "2025-08-10" },
+    { id: 2, customer: "Alice Smith", car: "BMW X5", date: "2025-08-15" },
+    { id: 3, customer: "Robert Brown", car: "Audi A6", date: "2025-08-25" },
+  ]);
+
+  // Dummy Available Rent Cars
+  const [rentCars, setRentCars] = useState([
+    { id: 1, model: "Toyota Corolla", rentPerDay: 50, availability: "Available" },
+    { id: 2, model: "Honda Civic", rentPerDay: 60, availability: "Rented" },
+    { id: 3, model: "Ford Mustang", rentPerDay: 120, availability: "Available" },
+  ]);
+
   const handleAdd = () => {
-    if (newCar.model && newCar.year && newCar.price) {
+    if (newCar.model && newCar.year && newCar.price && newCar.image) {
       setCars([...cars, { id: Date.now(), ...newCar }]);
-      setNewCar({ model: "", year: "", price: "" });
+      setNewCar({ model: "", year: "", price: "", image: null });
+      setPreview(null);
+      setSuccessMessage("✅ Car added successfully!");
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } else {
+      setSuccessMessage("⚠️ Please fill all fields including image!");
+      setTimeout(() => setSuccessMessage(""), 3000);
     }
   };
 
@@ -79,11 +102,6 @@ export default function Dashboard() {
       )
     );
   };
-
-  useEffect(() => {
-    // Example API call in real case
-    // fetch("/api/dashboard").then(res => res.json()).then(data => setGrowthData(data.growth))
-  }, []);
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -117,7 +135,7 @@ export default function Dashboard() {
 
         {/* Dashboard Content */}
         <main className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Available Car Model - Full width on md screens */}
+          {/* Available Car Models */}
           <div className="md:col-span-2">
             <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
               <h2 className="text-xl font-semibold mb-3">Available Car Models</h2>
@@ -179,6 +197,16 @@ export default function Dashboard() {
                   onChange={(e) => setNewCar({ ...newCar, price: e.target.value })}
                   className="border rounded px-3 py-2 w-full md:w-36"
                 />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setNewCar({ ...newCar, image: file });
+                    if (file) setPreview(URL.createObjectURL(file));
+                  }}
+                  className="border rounded px-3 py-2 w-full md:w-48"
+                />
                 <button
                   onClick={handleAdd}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full md:w-auto"
@@ -186,36 +214,85 @@ export default function Dashboard() {
                   Add
                 </button>
               </div>
+
+              {/* Image Preview */}
+              {preview && (
+                <div className="mt-2">
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    className="h-32 w-auto rounded shadow"
+                  />
+                </div>
+              )}
+
+              {/* Success Message */}
+              {successMessage && (
+                <div className="text-green-600 font-semibold mt-2">
+                  {successMessage}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Orders by Customer Cars */}
-          <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-5">
-              <h2 className="text-xl font-semibold mb-3">Orders by Customer</h2>
-              <div className="h-32 flex items-center justify-center text-gray-400 available-cars-box">
-                Order cars data (DB connect here)
-              </div>
-            </div>
+          {/* Orders by Customer */}
+          <div className="bg-white rounded-lg shadow-md p-5">
+            <h2 className="text-xl font-semibold mb-3">Orders by Customer</h2>
+            <table className="min-w-full border border-gray-200 text-left">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2 border">Customer</th>
+                  <th className="px-4 py-2 border">Car</th>
+                  <th className="px-4 py-2 border">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-2 border">{order.customer}</td>
+                    <td className="px-4 py-2 border">{order.car}</td>
+                    <td className="px-4 py-2 border">{order.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
-          {/* Available Rent Cars details */}
-          <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-5">
-              <h2 className="text-xl font-semibold mb-3">Available Rent Cars Details</h2>
-              <div className="h-32 flex items-center justify-center text-gray-400 available-cars-box">
-                Available Rent Cars Details (DB connect here)
-              </div>
-            </div>
+          {/* Available Rent Cars */}
+          <div className="bg-white rounded-lg shadow-md p-5">
+            <h2 className="text-xl font-semibold mb-3">Available Rent Cars</h2>
+            <table className="min-w-full border border-gray-200 text-left">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2 border">Model</th>
+                  <th className="px-4 py-2 border">Rent/Day ($)</th>
+                  <th className="px-4 py-2 border">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rentCars.map((car) => (
+                  <tr key={car.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-2 border">{car.model}</td>
+                    <td className="px-4 py-2 border">{car.rentPerDay}</td>
+                    <td className="px-4 py-2 border">{car.availability}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
-          {/* Company Growth Graph */}
+          {/* Company Growth */}
           <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
             <h2 className="text-lg font-semibold">Company Growth</h2>
             <div className="w-full h-64 growth-graph">
               <ResponsiveContainer>
                 <LineChart data={growthData}>
-                  <Line type="monotone" dataKey="growth" stroke="#3b82f6" strokeWidth={3} />
+                  <Line
+                    type="monotone"
+                    dataKey="growth"
+                    stroke="#3b82f6"
+                    strokeWidth={3}
+                  />
                   <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                   <XAxis dataKey="month" />
                   <YAxis />
@@ -227,12 +304,13 @@ export default function Dashboard() {
 
           {/* Last 12 Months Sales (Donut Chart) */}
           <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
-            <h2 className="text-xl font-semibold text-gray-700">Last 12 Months Sales</h2>
+            <h2 className="text-xl font-semibold text-gray-700">
+              Last 12 Months Sales
+            </h2>
             <div className="w-full h-80 sales-graph relative">
               <ResponsiveContainer>
                 <PieChart>
                   <defs>
-                    {/* Gradients for each month */}
                     <linearGradient id="colorJan" x1="0" y1="0" x2="1" y2="1">
                       <stop offset="0%" stopColor="#60a5fa" />
                       <stop offset="100%" stopColor="#2563eb" />
@@ -297,7 +375,10 @@ export default function Dashboard() {
                     }
                   >
                     {salesData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={`url(#color${entry.month})`} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={`url(#color${entry.month})`}
+                      />
                     ))}
                   </Pie>
                   <Tooltip

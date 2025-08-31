@@ -20,7 +20,7 @@ const Header = () => {
         <nav className="flex space-x-6 text-gray-700 font-medium">
           <a href="#" className="hover:text-blue-600">Home</a>
           <a href="#" className="hover:text-blue-600">Location</a>
-          <a href="#" className="hover:text-red-500">Log out</a>
+          <a href="/Login" className="hover:text-red-500">Log out</a>
         </nav>
       </header>
     </div>

@@ -7,12 +7,12 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
 
   const rentedVehicles = [
-    { id: 1, name: "Toyota Innova", dailyRate: 50, rentedDays: 12, customer: "John Doe", startDate: "2025-08-01", endDate: "2025-08-12" },
-    { id: 2, name: "Honda City", dailyRate: 40, rentedDays: 15, customer: "Jane Smith", startDate: "2025-08-03", endDate: "2025-08-17" },
-    { id: 3, name: "Maruti Suzuki Swift", dailyRate: 30, rentedDays: 20, customer: "Alice Johnson", startDate: "2025-08-05", endDate: "2025-08-25" },
-    { id: 4, name: "Mahindra Scorpio", dailyRate: 60, rentedDays: 10, customer: "Bob Williams", startDate: "2025-08-07", endDate: "2025-08-17" },
-    { id: 5, name: "Hyundai Creta", dailyRate: 55, rentedDays: 8, customer: "Eve Davis", startDate: "2025-08-10", endDate: "2025-08-18" },
-    { id: 6, name: "Ford EcoSport", dailyRate: 45, rentedDays: 14, customer: "Charlie Brown", startDate: "2025-08-12", endDate: "2025-08-26" },
+    { id: 1, customerId: "CUST-R01", name: "Toyota Innova", dailyRate: 50, rentedDays: 12, customer: "John Doe", startDate: "2025-08-01", endDate: "2025-08-12" },
+    { id: 2, customerId: "CUST-R02", name: "Honda City", dailyRate: 40, rentedDays: 15, customer: "Jane Smith", startDate: "2025-08-03", endDate: "2025-08-17" },
+    { id: 3, customerId: "CUST-R03", name: "Maruti Suzuki Swift", dailyRate: 30, rentedDays: 20, customer: "Alice Johnson", startDate: "2025-08-05", endDate: "2025-08-25" },
+    { id: 4, customerId: "CUST-R04", name: "Mahindra Scorpio", dailyRate: 60, rentedDays: 10, customer: "Bob Williams", startDate: "2025-08-07", endDate: "2025-08-17" },
+    { id: 5, customerId: "CUST-R05", name: "Hyundai Creta", dailyRate: 55, rentedDays: 8, customer: "Eve Davis", startDate: "2025-08-10", endDate: "2025-08-18" },
+    { id: 6, customerId: "CUST-R06", name: "Ford EcoSport", dailyRate: 45, rentedDays: 14, customer: "Charlie Brown", startDate: "2025-08-12", endDate: "2025-08-26" },
   ];
 
   // Calculate revenue
@@ -71,11 +71,12 @@ export default function Dashboard() {
               />
             </div>
 
-            <div className="overflow-x-auto rounded-lg border border-gray-200">
+            <div className="overflow-x-auto rounded-lg border border-gray-200 max-sm:w-90 max-sm:h-60">
               <table className="min-w-full text-gray-700 text-xs sm:text-sm">
                 <thead className="bg-gray-100 text-gray-800 text-left">
                   <tr>
                     <th className="py-2 px-3 sm:py-3 sm:px-4 border-b">Vehicle Name</th>
+                    <th className="py-2 px-3 sm:py-3 sm:px-4 border-b">Customer Id</th>
                     <th className="py-2 px-3 sm:py-3 sm:px-4 border-b">Customer</th>
                     <th className="py-2 px-3 sm:py-3 sm:px-4 border-b">Start Date</th>
                     <th className="py-2 px-3 sm:py-3 sm:px-4 border-b">End Date</th>
@@ -92,12 +93,14 @@ export default function Dashboard() {
                         className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-blue-50 transition`}
                       >
                         <td className="py-2 px-3 sm:py-3 sm:px-4 font-medium text-blue-900">{vehicle.name}</td>
+                        <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.customerId}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.customer}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.startDate}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.endDate}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">${vehicle.dailyRate}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.rentedDays}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4 font-semibold text-green-600">${vehicle.revenue}</td>
+                        
                       </tr>
                     ))
                   ) : (

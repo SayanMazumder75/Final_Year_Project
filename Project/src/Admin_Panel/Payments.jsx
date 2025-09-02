@@ -128,7 +128,7 @@ export default function Payments() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-700">
       <div className="md:sticky md:top-0 h-screen">
         <Sidebar open={open} setOpen={setOpen} />
       </div>

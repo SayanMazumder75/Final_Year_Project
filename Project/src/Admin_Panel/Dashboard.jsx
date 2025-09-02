@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import {
@@ -18,10 +18,9 @@ import {
 export default function Dashboard() {
   const [open, setOpen] = useState(false); // sidebar toggle
   const [successMessage, setSuccessMessage] = useState("");
-  const [preview, setPreview] = useState(null);
 
   // Dummy Growth Data
-  const [growthData, setGrowthData] = useState([
+  const [growthData] = useState([
     { month: "Jan", growth: 40 },
     { month: "Feb", growth: 55 },
     { month: "Mar", growth: 75 },
@@ -30,7 +29,7 @@ export default function Dashboard() {
   ]);
 
   // Dummy Sales Data
-  const [salesData, setSalesData] = useState([
+  const [salesData] = useState([
     { month: "Jan", sales: 120 },
     { month: "Feb", sales: 150 },
     { month: "Mar", sales: 200 },
@@ -46,65 +45,34 @@ export default function Dashboard() {
   ]);
 
   // Available Cars
-  const [cars, setCars] = useState([
+  const [cars] = useState([
     { id: 1, model: "Tesla Model 3", year: 2023, price: 100000 },
     { id: 2, model: "BMW X5", year: 2022, price: 130000 },
     { id: 3, model: "Audi A6", year: 2021, price: 200000 },
   ]);
 
-  const [newCar, setNewCar] = useState({ model: "", year: "", price: "" });
-
   // Dummy Orders by Customers
-  const [orders, setOrders] = useState([
+  const [orders] = useState([
     { id: 1, customer: "John Doe", car: "Tesla Model 3", date: "2025-08-10" },
     { id: 2, customer: "Alice Smith", car: "BMW X5", date: "2025-08-15" },
     { id: 3, customer: "Robert Brown", car: "Audi A6", date: "2025-08-25" },
   ]);
 
   // Dummy Available Rent Cars
-  const [rentCars, setRentCars] = useState([
+  const [rentCars] = useState([
     { id: 1, model: "Toyota Corolla", rentPerDay: 50, availability: "Available" },
     { id: 2, model: "Honda Civic", rentPerDay: 60, availability: "Rented" },
     { id: 3, model: "Ford Mustang", rentPerDay: 120, availability: "Available" },
   ]);
 
+  // Disabled Add Handler
   const handleAdd = () => {
-    if (newCar.model && newCar.year && newCar.price && newCar.image) {
-      setCars([...cars, { id: Date.now(), ...newCar }]);
-      setNewCar({ model: "", year: "", price: "", image: null });
-      setPreview(null);
-      setSuccessMessage("✅ Car added successfully!");
-      setTimeout(() => setSuccessMessage(""), 3000);
-    } else {
-      setSuccessMessage("⚠️ Please fill all fields including image!");
-      setTimeout(() => setSuccessMessage(""), 3000);
-    }
-  };
-
-  const handleDelete = (id) => {
-    setCars(cars.filter((car) => car.id !== id));
-  };
-
-  const handleEdit = (id) => {
-    const editedModel = prompt("Enter new car model:");
-    const editedYear = prompt("Enter new car year:");
-    const editedPrice = prompt("Enter new car price:");
-    setCars(
-      cars.map((car) =>
-        car.id === id
-          ? {
-              ...car,
-              model: editedModel || car.model,
-              year: editedYear || car.year,
-              price: editedPrice || car.price,
-            }
-          : car
-      )
-    );
+    setSuccessMessage("ℹ️ Adding new cars is disabled now");
+    setTimeout(() => setSuccessMessage(""), 3000);
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-700">
       {/* Sidebar */}
       <div className="md:sticky md:top-0 h-screen">
         <Sidebar open={open} setOpen={setOpen} />
@@ -156,16 +124,10 @@ export default function Dashboard() {
                       <td className="px-4 py-2 border">{car.year}</td>
                       <td className="px-4 py-2 border">{car.price}</td>
                       <td className="px-4 py-2 border space-x-2">
-                        <button
-                          onClick={() => handleEdit(car.id)}
-                          className="text-blue-500 hover:underline"
-                        >
+                        <button disabled className="text-gray-400 cursor-not-allowed">
                           Edit
                         </button>
-                        <button
-                          onClick={() => handleDelete(car.id)}
-                          className="text-red-500 hover:underline"
-                        >
+                        <button disabled className="text-gray-400 cursor-not-allowed">
                           Delete
                         </button>
                       </td>
@@ -174,61 +136,27 @@ export default function Dashboard() {
                 </tbody>
               </table>
 
-              {/* Add New Car */}
-              <div className="mt-4 flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0">
-                <input
-                  type="text"
-                  placeholder="Car Model"
-                  value={newCar.model}
-                  onChange={(e) => setNewCar({ ...newCar, model: e.target.value })}
-                  className="border rounded px-3 py-2 flex-1 w-full"
-                />
-                <input
-                  type="number"
-                  placeholder="Year"
-                  value={newCar.year}
-                  onChange={(e) => setNewCar({ ...newCar, year: e.target.value })}
-                  className="border rounded px-3 py-2 w-full md:w-28"
-                />
-                <input
-                  type="number"
-                  placeholder="Price"
-                  value={newCar.price}
-                  onChange={(e) => setNewCar({ ...newCar, price: e.target.value })}
-                  className="border rounded px-3 py-2 w-full md:w-36"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    setNewCar({ ...newCar, image: file });
-                    if (file) setPreview(URL.createObjectURL(file));
-                  }}
-                  className="border rounded px-3 py-2 w-full md:w-48"
-                />
+              {/* Disabled Add New Car Form */}
+              <div className="mt-4 flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0 opacity-50 pointer-events-none">
+                <input type="text" placeholder="Car Model" className="border rounded px-3 py-2 flex-1 w-full" disabled />
+                <input type="number" placeholder="Year" className="border rounded px-3 py-2 w-full md:w-28" disabled />
+                <input type="number" placeholder="Price" className="border rounded px-3 py-2 w-full md:w-36" disabled />
+                <input type="file" accept="image/*" className="border rounded px-3 py-2 w-full md:w-48" disabled />
+              </div>
+
+              {/* Disabled Add Button (Still clickable for message) */}
+              <div className="mt-4">
                 <button
                   onClick={handleAdd}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full md:w-auto"
+                  className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
                 >
-                  Add
+                  Add (Disabled)
                 </button>
               </div>
 
-              {/* Image Preview */}
-              {preview && (
-                <div className="mt-2">
-                  <img
-                    src={preview}
-                    alt="Preview"
-                    className="h-32 w-auto rounded shadow"
-                  />
-                </div>
-              )}
-
-              {/* Success Message */}
+              {/* Message */}
               {successMessage && (
-                <div className="text-green-600 font-semibold mt-2">
+                <div className="text-blue-600 font-semibold mt-2">
                   {successMessage}
                 </div>
               )}
@@ -304,9 +232,8 @@ export default function Dashboard() {
 
           {/* Last 12 Months Sales (Donut Chart) */}
           <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
-            <h2 className="text-xl font-semibold text-gray-700">
-              Last 12 Months Sales
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-700">Last 12 Months Sales</h2>
+
             <div className="w-full h-80 sales-graph relative">
               <ResponsiveContainer>
                 <PieChart>
@@ -375,12 +302,10 @@ export default function Dashboard() {
                     }
                   >
                     {salesData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={`url(#color${entry.month})`}
-                      />
+                      <Cell key={`cell-${index}`} fill={`url(#color${entry.month})`} />
                     ))}
                   </Pie>
+
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "white",
@@ -401,6 +326,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+
         </main>
       </div>
     </div>

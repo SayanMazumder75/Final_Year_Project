@@ -31,7 +31,7 @@ export default function Dashboard() {
   const totalRentedDays = vehiclesWithRevenue.reduce((sum, v) => sum + v.rentedDays, 0);
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-700">
       <div className="md:sticky md:top-0 h-screen">
         <Sidebar open={open} setOpen={setOpen} />
       </div>

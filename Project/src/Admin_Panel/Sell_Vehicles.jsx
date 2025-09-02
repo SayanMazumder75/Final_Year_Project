@@ -137,7 +137,7 @@ export default function Dashboard() {
 
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-700">
       {/* Sidebar */}
       <div className="md:sticky md:top-0 h-screen">
         <Sidebar open={open} setOpen={setOpen} />

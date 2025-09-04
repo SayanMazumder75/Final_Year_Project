@@ -141,7 +141,9 @@ export default function Payments() {
       )}
 
       <div className={`flex-1 flex flex-col transition-opacity duration-300 ${open ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto" : "opacity-100"}`}>
-        {!open && <Header />}
+       <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">
+            <Header />
+          </div>
 
         <div className="flex-1 px-3 sm:px-6 pt-4 sm:pt-6 pb-6 sm:pb-8 overflow-y-auto space-y-8">
           {/* Rented Vehicles */}
@@ -181,9 +183,9 @@ export default function Payments() {
                       <td className="py-2 px-3">{highlightText(v.customer, searchRent)}</td>
                       <td className="py-2 px-3">{v.startDate}</td>
                       <td className="py-2 px-3">{v.endDate}</td>
-                      <td className="py-2 px-3">${v.dailyRate}</td>
+                      <td className="py-2 px-3">₹{v.dailyRate}</td>
                       <td className="py-2 px-3">{v.rentedDays}</td>
-                      <td className="py-2 px-3 font-semibold text-green-600">${v.revenue}</td>
+                      <td className="py-2 px-3 font-semibold text-green-600">₹{v.revenue}</td>
                       <td className={`py-2 px-3 font-semibold ${v.paymentStatus === "Paid" ? "text-green-600" : "text-red-500"}`}>{v.paymentStatus}</td>
                       <td className="py-2 px-2">
                         <button
@@ -207,15 +209,15 @@ export default function Payments() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-4">
               <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5">
                 <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total Revenue</h3>
-                <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">${totalRentedRevenue}</p>
+                <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">₹{totalRentedRevenue}</p>
               </div>
               <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5">
                 <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total Paid</h3>
-                <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">${totalRentedPaid}</p>
+                <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">₹{totalRentedPaid}</p>
               </div>
               <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5">
                 <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total Unpaid</h3>
-                <p className="text-xl sm:text-2xl font-bold text-red-600 mt-1">${totalRentedUnpaid}</p>
+                <p className="text-xl sm:text-2xl font-bold text-red-600 mt-1">₹{totalRentedUnpaid}</p>
               </div>
             </div>
           </div>
@@ -253,7 +255,7 @@ export default function Payments() {
                       <td className="py-2 px-3">{highlightText(v.customerId, searchSell)}</td>
                       <td className="py-2 px-3">{highlightText(v.customer, searchSell)}</td>
                       <td className="py-2 px-3">{v.soldDate}</td>
-                      <td className="py-2 px-3 font-semibold text-green-600">${v.price}</td>
+                      <td className="py-2 px-3 font-semibold text-green-600">₹{v.price}</td>
                       <td className={`py-2 px-3 font-semibold ${v.paymentStatus === "Paid" ? "text-green-600" : "text-red-500"}`}>{v.paymentStatus}</td>
                       <td className="py-2 px-3">
                         <button
@@ -277,15 +279,15 @@ export default function Payments() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-4">
               <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5">
                 <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total Sold Amount</h3>
-                <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">${totalSoldRevenue}</p>
+                <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">₹{totalSoldRevenue}</p>
               </div>
               <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5">
                 <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total Paid</h3>
-                <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">${totalSoldPaid}</p>
+                <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1">₹{totalSoldPaid}</p>
               </div>
               <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5">
                 <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total Unpaid</h3>
-                <p className="text-xl sm:text-2xl font-bold text-red-600 mt-1">${totalSoldUnpaid}</p>
+                <p className="text-xl sm:text-2xl font-bold text-red-600 mt-1">₹{totalSoldUnpaid}</p>
               </div>
             </div>
           </div>

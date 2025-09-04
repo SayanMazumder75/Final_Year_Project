@@ -16,10 +16,10 @@ export default function Dashboard() {
       customerName: "Soumyadip",
       date: "2024-08-20",
       name: "Auto Rickshaw",
-      revenue: "$15,000",
-      originalPrice: "$45,000",
-      salePrice: "$60,000",
-      totalRevenue: "$75,000",
+      revenue: "₹15,000",
+      originalPrice: "₹45,000",
+      salePrice: "₹60,000",
+      totalRevenue: "₹75,000",
     },
     {
       id: 2,
@@ -27,10 +27,10 @@ export default function Dashboard() {
       customerName: "Sidhu",
       date: "2024-08-20",
       name: "TOTO",
-      revenue: "$10,500",
-      originalPrice: "$55,000",
-      salePrice: "$65,500",
-      totalRevenue: "$76,000",
+      revenue: "₹10,500",
+      originalPrice: "₹55,000",
+      salePrice: "₹65,500",
+      totalRevenue: "₹76,000",
     },
     {
       id: 3,
@@ -38,10 +38,10 @@ export default function Dashboard() {
       customerName: "Anushka",
       date: "2024-08-20",
       name: "maruti 800",
-      revenue: "$9,200",
-      originalPrice: "$50,000",
-      salePrice: "$59,200",
-      totalRevenue: "$68,400",
+      revenue: "₹9,200",
+      originalPrice: "₹50,000",
+      salePrice: "₹59,200",
+      totalRevenue: "₹68,400",
     },
     {
       id: 4,
@@ -49,10 +49,10 @@ export default function Dashboard() {
       customerName: "Nafiya",
       date: "2024-08-20",
       name: "Tata Nano",
-      revenue: "$9000",
-      originalPrice: "$20000",
-      salePrice: "$29,000",
-      totalRevenue: "$38,000",
+      revenue: "₹9000",
+      originalPrice: "₹20000",
+      salePrice: "₹29,000",
+      totalRevenue: "₹38,000",
     },
     {
       id: 5,
@@ -60,10 +60,10 @@ export default function Dashboard() {
       customerName: "Sayan",
       date: "2024-08-20",
       name: "Mercedes C-Class",
-      revenue: "$10,000",
-      originalPrice: "$47,000",
-      salePrice: "$58,000",
-      totalRevenue: "$68,000",
+      revenue: "₹10,000",
+      originalPrice: "₹47,000",
+      salePrice: "₹58,000",
+      totalRevenue: "₹68,000",
     },
   ];
 
@@ -78,7 +78,7 @@ export default function Dashboard() {
   // Highlight search text inside a string
   const highlightText = (text) => {
     if (!search) return text;
-    const regex = new RegExp(`(${search})`, "gi");
+    const regex = new RegExp(`(₹{search})`, "gi");
     return text.split(regex).map((part, index) =>
       part.toLowerCase() === search.toLowerCase() ? (
         <span key={index} className="bg-yellow-300 px-1 rounded">
@@ -132,7 +132,7 @@ export default function Dashboard() {
   });
 
   // Save PDF
-  doc.save(`${car.customerName}_Car_Report.pdf`);
+  doc.save(`₹{car.customerName}_Car_Report.pdf`);
 };
 
 
@@ -153,7 +153,7 @@ export default function Dashboard() {
 
       {/* Main Area */}
       <div
-        className={`flex-1 flex flex-col transition-opacity duration-300 ${
+        className={`flex-1 flex flex-col transition-opacity duration-300 ₹{
           open
             ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
             : "opacity-100"
@@ -220,7 +220,7 @@ export default function Dashboard() {
                     filteredCars.map((car, index) => (
                       <tr
                         key={car.id}
-                        className={`${
+                        className={`₹{
                           index % 2 === 0 ? "bg-white" : "bg-gray-50"
                         } hover:bg-blue-50 transition`}
                       >
@@ -288,7 +288,7 @@ export default function Dashboard() {
                 Total Revenue
               </h3>
               <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1 sm:mt-2">
-                $2.5M
+                ₹2.5M
               </p>
             </div>
             <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5 hover:shadow-lg transition">

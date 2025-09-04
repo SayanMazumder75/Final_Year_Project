@@ -44,7 +44,7 @@ export default function Dashboard() {
       )}
 
       <div
-        className={`flex-1 flex flex-col transition-opacity duration-300 ${
+        className={`flex-1 flex flex-col transition-opacity duration-300 ₹{
           open
             ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
             : "opacity-100"
@@ -90,16 +90,16 @@ export default function Dashboard() {
                     filteredVehicles.map((vehicle, index) => (
                       <tr
                         key={vehicle.id}
-                        className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-blue-50 transition`}
+                        className={`₹{index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-blue-50 transition`}
                       >
                         <td className="py-2 px-3 sm:py-3 sm:px-4 font-medium text-blue-900">{vehicle.name}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.customerId}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.customer}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.startDate}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.endDate}</td>
-                        <td className="py-2 px-3 sm:py-3 sm:px-4">${vehicle.dailyRate}</td>
+                        <td className="py-2 px-3 sm:py-3 sm:px-4">₹{vehicle.dailyRate}</td>
                         <td className="py-2 px-3 sm:py-3 sm:px-4">{vehicle.rentedDays}</td>
-                        <td className="py-2 px-3 sm:py-3 sm:px-4 font-semibold text-green-600">${vehicle.revenue}</td>
+                        <td className="py-2 px-3 sm:py-3 sm:px-4 font-semibold text-green-600">₹{vehicle.revenue}</td>
                         
                       </tr>
                     ))
@@ -122,7 +122,7 @@ export default function Dashboard() {
             </div>
             <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5 hover:shadow-lg transition">
               <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total Revenue</h3>
-              <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1 sm:mt-2">${totalRevenue}</p>
+              <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1 sm:mt-2">₹{totalRevenue}</p>
             </div>
             <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5 hover:shadow-lg transition">
               <h3 className="text-xs sm:text-sm font-medium text-gray-500">Total Rented Days</h3>

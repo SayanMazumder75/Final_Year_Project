@@ -1,113 +1,247 @@
 import React, { useState, useEffect } from "react";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  BarChart,
-  Bar,
-  ResponsiveContainer,
-} from "recharts";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
 
-export default function Dashboard() {
-  // Dummy Data (replace later with DB data)
-  const [growthData, setGrowthData] = useState([
-    { month: "Jan", growth: 40 },
-    { month: "Feb", growth: 55 },
-    { month: "Mar", growth: 75 },
-    { month: "Apr", growth: 50 },
-    { month: "May", growth: 90 },
-  ]);
+export default function Users() {
+  const [open, setOpen] = useState(false); // sidebar toggle
+  const [search, setSearch] = useState("");
+  const [filterType, setFilterType] = useState("All"); // dropdown filter
+  const [showPopup, setShowPopup] = useState(false); // popup state
 
-  const [salesData, setSalesData] = useState([
-    { month: "Jan", sales: 120 },
-    { month: "Feb", sales: 150 },
-    { month: "Mar", sales: 200 },
-    { month: "Apr", sales: 170 },
-    { month: "May", sales: 220 },
-  ]);
-
-  // Simulate fetching from DB (replace with API call)
+  // Auto-hide popup after 3s
   useEffect(() => {
-    // Example API call in real case
-    // fetch("/api/dashboard").then(res => res.json()).then(data => setGrowthData(data.growth))
-  }, []);
+    if (showPopup) {
+      const timer = setTimeout(() => setShowPopup(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showPopup]);
+
+  // Dummy user data (replace with DB later)
+  const [users] = useState([
+    {
+      id: "U001",
+      name: "Rahul Sharma",
+      email: "rahul@example.com",
+      phone: "9876543210",
+      address: "Delhi, India",
+      joined: "2024-01-12",
+      type: "Bought",
+    },
+    {
+      id: "U002",
+      name: "Priya Verma",
+      email: "priya@example.com",
+      phone: "9123456780",
+      address: "Mumbai, India",
+      joined: "2024-02-20",
+      type: "Rented",
+    },
+    {
+      id: "U003",
+      name: "Amit Singh",
+      email: "amit@example.com",
+      phone: "9988776655",
+      address: "Bangalore, India",
+      joined: "2024-03-15",
+      type: "Bought",
+    },
+    {
+      id: "U004",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Rented",
+    },
+    {
+      id: "U005",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Rented",
+    },
+    {
+      id: "U006",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Rented",
+    },
+    {
+      id: "U007",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Rented",
+    },
+    {
+      id: "U008",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Bought",
+    },
+    {
+      id: "U009",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Rented",
+    },
+    {
+      id: "U010",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Bought",
+    },
+    {
+      id: "U011",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Rented",
+    },
+    {
+      id: "U012",
+      name: "Sneha Kapoor",
+      email: "sneha@example.com",
+      phone: "9765432100",
+      address: "Pune, India",
+      joined: "2024-04-05",
+      type: "Rented",
+    },
+  ]);
+
+  // Search + Filter logic
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
+      user.id.toLowerCase().includes(search.toLowerCase()) ||
+      user.email.toLowerCase().includes(search.toLowerCase()) ||
+      user.name.toLowerCase().includes(search.toLowerCase());
+
+    const matchesType =
+      filterType === "All" ? true : user.type === filterType;
+
+    return matchesSearch && matchesType;
+  });
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      {/* Header */}
-      <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-        <div className="text-lg font-bold">same</div>
-        <nav className="flex space-x-6 text-gray-700 font-medium">
-          <a href="#" className="hover:text-blue-600">Home</a>
-          <a href="#" className="hover:text-blue-600">Location</a>
-          <a href="#" className="hover:text-red-500">Log out</a>
-        </nav>
-      </header>
+    <div className="md:flex">
+      {/* Sidebar */}
+      <Sidebar />
 
       {/* Main Content */}
-      <main className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        {/* Left Section */}
-        <div className="space-y-6">
-          {/* Car Model */}
-          <div className="bg-white rounded-lg shadow-md p-5">
-            <h2 className="text-xl font-semibold mb-3">Car Model</h2>
-            <div className="h-32 flex items-center justify-center text-gray-400 car-model-box">
-              Car model data (DB connect here)
-            </div>
-          </div>
-          
-        </div>
+      <div className="flex-1 min-h-screen bg-gray-100">
+        <Header setOpen={setOpen} />
 
-        {/* Right Section */}
-        <div className="space-y-6">
-          {/* Available Cars */}
-          <div className="bg-white rounded-lg shadow-md p-5">
-            <h2 className="text-xl font-semibold mb-3">Available Cars</h2>
-            <div className="h-32 flex items-center justify-center text-gray-400 available-cars-box">
-              Available cars data (DB connect here)
-            </div>
+        <div className="p-6 max-h-[500px]">
+          <h1 className="text-2xl font-semibold mb-4">Users</h1>
+
+          {/* Search & Filter Bar */}
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <input
+              type="text"
+              placeholder="Search by User ID, Email, or Name..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-1 p-2 border rounded-lg shadow-sm focus:ring focus:ring-violet-400"
+            />
+
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="p-2 border rounded-lg shadow-sm focus:ring focus:ring-violet-400"
+            >
+              <option value="All">All</option>
+              <option value="Bought">Bought</option>
+              <option value="Rented">Rented</option>
+            </select>
           </div>
 
-          {/* Ordered Cars + Graphs */}
-          <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
-            <h2 className="text-lg font-semibold">Ordered Cars</h2>
-          </div>
-            {/* Company Growth Graph */}
-            <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
-                <h2 className="text-lg font-semibold">Company Growth</h2>
-                <div className="w-full h-64 growth-graph">
-                <ResponsiveContainer>
-                    <LineChart data={growthData}>
-                    <Line type="monotone" dataKey="growth" stroke="#3b82f6" strokeWidth={3} />
-                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    </LineChart>
-                </ResponsiveContainer>
-                </div>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
-                <h2 className="text-lg font-semibold">Company Growth</h2>
-                {/* Last 5 Months Total Sales */}
-                <div className="w-full h-64 sales-graph">
-                <ResponsiveContainer>
-                    <BarChart data={salesData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="sales" fill="#10b981" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                </ResponsiveContainer>
-                </div>
+          {/* Users Table */}
+          <div className="bg-white shadow-lg rounded-2xl overflow-x-auto overflow-y-auto max-h-[500px] max-sm:max-h-[640px]">
+            <table className="w-full border-collapse">
+              <thead className="sticky top-0">
+                <tr className="bg-violet-400 text-left text-sm text-black">
+                  <th className="p-3">User ID</th>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Email</th>
+                  <th className="p-3">Phone</th>
+                  <th className="p-3">Address</th>
+                  <th className="p-3">Joined</th>
+                  <th className="p-3">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((user) => (
+                    <tr
+                      key={user.id}
+                      className="border-b text-sm hover:bg-gray-100"
+                    >
+                      <td className="p-3">{user.id}</td>
+                      <td className="p-3">{user.name}</td>
+                      <td className="p-3">{user.email}</td>
+                      <td className="p-3">{user.phone}</td>
+                      <td className="p-3">{user.address}</td>
+                      <td className="p-3">{user.joined}</td>
+                      <td className="p-3">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            user.type === "Bought"
+                              ? "bg-blue-100 text-blue-600"
+                              : "bg-green-100 text-green-600"
+                          }`}
+                        >
+                          {user.type}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  (() => {
+                    if (!showPopup) {
+                      setShowPopup(true);
+                      setSearch(""); // 🔹 clear search box when no users found
+                    }
+                    return null;
+                  })()
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
-      </main>
+      </div>
+
+      {/* Popup Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center animate-fade-in">
+            <h2 className="text-lg font-semibold mb-2 text-red-600">
+              No Users Found
+            </h2>
+            <p className="text-gray-600">
+              No users match your search or filter.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

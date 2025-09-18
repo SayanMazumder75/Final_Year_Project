@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import Homepage from '../Homepage/Homepage';
+import CarBookingForm from "./User_Dashboard/CarBookingForm";
+import Homepage from './Homepage/Homepage';
 import Dashboard from "./Admin_Panel/Dashboard";
 import Profile from "./Admin_Panel/Profile";
 import Setting from "./Admin_Panel/Setting";
@@ -13,6 +13,7 @@ import User_Dashboard from "./User_Dashboard/User_Dashboard";
 import Signup from "./Login_Signup/Signup";
 import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
+
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -36,7 +37,8 @@ function App() {
         <Routes>
           {/* Homepage route */}
           <Route path="/" element={<Homepage />} />
-          
+          <Route path="/booking" element={<CarBookingForm />} />
+
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/Users" element={<Users />} />
           <Route path="/Setting" element={<Setting />} />

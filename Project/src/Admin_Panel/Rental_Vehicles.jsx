@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import Footer from "../Homepage/Footer";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
@@ -130,6 +131,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );

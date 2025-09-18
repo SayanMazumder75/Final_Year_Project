@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "./Header";
+import Footer from "../Homepage/Footer";
 import Sidebar from "./Sidebar";
 
 export default function Profile() {
@@ -88,6 +89,7 @@ export default function Profile() {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );

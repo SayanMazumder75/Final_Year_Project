@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import Footer from "../Homepage/Footer";
 import {
   LineChart,
   Line,
@@ -231,7 +232,7 @@ export default function Dashboard() {
           </div>
 
           {/* Last 12 Months Sales (Donut Chart) */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
+          <section className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
             <h2 className="text-xl font-semibold text-gray-700">Last 12 Months Sales</h2>
 
             <div className="w-full h-80 sales-graph relative">
@@ -325,10 +326,12 @@ export default function Dashboard() {
                 </span>
               </div>
             </div>
-          </div>
-
+          </section>
         </main>
+        <Footer />
       </div>
+    
     </div>
+    
   );
 }

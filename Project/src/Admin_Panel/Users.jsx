@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import Footer from "../Homepage/Footer";
 
 export default function Users() {
   const [open, setOpen] = useState(false); // sidebar toggle
@@ -226,6 +227,7 @@ export default function Users() {
               </tbody>
             </table>
           </div>
+          <Footer />
         </div>
       </div>
 

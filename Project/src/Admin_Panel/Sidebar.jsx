@@ -10,7 +10,7 @@ const Sidebar = () => {
 
 
   const menuItems = [
-    { name: "Dashboard", path: "/", icon: <Home size={15} /> },
+    { name: "Dashboard", path: "/admin/dashboard", icon: <Home size={15} /> },
     { name: "Users", path: "/Users", icon: <UsersRound  size={15} /> },
     { name: "Sell Vehicles", path: "/Sell_Vehicles", icon: <Car size={15} /> },
     { name: "Rental Vehicles", path: "/Rental_Vehicles", icon: <Car size={15} /> },

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import Footer from "../Homepage/Footer";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from "../images/logo.png"; // make sure to adjust your logo path
@@ -292,6 +293,7 @@ export default function Payments() {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import Homepage from '../Homepage/Homepage';
 import Dashboard from "./Admin_Panel/Dashboard";
 import Profile from "./Admin_Panel/Profile";
 import Setting from "./Admin_Panel/Setting";
@@ -33,7 +34,10 @@ function App() {
       {/* Show routes only after preloader is done */}
       {!loading && (
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          {/* Homepage route */}
+          <Route path="/" element={<Homepage />} />
+          
+          <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/Users" element={<Users />} />
           <Route path="/Setting" element={<Setting />} />
           <Route path="/Profile" element={<Profile />} />
@@ -50,3 +54,5 @@ function App() {
 }
 
 export default App;
+
+

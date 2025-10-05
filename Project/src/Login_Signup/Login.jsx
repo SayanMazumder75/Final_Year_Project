@@ -106,6 +106,12 @@ export default function Login() {
             Signup here
           </a>
         </p>
+        <p className="text-sm text-gray-400 text-center mt-5">
+          Admin?{" "}
+          <a href="/AdminLogin" className="text-blue-400 hover:underline">
+            Click here
+          </a>
+        </p>
       </div>
     </div>
   );

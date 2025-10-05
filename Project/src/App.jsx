@@ -14,7 +14,8 @@ import User_Dashboard from "./User_Dashboard/User_Dashboard";
 import Signup from "./Login_Signup/Signup";
 import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
-
+import AdminSignup from "./Login_Signup/AdminSignup";
+import AdminLogin from "./Login_Signup/AdminLogin";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -51,6 +52,8 @@ function App() {
           <Route path="/User_Dashboard" element={<User_Dashboard />} />
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/AdminSignup" element={<AdminSignup />} />
+          <Route path="/AdminLogin" element={<AdminLogin />} />
         </Routes>
       )}
     </>

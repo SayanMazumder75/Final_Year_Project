@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CarBookingForm from "./User_Dashboard/CarBookingForm";
+import CarBuyForm from "./User_Dashboard/CurBuyForm";
 import Homepage from './Homepage/Homepage';
 import Dashboard from "./Admin_Panel/Dashboard";
 import Profile from "./Admin_Panel/Profile";
@@ -38,7 +39,8 @@ function App() {
           {/* Homepage route */}
           <Route path="/" element={<Homepage />} />
           <Route path="/booking" element={<CarBookingForm />} />
-
+          <Route path="/buying" element={<CarBuyForm />} />
+          {/* Admin Panel routes */}
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/Users" element={<Users />} />
           <Route path="/Setting" element={<Setting />} />

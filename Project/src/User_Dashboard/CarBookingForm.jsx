@@ -38,7 +38,7 @@ const CarRentalForm = () => {
   };
 
   const goHome = () => {
-    window.location.href = "/"; // redirect to homepage
+    window.location.href = "/User_Dashboard"; // redirect to homepage
   };
 
   return (

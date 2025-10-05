@@ -4,11 +4,11 @@ import Header from "./Header";
 import Footer from "../Homepage/Footer";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import logo from "../images/logo.png"
+import logo from "../images/logo.png";
 
 export default function Dashboard() {
-  const [open, setOpen] = useState(false); // sidebar toggle state
-  const [search, setSearch] = useState(""); // search state
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const soldCars = [
     {
@@ -17,10 +17,10 @@ export default function Dashboard() {
       customerName: "Soumyadip",
       date: "2024-08-20",
       name: "Auto Rickshaw",
-      revenue: "₹15,000",
-      originalPrice: "₹45,000",
-      salePrice: "₹60,000",
-      totalRevenue: "₹75,000",
+      revenue: "15,000",
+      originalPrice: "45,000",
+      salePrice: "60,000",
+      totalRevenue: "75,000",
     },
     {
       id: 2,
@@ -28,21 +28,21 @@ export default function Dashboard() {
       customerName: "Sidhu",
       date: "2024-08-20",
       name: "TOTO",
-      revenue: "₹10,500",
-      originalPrice: "₹55,000",
-      salePrice: "₹65,500",
-      totalRevenue: "₹76,000",
+      revenue: "10,500",
+      originalPrice: "55,000",
+      salePrice: "65,500",
+      totalRevenue: "76,000",
     },
     {
       id: 3,
       customerId: "CUST-103",
       customerName: "Anushka",
       date: "2024-08-20",
-      name: "maruti 800",
-      revenue: "₹9,200",
-      originalPrice: "₹50,000",
-      salePrice: "₹59,200",
-      totalRevenue: "₹68,400",
+      name: "Maruti 800",
+      revenue: "9,200",
+      originalPrice: "50,000",
+      salePrice: "59,200",
+      totalRevenue: "68,400",
     },
     {
       id: 4,
@@ -50,10 +50,10 @@ export default function Dashboard() {
       customerName: "Nafiya",
       date: "2024-08-20",
       name: "Tata Nano",
-      revenue: "₹9000",
-      originalPrice: "₹20000",
-      salePrice: "₹29,000",
-      totalRevenue: "₹38,000",
+      revenue: "9,000",
+      originalPrice: "20,000",
+      salePrice: "29,000",
+      totalRevenue: "38,000",
     },
     {
       id: 5,
@@ -61,14 +61,14 @@ export default function Dashboard() {
       customerName: "Sayan",
       date: "2024-08-20",
       name: "Mercedes C-Class",
-      revenue: "₹10,000",
-      originalPrice: "₹47,000",
-      salePrice: "₹58,000",
-      totalRevenue: "₹68,000",
+      revenue: "10,000",
+      originalPrice: "47,000",
+      salePrice: "58,000",
+      totalRevenue: "68,000",
     },
   ];
 
-  // Filter cars by name, customerId, or customerName
+  // Filter based on search input
   const filteredCars = soldCars.filter(
     (car) =>
       car.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -76,13 +76,13 @@ export default function Dashboard() {
       car.customerName.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Highlight search text inside a string
+  // Highlight search text
   const highlightText = (text) => {
     if (!search) return text;
-    const regex = new RegExp(`(₹{search})`, "gi");
-    return text.split(regex).map((part, index) =>
+    const regex = new RegExp(`(${search})`, "gi");
+    return text.split(regex).map((part, i) =>
       part.toLowerCase() === search.toLowerCase() ? (
-        <span key={index} className="bg-yellow-300 px-1 rounded">
+        <span key={i} className="bg-yellow-300 px-1 rounded">
           {part}
         </span>
       ) : (
@@ -91,51 +91,47 @@ export default function Dashboard() {
     );
   };
 
-  // Download PDF for a single car
+  // PDF Download
   const downloadPDF = (car) => {
-  const doc = new jsPDF();
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
 
-  // Page width
-  const pageWidth = doc.internal.pageSize.getWidth();
+    const imgWidth = 40;
+    const imgHeight = 20;
+    const imgX = (pageWidth - imgWidth) / 2;
+    const imgY = 10;
 
-  // Logo dimensions
-  const imgWidth = 40;
-  const imgHeight = 20;
+    // Add logo
+    doc.addImage(logo, "PNG", imgX, imgY, imgWidth, imgHeight);
 
-  // Centered logo position
-  const imgX = (pageWidth - imgWidth) / 2;
-  const imgY = 10;
+    // Title
+    doc.setFontSize(18);
+    doc.setTextColor(40, 40, 40);
+    doc.text("Customer Car Sale Report", pageWidth / 2, imgY + imgHeight + 10, {
+      align: "center",
+    });
 
-  // Add Logo
-  doc.addImage(logo, "PNG", imgX, imgY, imgWidth, imgHeight);
+    // Table
+    autoTable(doc, {
+      startY: imgY + imgHeight + 20,
+      head: [["Field", "Details"]],
+      body: [
+        ["Customer ID", car.customerId],
+        ["Customer Name", car.customerName],
+        ["Date", car.date],
+        ["Car Name", car.name],
+        ["Revenue", `INR ${car.revenue}`],
+        ["Original Price", `INR ${car.originalPrice}`],
+        ["Sale Price", `INR ${car.salePrice}`],
+        ["Total Revenue", `INR ${car.totalRevenue}`],
+      ],
+      styles: { fontSize: 11 },
+      headStyles: { fillColor: [41, 128, 185] },
+    });
 
-  // Title below logo
-  doc.setFontSize(18);
-  doc.setTextColor(40, 40, 40);
-  doc.text("Customer Car Sale Report", pageWidth / 2, imgY + imgHeight + 10, { align: "center" });
-
-  // Table starts after title
-  autoTable(doc, {
-    startY: imgY + imgHeight + 20,
-    head: [["Field", "Details"]],
-    body: [
-      ["Customer ID", car.customerId],
-      ["Customer Name", car.customerName],
-      ["Date", car.date],
-      ["Car Name", car.name],
-      ["Revenue", car.revenue],
-      ["Original Price", car.originalPrice],
-      ["Sale Price", car.salePrice],
-      ["Total Revenue", car.totalRevenue],
-    ],
-    styles: { fontSize: 11 },
-    headStyles: { fillColor: [41, 128, 185] }, // nice blue header
-  });
-
-  // Save PDF
-  doc.save(`₹{car.customerName}_Car_Report.pdf`);
-};
-
+    // Save file
+    doc.save(`${car.customerName}_Car_Report.pdf`);
+  };
 
   return (
     <div className="min-h-screen flex bg-gray-700">
@@ -144,7 +140,7 @@ export default function Dashboard() {
         <Sidebar open={open} setOpen={setOpen} />
       </div>
 
-      {/* Overlay (mobile only) */}
+      {/* Overlay (mobile) */}
       {open && (
         <div
           className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
@@ -152,9 +148,9 @@ export default function Dashboard() {
         ></div>
       )}
 
-      {/* Main Area */}
+      {/* Main */}
       <div
-        className={`flex-1 flex flex-col transition-opacity duration-300 ₹{
+        className={`flex-1 flex flex-col transition-opacity duration-300 ${
           open
             ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
             : "opacity-100"
@@ -170,11 +166,11 @@ export default function Dashboard() {
         {/* Content */}
         <div className="flex-1 px-3 sm:px-6 pt-4 sm:pt-6 pb-6 sm:pb-8 overflow-y-auto md:max-w-1500">
           <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+            {/* Search Bar */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-5 gap-3">
               <h2 className="text-lg sm:text-xl font-bold text-blue-800">
                 Already Sold Cars
               </h2>
-              {/* Search Bar */}
               <input
                 type="text"
                 placeholder="Search by car name, customer ID or name..."
@@ -185,7 +181,7 @@ export default function Dashboard() {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto rounded-lg border border-gray-200 w-full max-sm:w-90 max-sm:h-60">
+            <div className="overflow-x-auto rounded-lg border border-gray-200 w-full">
               <table className="text-gray-700 text-xs sm:text-sm w-full">
                 <thead className="bg-gray-100 text-gray-800 text-left">
                   <tr>
@@ -221,7 +217,7 @@ export default function Dashboard() {
                     filteredCars.map((car, index) => (
                       <tr
                         key={car.id}
-                        className={`₹{
+                        className={`${
                           index % 2 === 0 ? "bg-white" : "bg-gray-50"
                         } hover:bg-blue-50 transition`}
                       >

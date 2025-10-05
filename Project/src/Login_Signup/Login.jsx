@@ -9,6 +9,18 @@ export default function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  // Handle form submission
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault(); // Prevent page refresh
+  //   console.log("Login Data:", loginData);
+  //   // You can add your login API call here
+  //   try{
+  //     const response = await axios.post('http://localhost:8000/login', loginData);
+  //   }catch(error){
+  //     console.error("There was an error logging in!", error);
+  //   }
+  // };
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -92,6 +104,12 @@ export default function Login() {
           New User?{" "}
           <a href="/Signup" className="text-blue-400 hover:underline">
             Signup here
+          </a>
+        </p>
+        <p className="text-sm text-gray-400 text-center mt-5">
+          Admin?{" "}
+          <a href="/AdminLogin" className="text-blue-400 hover:underline">
+            Click here
           </a>
         </p>
       </div>

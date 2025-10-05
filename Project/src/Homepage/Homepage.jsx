@@ -14,21 +14,26 @@ import {
   CreditCard,
   Headphones,
 } from "lucide-react";
+
 import logo from "/src/images/logo.png";
 import car1 from "/src/assets/Car5.jpg";
 import car2 from "/src/assets/Car8.jpg";
 import car3 from "/src/assets/Car6.jpg";
-import car4 from "/src/assets/Car6.jpg";
+import car4 from "/src/assets/JaguarXF.avif";
+import car5 from "/src/assets/LexusRX.jpg";
+import car6 from "/src/assets/Porsche911.jpg";
+import car7 from "/src/assets/TeslaModelS.jpeg";
+import car8 from "/src/assets/RangeRoverVogue.jpeg";
 
 function Homepage() {
-  const images = [car1, car2, car3, car4];
+  const images = [car1, car2, car3, car4, car5, car6];
   const [index, setIndex] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(
       () => setIndex((prev) => (prev + 1) % images.length),
-      3000
+      4000
     );
     return () => clearInterval(interval);
   }, [images.length]);
@@ -51,11 +56,11 @@ function Homepage() {
       </header>
 
       {/* Hero Slider */}
-      <section className="relative w-full h-[500px] overflow-hidden">
+      <section className="relative w-full h-[550px] overflow-hidden">
         <img
           src={images[index]}
           alt="Car"
-          className="w-full h-full object-cover transition duration-700"
+          className="w-full h-full object-cover transition duration-1000 ease-in-out"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent flex items-center px-8 md:px-16">
           <div className="text-white max-w-xl">
@@ -120,41 +125,50 @@ function Homepage() {
       </section>
 
       {/* Featured Vehicles */}
-      <section className="py-16 bg-gray-100">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-800 text-center mb-12">
-            Featured Vehicles
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[car1, car2, car3].map((car, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
-              >
-                <img
-                  src={car}
-                  alt={`Car ${i + 1}`}
-                  className="h-48 w-full object-cover"
-                />
-                <div className="p-6">
-                  <h3 className="font-semibold text-lg text-gray-800 mb-2">
-                    {i === 0
-                      ? "BMW M4"
-                      : i === 1
-                      ? "Audi A6"
-                      : "Mercedes C-Class"}
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Starting at ₹
-                    {i === 0 ? "45,00,000" : i === 1 ? "52,00,000" : "48,00,000"}
-                  </p>
-                  
-                </div>
-              </div>
-            ))}
+<section className="py-16 bg-gray-100">
+  <div className="max-w-7xl mx-auto px-6">
+    <h2 className="text-3xl font-bold text-gray-800 text-center mb-12">
+      Featured Vehicles
+    </h2>
+    <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {[
+        { img: car1, name: "BMW M4", price: "45,00,000", seats: 4, engine: "3.0L" },
+        { img: car2, name: "Audi A6", price: "52,00,000", seats: 5, engine: "2.8L" },
+        { img: car3, name: "Mercedes C-Class", price: "48,00,000", seats: 5, engine: "2.0L" },
+        { img: car4, name: "Jaguar XF", price: "60,00,000", seats: 5, engine: "3.0L" },
+        { img: car5, name: "Lexus RX", price: "55,00,000", seats: 5, engine: "3.5L" },
+        { img: car6, name: "Porsche 911", price: "1,20,00,000", seats: 2, engine: "3.0L" },
+        { img: car7, name: "Tesla Model S", price: "1,05,00,000", seats: 5, engine: "Electric" },
+        { img: car8, name: "Range Rover Vogue", price: "90,00,000", seats: 5, engine: "3.0L" },
+      ].map((car, i) => (
+        <div
+          key={i}
+          className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1 overflow-hidden"
+        >
+          <div className="relative">
+            <img
+              src={car.img}
+              alt={car.name}
+              className="h-56 w-full object-cover"
+              loading="lazy"
+            />
+            <span className="absolute top-3 left-3 bg-indigo-600 text-white px-3 py-1 rounded-full font-semibold text-sm shadow-lg">
+              ₹{car.price}
+            </span>
+          </div>
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">{car.name}</h3>
+            <div className="flex items-center justify-between text-gray-600 mb-4">
+              <span>{car.seats} Seats</span>
+              <span>{car.engine} Engine</span>
+            </div>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       {/* Info Section */}
       <section className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10">
@@ -166,9 +180,8 @@ function Homepage() {
           <p className="text-gray-600 leading-relaxed">
             Since our founding in 2010, we’ve helped over{" "}
             <strong className="text-gray-900">15,000 customers</strong> find
-            their dream cars across India. From a small showroom to a
-            full-service dealership, our mission is to deliver luxury vehicles
-            with transparency and customer-first service.
+            their dream cars across India. Our mission is to deliver luxury
+            vehicles with transparency and customer-first service.
           </p>
         </div>
 
@@ -230,7 +243,7 @@ function Homepage() {
         <p className="mb-6 text-lg">
           Book a Car today and let us help you make the right choice.
         </p>
-        <p className="mb-6 text-lg">Login For explore more</p>
+        <p className="mb-6 text-lg">Login to explore more</p>
       </section>
 
       {/* Footer */}

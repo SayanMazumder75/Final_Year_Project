@@ -64,15 +64,17 @@ export default function User_Dashboard() {
             Flexible plans to buy or rent premium cars at the best prices.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
-            <button className="px-6 py-3 bg-green-500 hover:bg-green-700 text-black font-semibold rounded-lg shadow-lg transition">
-              Rent a Car
-            </button>
+            <Link to="/buying">
+              <button className="px-6 py-3 bg-green-500 hover:bg-green-700 text-black font-semibold rounded-lg shadow-lg transition">
+                Rent a Car
+              </button>
+            </Link>
            {/* Buy a Car button → goes to Booking Page */}
-          <Link to="/booking">
-            <button className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-lg shadow-lg transition">
-              Buy a Car
-            </button>
-          </Link>
+            <Link to="/booking">
+              <button className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-lg shadow-lg transition">
+                Buy a Car
+              </button>
+            </Link>
           </div>
         </div>
       </section>

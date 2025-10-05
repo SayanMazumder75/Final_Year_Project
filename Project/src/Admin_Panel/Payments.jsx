@@ -103,9 +103,9 @@ export default function Payments() {
           ["Vehicle Name", vehicle.name],
           ["Start Date", vehicle.startDate],
           ["End Date", vehicle.endDate],
-          ["Daily Rate", `$${vehicle.dailyRate}`],
+          ["Daily Rate", `INR ${vehicle.dailyRate}`],
           ["Rented Days", vehicle.rentedDays],
-          ["Revenue", `$${vehicle.revenue}`],
+          ["Revenue", `INR ${vehicle.revenue}`],
           ["Payment Status", vehicle.paymentStatus],
         ]
       : [
@@ -113,7 +113,7 @@ export default function Payments() {
           ["Customer Name", vehicle.customer],
           ["Vehicle Name", vehicle.name],
           ["Sold Date", vehicle.soldDate],
-          ["Price", `$${vehicle.price}`],
+          ["Price", `INR ${vehicle.price}`],
           ["Payment Status", vehicle.paymentStatus],
         ];
 

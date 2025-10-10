@@ -10,16 +10,30 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   // Handle form submission
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault(); // Prevent page refresh
-  //   console.log("Login Data:", loginData);
-  //   // You can add your login API call here
-  //   try{
-  //     const response = await axios.post('http://localhost:8000/login', loginData);
-  //   }catch(error){
-  //     console.error("There was an error logging in!", error);
-  //   }
-  // };
+  const handleLogin = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch("http://localhost:5000/user/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+      credentials: "include"
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.msg || "Login successful!");
+      localStorage.setItem("token", data.accessToken);
+      console.log("User Type:", data.userType);
+    } else {
+      alert(data.msg || "Invalid credentials.");
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("Error during login. Please try again.");
+  }
+};
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

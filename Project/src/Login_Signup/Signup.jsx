@@ -40,10 +40,58 @@ export default function Signup() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Signup Data:", form);
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Simple front-end password match check
+  if (form.password !== form.confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/user/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // include cookies (for refresh token)
+      //stringify the form data to send to server
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        userType: "user", // or "owner" for owner signup page
+        phoneNumber: form.number,
+        address: form.address,
+        pincode: form.pin,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.msg || "Registration failed");
+    } else {
+      alert("Registered successfully!");
+      console.log("Server Response:", data);
+      // Reset form
+      setForm({
+        name: "",
+        email: "",
+        number: "",
+        address: "",
+        pin: "",
+        password: "",
+        confirmPassword: "",
+      });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Something went wrong. Please try again.");
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-blue-950 to-slate-900 p-4 sm:p-6">

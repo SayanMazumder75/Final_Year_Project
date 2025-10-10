@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, ShieldCheck } from "lucide-react";
-
+import axios from "axios";
 export default function AdminLogin() {
   const [form, setForm] = useState({
     email: "",
@@ -13,11 +13,34 @@ export default function AdminLogin() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Admin Login Data:", form);
-    // Add admin login API call here
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const { data } = await axios.post(
+      "http://localhost:5000/user/login", // your backend login URL
+      form, // automatically sent as JSON
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    // Optional: check if user is admin
+    if (data.userType !== "admin") {
+      alert("You are not an admin!");
+      return;
+    }
+
+    // Save token
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("userType", data.userType);
+
+    alert("Admin logged in successfully!");
+    window.location.href = "/admin/dashboard"; // redirect to admin dashboard
+
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.msg || "Login failed");
+  }
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-gray-800 p-6">

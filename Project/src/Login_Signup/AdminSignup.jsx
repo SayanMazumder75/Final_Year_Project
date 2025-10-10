@@ -45,10 +45,36 @@ export default function AdminSignup() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Car Shop Owner Signup Data:", form);
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (form.password !== form.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const payload = {
+      name: form.ownerName,
+      email: form.email,
+      password: form.password,
+      userType: "owner",
+      ownerCode: process.env.REACT_APP_OWNER_CODE, // or a hardcoded secret for now
+    };
+
+    const { data } = await axios.post("http://localhost:5000/user/register", payload, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    alert(data.msg || "Owner registered successfully!");
+    window.location.href = "/AdminLogin"; // redirect to login
+
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.msg || "Registration failed");
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-gray-800 p-4 sm:p-6">

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const userCtrl = require('../Controllers/userCtrl');
+const userCtrl = require('../controllers/userCtrl');
 const auth = require('../middleware/auth'); // your auth middleware
 const authOwner = require('../middleware/authOwner');
 
@@ -9,10 +9,10 @@ router.post('/owner/upload', auth, authOwner, (req, res) => {
 
 });
 // Owner-specific routes
-router.get('/logout', userCtrl.logout);
 
 router.post('/register', userCtrl.register);
 router.post('/login', userCtrl.login);
+router.get('/logout', userCtrl.logout);
 
 // Refresh token route
 router.post('/refresh_token', userCtrl.refreshToken);

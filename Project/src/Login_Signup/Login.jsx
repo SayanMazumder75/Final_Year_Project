@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Mail, Lock} from "lucide-react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -9,39 +9,43 @@ export default function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  // Handle form submission
-  const handleLogin = async (e) => {
-  e.preventDefault();
-
-  try {
-    const response = await fetch("http://localhost:5000/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-      credentials: "include"
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      alert(data.msg || "Login successful!");
-      localStorage.setItem("token", data.accessToken);
-      console.log("User Type:", data.userType);
-    } else {
-      alert(data.msg || "Invalid credentials.");
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-    alert("Error during login. Please try again.");
-  }
-};
-
+  // Handle input changes
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Signin Data:", form);
+
+    try {
+      const response = await fetch("http://localhost:5000/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // important for cookies (refreshToken)
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      console.log("Status:", response.status);
+      console.log("Response:", data);
+
+      if (response.ok) {
+        alert("Login successful!");
+        window.location.href = "/home";
+      } else {
+        alert(data.msg || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("An unexpected error occurred. Check console for details.");
+    }
   };
 
   return (
@@ -52,12 +56,11 @@ export default function Login() {
           Login Account
         </h2>
         <p className="text-gray-400 text-center mb-6">
-          Welcome User 🚀
+          Welcome User 
         </p>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-
+        <form onSubmit={handleLogin} className="space-y-5">
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -83,8 +86,7 @@ export default function Login() {
               Password
             </label>
             <div className="relative">
-            <Lock className="absolute left-3 top-2.5 text-gray-400" size={18} />
-
+              <Lock className="absolute left-3 top-2.5 text-gray-400" size={18} />
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"

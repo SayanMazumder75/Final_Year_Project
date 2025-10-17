@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import showroom1 from "../User_Dashboard/rental.jpg";
 import showroom2 from "../User_Dashboard/rental2.jpg";
+import axios from "axios";
 
 import {
   Eye,
@@ -13,7 +14,6 @@ import {
   Lock,
   Store,
   Briefcase,
-  Car,
 } from "lucide-react";
 
 export default function AdminSignup() {
@@ -46,35 +46,44 @@ export default function AdminSignup() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (form.password !== form.confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
 
-  try {
-    const payload = {
-      name: form.ownerName,
-      email: form.email,
-      password: form.password,
-      userType: "owner",
-      ownerCode: process.env.REACT_APP_OWNER_CODE, // or a hardcoded secret for now
-    };
+    try {
+      const payload = {
+        name: form.ownerName,
+        email: form.email,
+        password: form.password,
+        userType: "owner",
+        ownerCode: process.env.REACT_APP_OWNER_CODE,
+        phoneNumber: form.number,
+        address: form.address,
+        pincode: form.pin,
+        shopName: form.shopName,
+        businessRegId: form.registration,
+      };
 
-    const { data } = await axios.post("http://localhost:5000/user/register", payload, {
-      headers: { "Content-Type": "application/json" },
-    });
+      console.log("sending payload:", payload);
 
-    alert(data.msg || "Owner registered successfully!");
-    window.location.href = "/AdminLogin"; // redirect to login
+      const { data } = await axios.post(
+        "http://localhost:5000/owner/register",
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-  } catch (err) {
-    console.error(err);
-    alert(err.response?.data?.msg || "Registration failed");
-  }
-};
-
+      alert(data.msg || "Owner registered successfully!");
+      window.location.href = "/AdminLogin";
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.msg || "Registration failed");
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-gray-800 p-4 sm:p-6">
@@ -127,7 +136,7 @@ export default function AdminSignup() {
                   onChange={handleChange}
                   required
                   className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-900/70 text-white border border-gray-700 focus:ring-2 focus:ring-yellow-500 outline-none"
-                  placeholder="Mark Zuckerberg "
+                  placeholder="Mark Zuckerberg"
                 />
               </div>
             </div>
@@ -285,13 +294,11 @@ export default function AdminSignup() {
                   value={form.confirmPassword}
                   onChange={handleChange}
                   required
-                  className={`w-full pl-10 pr-4 py-2 rounded-lg bg-gray-900/70 text-white border 
-                    ${
-                      form.confirmPassword &&
-                      form.password !== form.confirmPassword
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-700 focus:ring-yellow-500"
-                    } outline-none`}
+                  className={`w-full pl-10 pr-4 py-2 rounded-lg bg-gray-900/70 text-white border ${
+                    form.confirmPassword && form.password !== form.confirmPassword
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-700 focus:ring-yellow-500"
+                  } outline-none`}
                   placeholder="Re-enter password"
                 />
               </div>

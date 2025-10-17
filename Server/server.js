@@ -5,12 +5,11 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const fileUpload = require('express-fileupload');// to upload files
+const fileUpload = require('express-fileupload'); // to upload files
 
 // CORS configuration to allow requests from frontend and credentials
-// Allow frontend to send cookies
 app.use(cors({
-  origin: 'http://localhost:5173', // your frontend URL
+  origin: 'http://localhost:5173', // frontend URL
   credentials: true // allow cookies
 }));
 
@@ -20,13 +19,13 @@ app.use(cookieParser());
 app.use(fileUpload({ useTempFiles: true }));
 
 // Routes
-app.use('/user', require('./Routes/userRoutes'));//user routes
-app.use('/api', require('./Routes/categoryRoutes'));//category routes
-app.use('/api', require('./Routes/upload'));//upload routes
+app.use('/user', require('./Routes/userRoutes'));       // user routes
+app.use('/owner', require('./Routes/ownerRoutes'));     // owner routes
+app.use('/api', require('./Routes/categoryRoutes'));    // category routes
+app.use('/api', require('./Routes/upload'));            // upload routes
+app.use('/api', require('./Routes/productRouter'));     // product routes
 
-app.use('/api', require('./Routes/productRouter'));//product routes
-
-
+// Test endpoint
 app.get('/', (req, res) => {
   res.send('Hello from the server!');
 });

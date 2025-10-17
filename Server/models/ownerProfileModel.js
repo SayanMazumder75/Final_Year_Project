@@ -1,24 +1,14 @@
-// models/ownerProfileModel.js
 const mongoose = require('mongoose');
 
 const ownerProfileSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Users',
-    required: true,
-    unique: true
-  },
-  shopName: {
-    type: String,
-    required: true
-  },
-  businessRegId: {
-    type: String,
-    required: true
-  },
-  gstNumber: {
-    type: String
-  }
+  ownerName: { type: String, required: true },
+  shopName: { type: String, required: true },
+  businessRegId: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  contactNumber: { type: String, required: true },
+  shopAddress: { type: String, required: true },
+  pinCode: { type: String, required: true },
+  password: { type: String, required: true },
 }, { timestamps: true });
 
 module.exports = mongoose.model('OwnerProfile', ownerProfileSchema);

@@ -1,176 +1,101 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const OwnerProfile = require('../models/ownerProfileModel');
+const jwt = require('jsonwebtoken');
 
 // Token helpers
-const createAccessToken = (user) => jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
-function createRefreshToken(user) {
-  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
-}
+const createAccessToken = (owner) => jwt.sign(owner, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
+const createRefreshToken = (owner) => jwt.sign(owner, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 
-const userCtrl = {
-  // Register user (buyer or owner)
+const ownerCtrl = {
+  register: async (req, res) => {
+    try {
+      const { ownerName, shopName, businessRegId, email, contactNumber, shopAddress, pinCode, password, ownerCode } = req.body;
 
-register: async (req, res) => {
-  try {
-    const {
-      name, email, password, userType, ownerCode,
-      phoneNumber, address, pincode,
-      shopName, businessRegId, gstNumber
-    } = req.body;
-
-    const existingUser = await Users.findOne({ email });
-    if (existingUser) return res.status(400).json({ msg: "The email already exists." });
-
-    if (password.length < 6)
-      return res.status(400).json({ msg: "Password must be at least 6 characters." });
-
-    // Owner validation
-    if (userType === 'owner') {
       if (ownerCode !== process.env.OWNER_SECRET) {
-        return res.status(403).json({ msg: "Invalid owner code. Cannot register as owner." });
+        return res.status(403).json({ msg: "Invalid owner code" });
       }
 
-      if (!shopName || !businessRegId) {
-        return res.status(400).json({ msg: "Missing shop name or business registration ID." });
-      }
-    }
+      const existingOwner = await OwnerProfile.findOne({ email });
+      if (existingOwner) return res.status(400).json({ msg: "Email already exists." });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+      if (password.length < 6) return res.status(400).json({ msg: "Password must be at least 6 characters." });
 
-    const newUser = new Users({
-      name,
-      email,
-      password: hashedPassword,
-      userType: userType || 'user',
-      phoneNumber,
-      address,
-      pincode
-    });
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    await newUser.save();
-
-    // Create owner profile only if userType is owner
-    if (userType === 'owner') {
-      const ownerProfile = new OwnerProfile({
-        user: newUser._id,
-        shopName,
-        businessRegId,
-        gstNumber
+      const newOwner = new OwnerProfile({
+        ownerName, shopName, businessRegId, email, contactNumber, shopAddress, pinCode, password: hashedPassword
       });
 
-      await ownerProfile.save();
-    }
+      await newOwner.save();
 
-    const accessToken = createAccessToken({ id: newUser._id, userType: newUser.userType });
-    const refreshToken = createRefreshToken({ id: newUser._id, userType: newUser.userType });
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      path: '/user/refresh_token',
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax'
-    });
-
-    res.status(201).json({
-      msg: "User registered successfully",
-      user: newUser._id,
-      userType: newUser.userType,
-      accessToken
-    });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: err.message });
-  }
-},
-
-  // Login user
-  login: async (req, res) => {
-    try {
-      const { email, password } = req.body;
-
-      const user = await Users.findOne({ email });
-      if (!user) return res.status(400).json({ msg: "User does not exist." });
-
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return res.status(400).json({ msg: "Incorrect password." });
-
-      const accessToken = createAccessToken({ id: user._id, userType: user.userType });
-      const refreshToken = createRefreshToken({ id: user._id, userType: user.userType });
+      const accessToken = createAccessToken({ id: newOwner._id, email: newOwner.email });
+      const refreshToken = createRefreshToken({ id: newOwner._id, email: newOwner.email });
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: '/user/refresh_token',
+        path: '/owner/refresh_token',
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax'
       });
 
-      res.json({
-        msg: "Login successful",
-        user: user._id,
-        userType: user.userType,
-        accessToken
-      });
+      res.status(201).json({ msg: "Owner registered successfully", ownerId: newOwner._id, accessToken });
 
     } catch (err) {
       res.status(500).json({ msg: err.message });
     }
   },
 
-  // Logout
-  logout: async (req, res) => {
+  login: async (req, res) => {
     try {
-      res.clearCookie('refreshToken', { path: '/user/refresh_token' });
-      res.json({ msg: "Logged out successfully." });
-    } catch (err) {
-      res.status(500).json({ msg: err.message });
-    }
-  },
+      const { email, password } = req.body;
 
-  // Refresh token
-  refreshToken: async (req, res) => {
-    try {
-      const rf_token = req.cookies.refreshToken;
-      if (!rf_token) return res.status(401).json({ msg: "No refresh token, authorization denied." });
+      const owner = await OwnerProfile.findOne({ email });
+      if (!owner) return res.status(400).json({ msg: "Owner not found." });
 
-      const verified = jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET);
+      const isMatch = await bcrypt.compare(password, owner.password);
+      if (!isMatch) return res.status(400).json({ msg: "Incorrect password." });
 
-      const existingUser = await Users.findById(verified.id);
-      if (!existingUser) return res.status(400).json({ msg: "User no longer exists." });
-
-      // Create new access and refresh tokens
-      const accessToken = createAccessToken({ id: verified.id, userType: verified.userType });
-      const refreshToken = createRefreshToken({ id: verified.id, userType: verified.userType });
+      const accessToken = createAccessToken({ id: owner._id, email: owner.email });
+      const refreshToken = createRefreshToken({ id: owner._id, email: owner.email });
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: '/user/refresh_token',
+        path: '/owner/refresh_token',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax'
+      });
+
+      res.json({ msg: "Login successful", ownerId: owner._id, accessToken });
+
+    } catch (err) {
+      res.status(500).json({ msg: err.message });
+    }
+  },
+
+  refreshToken: async (req, res) => {
+    try {
+      const rf_token = req.cookies.refreshToken;
+      if (!rf_token) return res.status(401).json({ msg: "No refresh token." });
+
+      const verified = jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET);
+      const owner = await OwnerProfile.findById(verified.id);
+      if (!owner) return res.status(400).json({ msg: "Owner not found." });
+
+      const accessToken = createAccessToken({ id: owner._id, email: owner.email });
+      const refreshToken = createRefreshToken({ id: owner._id, email: owner.email });
+
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        path: '/owner/refresh_token',
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax'
       });
 
       res.json({ accessToken });
-
     } catch (err) {
       res.status(403).json({ msg: "Invalid refresh token." });
-    }
-  },
-
-  // Get logged-in user info
-  getUserInfo: async (req, res) => {
-    try {
-      const user = await Users.findById(req.user.id).select('-password');
-      if (!user) return res.status(404).json({ msg: "User not found." });
-      res.json(user);
-    } catch (err) {
-      res.status(500).json({ msg: err.message });
     }
   }
 };
 
-module.exports = userCtrl;
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const OwnerProfile = require('../models/ownerProfileModel');
-const Users = require('../models/userModel');
+module.exports = ownerCtrl;

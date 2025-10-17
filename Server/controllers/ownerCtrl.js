@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const Users = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const OwnerProfile = require('../models/ownerProfileModel');
 
@@ -171,3 +170,7 @@ register: async (req, res) => {
 };
 
 module.exports = userCtrl;
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const OwnerProfile = require('../models/ownerProfileModel');
+const Users = require('../models/userModel');

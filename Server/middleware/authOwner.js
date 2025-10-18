@@ -1,4 +1,5 @@
-const Users = require('../models/userModel');
+// const Users = require('../models/userModel');
+const Users = require('../models/ownerProfileModel')
 
 const authOwner = async (req, res, next) => {
   try {

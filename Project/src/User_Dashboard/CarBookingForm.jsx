@@ -38,9 +38,8 @@ const CarRentalForm = () => {
   };
 
   const goHome = () => {
-    window.location.href = "/User_Dashboard"; // redirect to homepage
+    window.location.href = "/User_Dashboard"; //redirect to home page
   };
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
       <form

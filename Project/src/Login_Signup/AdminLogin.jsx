@@ -18,23 +18,23 @@ export default function AdminLogin() {
 
   try {
     const { data } = await axios.post(
-      "http://localhost:5000/user/login", // your backend login URL
+      "http://localhost:5000/owner/login", // your backend login URL
       form, // automatically sent as JSON
       { headers: { "Content-Type": "application/json" } }
     );
 
     // Optional: check if user is admin
-    if (data.userType !== "admin") {
-      alert("You are not an admin!");
-      return;
-    }
+    // if (data.userType !== "owner") {
+    //   alert("You are not an owner!");
+    //   return;
+    // }
 
     // Save token
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("userType", data.userType);
 
     alert("Admin logged in successfully!");
-    window.location.href = "/admin/dashboard"; // redirect to admin dashboard
+    window.location.href = "/Profile"; // redirect to admin dashboard
 
   } catch (err) {
     console.error(err);

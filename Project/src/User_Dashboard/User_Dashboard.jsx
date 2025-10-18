@@ -101,12 +101,16 @@ export default function User_Dashboard() {
                   Rent: {car.price.rent} | Buy: {car.price.buy}
                 </p>
                 <div className="flex gap-3 mt-4">
-                  <button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition">
+                  <Link to="/booking">
+                  <button className="px-6 py-3 flex-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition">
                     Rent
                   </button>
-                  <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
+                  </Link>
+                  <Link to="/booking">
+                  <button className="px-6 py-3 flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
                     Buy
                   </button>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "../Homepage/Footer";
+import PostAd from "./PostAd";
+import { useNavigate } from "react-router-dom";
 import {
   LineChart,
   Line,
@@ -66,11 +68,12 @@ export default function Dashboard() {
     { id: 3, model: "Ford Mustang", rentPerDay: 120, availability: "Available" },
   ]);
 
-  // Disabled Add Handler
-  const handleAdd = () => {
-    setSuccessMessage("ℹ️ Adding new cars is disabled now");
-    setTimeout(() => setSuccessMessage(""), 3000);
-  };
+  const navigate = useNavigate();
+
+const handleAdd = () => {
+  navigate("/PostAd"); // this will open PostAd page
+};
+
 
   return (
     <div className="min-h-screen flex bg-gray-700">
@@ -137,21 +140,12 @@ export default function Dashboard() {
                 </tbody>
               </table>
 
-              {/* Disabled Add New Car Form */}
-              <div className="mt-4 flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0 opacity-50 pointer-events-none">
-                <input type="text" placeholder="Car Model" className="border rounded px-3 py-2 flex-1 w-full" disabled />
-                <input type="number" placeholder="Year" className="border rounded px-3 py-2 w-full md:w-28" disabled />
-                <input type="number" placeholder="Price" className="border rounded px-3 py-2 w-full md:w-36" disabled />
-                <input type="file" accept="image/*" className="border rounded px-3 py-2 w-full md:w-48" disabled />
-              </div>
-
-              {/* Disabled Add Button (Still clickable for message) */}
               <div className="mt-4">
                 <button
                   onClick={handleAdd}
                   className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
                 >
-                  Add (Disabled)
+                  Add
                 </button>
               </div>
 

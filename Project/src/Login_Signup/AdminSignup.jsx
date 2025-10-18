@@ -54,18 +54,19 @@ export default function AdminSignup() {
     }
 
     try {
-      const payload = {
-        name: form.ownerName,
-        email: form.email,
-        password: form.password,
-        userType: "owner",
-        ownerCode: process.env.REACT_APP_OWNER_CODE,
-        phoneNumber: form.number,
-        address: form.address,
-        pincode: form.pin,
-        shopName: form.shopName,
-        businessRegId: form.registration,
+     const payload = {
+      ownerName: form.ownerName,
+      email: form.email,
+      password: form.password,
+      userType: "owner",
+      ownerCode: import.meta.env.VITE_OWNER_CODE,
+      contactNumber: form.number,
+      shopAddress: form.address,
+      pinCode: form.pin,
+      shopName: form.shopName,
+      businessRegId: form.registration,
       };
+
 
       console.log("sending payload:", payload);
 

@@ -16,7 +16,7 @@ import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
 import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
-
+import PostAd from "./Admin_Panel/PostAd";
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -54,6 +54,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/AdminSignup" element={<AdminSignup />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
+          <Route path="/PostAd" element={<PostAd />} />
         </Routes>
       )}
     </>

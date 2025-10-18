@@ -23,6 +23,7 @@ const CarRentalForm = () => {
     "Toyota Corolla",
   ];
 
+
   const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking"];
 
   const handleChange = (e) => {

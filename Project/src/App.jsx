@@ -16,7 +16,13 @@ import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
 import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
+<<<<<<< Updated upstream
 import PostAd from "./Admin_Panel/PostAd";
+=======
+import Wishlist from "./User_Dashboard/Wishlist";
+
+
+>>>>>>> Stashed changes
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -41,6 +47,7 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/booking" element={<CarBookingForm />} />
           <Route path="/buying" element={<CarBuyForm />} />
+          
           {/* Admin Panel routes */}
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/Users" element={<Users />} />
@@ -49,7 +56,13 @@ function App() {
           <Route path="/Sell_Vehicles" element={<Sell_Vehicles />} />
           <Route path="/Rental_Vehicles" element={<Rental_Vehicles />} />
           <Route path="/Payments" element={<Payments />} />
+          
+          {/* User Dashboard routes */}
           <Route path="/User_Dashboard" element={<User_Dashboard />} />
+          <Route path="/wishlist" element={<Wishlist />} /> {/* Add this route */}
+
+
+          {/* Authentication routes */}
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/AdminSignup" element={<AdminSignup />} />
@@ -62,5 +75,3 @@ function App() {
 }
 
 export default App;
-
-

@@ -193,7 +193,7 @@ function Homepage() {
             </h3>
           </div>
           <p className="text-gray-600 leading-relaxed">
-            ⭐️⭐️⭐️⭐️⭐️ “I bought a used BMW M4 and the experience was
+            ⭐⭐⭐⭐⭐ “I bought a used BMW M4 and the experience was
             exceptional — transparent, fast, and professional. The vehicle
             quality and customer support exceeded expectations.”
             <br />— <i>Rajeev T., Bangalore</i>
@@ -252,4 +252,4 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default Homepage;

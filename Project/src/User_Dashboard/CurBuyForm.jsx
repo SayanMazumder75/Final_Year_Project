@@ -23,6 +23,8 @@ const CarBuyForm = () => {
     "Hyundai Creta",
   ];
 
+ 
+
   const colorOptions = ["White", "Black", "Blue", "Red", "Silver", "Gray"];
 
   const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking", "Cash"];
@@ -239,5 +241,5 @@ const CarBuyForm = () => {
     </div>
   );
 };
-
+ 
 export default CarBuyForm;

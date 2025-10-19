@@ -14,9 +14,14 @@ app.use(cors({
 }));
 
 // Middlewares
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));  // increase JSON limit
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // handle form data
+
 app.use(cookieParser());
-app.use(fileUpload({ useTempFiles: true }));
+app.use(fileUpload({
+  useTempFiles: true,
+  limits: { fileSize: 10 * 1024 * 1024 } // limit file uploads to 10 MB
+}));
 
 // Routes
 app.use('/user', require('./Routes/userRoutes'));       // user routes

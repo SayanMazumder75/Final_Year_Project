@@ -16,25 +16,29 @@ import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
 import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
-import Wishlist from "./User_Dashboard/Wishlist";
 import PostAd from "./Admin_Panel/PostAd";
+import Wishlist from "./User_Dashboard/Wishlist";
+import Car1 from "./Pages/car1";
+import Car2 from "./Pages/car2";
+import Car3 from "./Pages/car3";
+import Car4 from "./Pages/car4";
+import Car5 from "./Pages/car5";
+
 
 
 function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time (e.g. fetching user data, assets, etc.)
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); // 2 seconds
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      {/* Preloader shows first */}
       <Preloader loading={loading} />
 
       {/* Show routes only after preloader is done */}
@@ -44,7 +48,16 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/booking" element={<CarBookingForm />} />
           <Route path="/buying" element={<CarBuyForm />} />
-          
+
+          {/* Car detail routes - MOVED INSIDE THE MAIN ROUTES */}
+          <Route path="/car/1" element={<Car1 />} />
+          <Route path="/car/2" element={<Car2 />} />
+          <Route path="/car/3" element={<Car3 />} />
+          <Route path="/car/4" element={<Car4 />} />
+          <Route path="/car/5" element={<Car5 />} />
+
+         
+
           {/* Admin Panel routes */}
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/Users" element={<Users />} />
@@ -53,11 +66,10 @@ function App() {
           <Route path="/Sell_Vehicles" element={<Sell_Vehicles />} />
           <Route path="/Rental_Vehicles" element={<Rental_Vehicles />} />
           <Route path="/Payments" element={<Payments />} />
-          
+
           {/* User Dashboard routes */}
           <Route path="/User_Dashboard" element={<User_Dashboard />} />
-          <Route path="/wishlist" element={<Wishlist />} /> {/* Add this route */}
-
+          <Route path="/wishlist" element={<Wishlist />} />
 
           {/* Authentication routes */}
           <Route path="/Signup" element={<Signup />} />

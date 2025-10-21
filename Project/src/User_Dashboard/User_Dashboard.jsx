@@ -4,6 +4,7 @@ import rental from "./rental.jpg";
 import rental2 from "./rental2.jpg";
 import { Link } from "react-router-dom";
 
+
 // Cars Data (Dynamic)
 const carsData = [
   {
@@ -50,20 +51,20 @@ export default function User_Dashboard() {
   }, []);
 
   const toggleWishlist = (vehicleId) => {
-  const idStr = vehicleId.toString(); // Make sure ID is always a string
-  let updatedWishlist;
+    const idStr = vehicleId.toString(); // Make sure ID is always a string
+    let updatedWishlist;
 
-  if (wishlist.includes(idStr)) {
-    updatedWishlist = wishlist.filter(id => id !== idStr);
-  } else {
-    updatedWishlist = [...wishlist, idStr];
-  }
+    if (wishlist.includes(idStr)) {
+      updatedWishlist = wishlist.filter(id => id !== idStr);
+    } else {
+      updatedWishlist = [...wishlist, idStr];
+    }
 
-  setWishlist(updatedWishlist);
-  localStorage.setItem('vehicleWishlist', JSON.stringify(updatedWishlist));
+    setWishlist(updatedWishlist);
+    localStorage.setItem('vehicleWishlist', JSON.stringify(updatedWishlist));
 
-  console.log("Updated Wishlist:", updatedWishlist); // Debug log
-};
+    console.log("Updated Wishlist:", updatedWishlist); // Debug log
+  };
 
 
   const isInWishlist = (vehicleId) => wishlist.includes(vehicleId.toString());
@@ -74,15 +75,15 @@ export default function User_Dashboard() {
       {/* Header with Wishlist Navigation */}
       <div className="w-full shadow-md sticky top-0 z-10 bg-white">
         <Header />
-        
+
         {/* Wishlist Navigation Bar */}
         <div className="bg-yellow-500 py-3 px-6">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <span className="text-black font-bold text-lg">
               ❤️ My Wishlist: {wishlist.length} {wishlist.length === 1 ? 'item' : 'items'}
             </span>
-            <Link 
-              to="/wishlist" 
+            <Link
+              to="/wishlist"
               className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold transition duration-300"
             >
               View Wishlist
@@ -135,7 +136,7 @@ export default function User_Dashboard() {
               className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition duration-300 relative"
             >
               {/* Wishlist Heart Button */}
-              <button 
+              <button
                 onClick={() => toggleWishlist(car.id)}
                 className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-lg hover:scale-110 transition duration-300 z-10 text-2xl"
                 title={isInWishlist(car.id) ? "Remove from wishlist" : "Add to wishlist"}
@@ -166,11 +167,18 @@ export default function User_Dashboard() {
                     </button>
 
                   </Link>
+                  <Link to={`/car/${car.id}`} className="flex-1">
+                    <button className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition">
+                      Details
+                    </button>
+
+                  </Link>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
       </section>
 
       {/* Testimonials */}

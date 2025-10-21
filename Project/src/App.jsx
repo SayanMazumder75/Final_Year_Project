@@ -1,3 +1,107 @@
+// import { Routes, Route } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import CarBookingForm from "./User_Dashboard/CarBookingForm";
+// import CarBuyForm from "./User_Dashboard/CurBuyForm";
+// import Homepage from './Homepage/Homepage';
+// import Dashboard from "./Admin_Panel/Dashboard";
+// import Profile from "./Admin_Panel/Profile";
+// import Setting from "./Admin_Panel/Setting";
+// import Users from "./Admin_Panel/Users";
+// import Sell_Vehicles from "./Admin_Panel/Sell_Vehicles";
+// import Rental_Vehicles from "./Admin_Panel/Rental_Vehicles";
+// import Payments from "./Admin_Panel/Payments";
+// import User_Dashboard from "./User_Dashboard/User_Dashboard";
+// import Signup from "./Login_Signup/Signup";
+// import Login from "./Login_Signup/Login";
+// import Preloader from "./Preloader";
+// import AdminSignup from "./Login_Signup/AdminSignup";
+// import AdminLogin from "./Login_Signup/AdminLogin";
+
+// import PostAd from "./Admin_Panel/PostAd";
+
+// import Wishlist from "./User_Dashboard/Wishlist";
+// // import { BrowserRouter as Router } from "react-router-dom";
+// import Car1 from "./Pages/car1";
+// import Car2 from "./Pages/car2";
+// import Car3 from "./Pages/car3";
+// import Car4 from "./Pages/car4";
+// import Car5 from "./Pages/car5";
+
+
+
+
+
+
+
+// function App() {
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     // Simulate loading time (e.g. fetching user data, assets, etc.)
+//     const timer = setTimeout(() => {
+//       setLoading(false);
+//     }, 2000); // 2 seconds
+
+//     return () => clearTimeout(timer);
+//   }, []);
+
+//   return (
+//     <>
+//     <Routes>
+//       {/* ... your other routes ... */}
+//       <Route path="/User_Dashboard" element={<User_Dashboard />} />
+      
+//       {/* Add car detail routes */}
+//       <Route path="/car/1" element={<Car1 />} />
+//       <Route path="/car/2" element={<Car2 />} />
+//       <Route path="/car/3" element={<Car3 />} />
+//       <Route path="/car/4" element={<Car4 />} />
+//       <Route path="/car/5" element={<Car5 />} />
+//     </Routes>
+
+
+//       {/* Preloader shows first */}
+//       <Preloader loading={loading} />
+
+//       {/* Show routes only after preloader is done */}
+//       {!loading && (
+//         <Routes>
+//           {/* Homepage route */}
+//           <Route path="/" element={<Homepage />} />
+//           <Route path="/booking" element={<CarBookingForm />} />
+//           <Route path="/buying" element={<CarBuyForm />} />
+
+//           {/* Admin Panel routes */}
+//           <Route path="/admin/dashboard" element={<Dashboard />} />
+//           <Route path="/Users" element={<Users />} />
+//           <Route path="/Setting" element={<Setting />} />
+//           <Route path="/Profile" element={<Profile />} />
+//           <Route path="/Sell_Vehicles" element={<Sell_Vehicles />} />
+//           <Route path="/Rental_Vehicles" element={<Rental_Vehicles />} />
+//           <Route path="/Payments" element={<Payments />} />
+
+          
+
+//           {/* User Dashboard routes */}
+//           <Route path="/User_Dashboard" element={<User_Dashboard />} />
+//           <Route path="/wishlist" element={<Wishlist />} /> {/* Add this route */}
+
+
+
+
+//           {/* Authentication routes */}
+//           <Route path="/Signup" element={<Signup />} />
+//           <Route path="/Login" element={<Login />} />
+//           <Route path="/AdminSignup" element={<AdminSignup />} />
+//           <Route path="/AdminLogin" element={<AdminLogin />} />
+//           <Route path="/PostAd" element={<PostAd />} />
+//         </Routes>
+//       )}
+//     </>
+//   );
+// }
+
+// export default App;
 import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CarBookingForm from "./User_Dashboard/CarBookingForm";
@@ -16,28 +120,34 @@ import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
 import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
-<<<<<<< Updated upstream
+<<<<<<< HEAD
 import PostAd from "./Admin_Panel/PostAd";
 =======
+
+import PostAd from "./Admin_Panel/PostAd";
+
+>>>>>>> f746b5f0a5227ae48275165dd389214a2d57394c
 import Wishlist from "./User_Dashboard/Wishlist";
+import Car1 from "./Pages/car1";
+import Car2 from "./Pages/car2";
+import Car3 from "./Pages/car3";
+import Car4 from "./Pages/car4";
+import Car5 from "./Pages/car5";
+// import RelatedProducts from './RelatedProducts/RelatedProducts';
 
-
->>>>>>> Stashed changes
 function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time (e.g. fetching user data, assets, etc.)
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); // 2 seconds
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      {/* Preloader shows first */}
       <Preloader loading={loading} />
 
       {/* Show routes only after preloader is done */}
@@ -47,7 +157,15 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/booking" element={<CarBookingForm />} />
           <Route path="/buying" element={<CarBuyForm />} />
-          
+
+          {/* Car detail routes - MOVED INSIDE THE MAIN ROUTES */}
+          <Route path="/car/1" element={<Car1 />} />
+          <Route path="/car/2" element={<Car2 />} />
+          <Route path="/car/3" element={<Car3 />} />
+          <Route path="/car/4" element={<Car4 />} />
+          <Route path="/car/5" element={<Car5 />} />
+          {/* <Route path="/related-products" element={<RelatedProducts />} /> */}
+
           {/* Admin Panel routes */}
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/Users" element={<Users />} />
@@ -56,11 +174,10 @@ function App() {
           <Route path="/Sell_Vehicles" element={<Sell_Vehicles />} />
           <Route path="/Rental_Vehicles" element={<Rental_Vehicles />} />
           <Route path="/Payments" element={<Payments />} />
-          
+
           {/* User Dashboard routes */}
           <Route path="/User_Dashboard" element={<User_Dashboard />} />
-          <Route path="/wishlist" element={<Wishlist />} /> {/* Add this route */}
-
+          <Route path="/wishlist" element={<Wishlist />} />
 
           {/* Authentication routes */}
           <Route path="/Signup" element={<Signup />} />

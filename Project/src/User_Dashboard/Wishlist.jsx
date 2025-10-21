@@ -84,7 +84,7 @@ const Wishlist = () => {
 
     if (wishlistedVehicles.length === 0) {
         return (
-            <div className="min-h-screen w-full mx-auto font-sans bg-gray-50 text-gray-900">
+            <div className="min-h-screen w-full font-sans bg-gray-50 text-gray-900 overflow-x-hidden">
                 {/* Header */}
                 <div className="w-full shadow-md sticky top-0 z-10 bg-white">
                     <Header />

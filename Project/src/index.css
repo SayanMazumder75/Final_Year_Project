@@ -1,8 +1,21 @@
 @import "tailwindcss";
-body{
-    margin: 0px;
-    padding: 0px;
+
+/* Reset default browser spacing */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* ✅ Prevents horizontal overflow globally */
+  box-sizing: border-box;
 }
+
+/* Optional: improve font rendering */
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+/* Shimmer animation (you already had this — keeping it intact) */
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);

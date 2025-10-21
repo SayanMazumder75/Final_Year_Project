@@ -16,13 +16,8 @@ import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
 import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
-<<<<<<< Updated upstream
 import PostAd from "./Admin_Panel/PostAd";
-=======
 import Wishlist from "./User_Dashboard/Wishlist";
-
-
->>>>>>> Stashed changes
 function App() {
   const [loading, setLoading] = useState(true);
 

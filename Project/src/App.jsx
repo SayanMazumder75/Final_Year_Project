@@ -16,8 +16,10 @@ import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
 import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
+import Wishlist from "./User_Dashboard/Wishlist";
 import PostAd from "./Admin_Panel/PostAd";
 import Wishlist from "./User_Dashboard/Wishlist";
+
 function App() {
   const [loading, setLoading] = useState(true);
 

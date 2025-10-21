@@ -98,7 +98,7 @@ const Wishlist = () => {
                             Start adding your favorite cars to the wishlist to see them here!
                         </p>
                         <Link 
-                            to="/user-dashboard"
+                            to="/user_dashboard"
                             className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-8 rounded-lg transition duration-300"
                         >
                             Browse Cars

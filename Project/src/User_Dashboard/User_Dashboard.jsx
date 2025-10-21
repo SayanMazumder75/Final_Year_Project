@@ -95,7 +95,7 @@ export default function User_Dashboard() {
       <section
         className="relative w-full h-[28rem] flex items-center justify-center"
         style={{
-          backgroundImage: url(${rental}),
+          backgroundImage: "url(${rental})",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

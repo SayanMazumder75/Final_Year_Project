@@ -155,7 +155,7 @@ export default function User_Dashboard() {
       </section>
 
       {/* Popular Cars Section with Wishlist Buttons */}
-      <section className="py-16 px-6 sm:px-12 md:px-20">
+      <section className="py-16 px-6 sm:px-12 md:px-20 bg-gray-400">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
           Popular Cars
         </h2>
@@ -212,7 +212,7 @@ export default function User_Dashboard() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-gray-100 px-6 sm:px-12 md:px-20">
+      <section className="py-16 bg-gray-600 text-black px-6 sm:px-12 md:px-20">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
           What Our Customers Say
         </h2>
@@ -239,7 +239,7 @@ export default function User_Dashboard() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-gradient-to-r from-yellow-500 to-orange-500 text-center text-white px-6">
+      <section className="py-20 bg-gradient-to-r bg-gray-400 to-black text-center text-white px-6">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
           Ready to Start Your Journey?
         </h2>
@@ -253,7 +253,7 @@ export default function User_Dashboard() {
             </button>
           </Link>
           <Link to="/buying">
-            <button className="bg-white hover:bg-gray-200 text-black px-8 py-3 rounded-lg text-lg font-semibold transition">
+            <button className="bg-white hover:bg-gray-400 text-black px-8 py-3 rounded-lg text-lg font-semibold transition">
               Buy a Car
             </button>
           </Link>

@@ -42,32 +42,32 @@ const CarRentalForm = () => {
     window.location.href = "/User_Dashboard"; //redirect to home page
   };
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-500 to-gray-200">
       <form
         onSubmit={handleSubmit}
-        className="relative bg-white p-10 rounded-2xl shadow-2xl w-full max-w-2xl transition hover:shadow-xl"
+        className="relative bg-gray-700 p-10 rounded-2xl shadow-2xl w-full max-w-2xl transition hover:shadow-xl"
       >
         {/* Home Icon (inside the form - top-right corner) */}
         <button
           type="button"
           onClick={goHome}
-          className="absolute top-5 right-5 bg-gray-100 p-2 rounded-full shadow hover:bg-gray-200 transition cursor-pointer"
+          className="absolute top-5 right-5 bg-gray-500 p-2 rounded-full shadow hover:bg-gray-400 transition cursor-pointer"
         >
-          <Home className="w-6 h-6 text-gray-700" />
+          <Home className="w-6 h-6 text-gray-200" />
         </button>
 
         {/* Title */}
-        <h2 className="text-3xl font-extrabold text-gray-800 mb-2 text-center">
+        <h2 className="text-3xl font-extrabold text-gray-300 mb-2 text-center">
           Car Rental Form
         </h2>
-        <p className="text-gray-500 text-center mb-8">
+        <p className="text-gray-300 text-center mb-8">
           Fill in your details to rent a car 🚘
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Name */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Full Name
             </label>
             <input
@@ -77,13 +77,13 @@ const CarRentalForm = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           {/* Phone */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Phone</label>
+            <label className="block text-gray-300 font-medium mb-2">Phone</label>
             <input
               type="number"
               name="phone"
@@ -91,13 +91,13 @@ const CarRentalForm = () => {
               value={formData.phone}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           {/* Email */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">Email</label>
+            <label className="block text-gray-300 font-medium mb-2">Email</label>
             <input
               type="email"
               name="email"
@@ -105,13 +105,13 @@ const CarRentalForm = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           {/* Pickup Date */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Pickup Date
             </label>
             <input
@@ -120,13 +120,13 @@ const CarRentalForm = () => {
               value={formData.pickupDate}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           {/* Pickup Time */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Pickup Time
             </label>
             <input
@@ -135,13 +135,13 @@ const CarRentalForm = () => {
               value={formData.pickupTime}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           {/* Dropoff Date */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Dropoff Date
             </label>
             <input
@@ -150,13 +150,13 @@ const CarRentalForm = () => {
               value={formData.dropoffDate}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
           {/* Car Selection */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Select Car
             </label>
             <select
@@ -164,7 +164,7 @@ const CarRentalForm = () => {
               value={formData.car}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2  focus:ring-indigo-500 outline-none bg-white"
             >
               <option value="">-- Choose a Car --</option>
               {carOptions.map((car, idx) => (
@@ -177,7 +177,7 @@ const CarRentalForm = () => {
 
           {/* Payment Method */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Payment Method
             </label>
             <select

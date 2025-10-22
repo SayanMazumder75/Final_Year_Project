@@ -41,7 +41,7 @@ function Homepage() {
   const User_Dashboard = () => navigate("/User_Dashboard");
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-700">
       {/* Header */}
       <header className="flex justify-between items-center px-8 py-4 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-20">
         <img src={logo} alt="Logo" className="h-12 w-auto object-contain" />
@@ -81,9 +81,9 @@ function Homepage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="bg-white py-16">
+      <section className="bg-gray-500 py-16">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-12">
+          <h2 className="text-3xl font-bold text-black mb-12">
             Why Choose Us?
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
@@ -125,9 +125,9 @@ function Homepage() {
       </section>
 
       {/* Featured Vehicles */}
-<section className="py-16 bg-gray-100">
+<section className="py-16 bg-gray-600">
   <div className="max-w-7xl mx-auto px-6">
-    <h2 className="text-3xl font-bold text-gray-800 text-center mb-12">
+    <h2 className="text-3xl font-bold text-black text-center mb-12">
       Featured Vehicles
     </h2>
     <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -202,9 +202,9 @@ function Homepage() {
       </section>
 
       {/* Reviews Section */}
-      <section className="bg-gray-100 py-16">
+      <section className="bg-gray-600 py-16">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <h3 className="text-3xl font-bold text-gray-800 mb-10">
+          <h3 className="text-3xl font-bold text-black mb-10">
             Customer Reviews
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
@@ -236,7 +236,7 @@ function Homepage() {
       </section>
 
       {/* Call to Action */}
-      <section className="bg-indigo-600 text-white py-16 text-center">
+      <section className="bg-gray-400 text-white py-16 text-center">
         <h2 className="text-3xl font-bold mb-4">
           Ready to Experience Your Dream Car?
         </h2>

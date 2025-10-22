@@ -48,32 +48,32 @@ const CarBuyForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-500 to-gray-200">
       <form
         onSubmit={handleSubmit}
-        className="relative bg-white p-10 rounded-2xl shadow-2xl w-full max-w-2xl transition hover:shadow-xl"
+        className="relative bg-gray-700 p-10 rounded-2xl shadow-2xl w-full max-w-2xl transition hover:shadow-xl"
       >
         {/* Home Icon (top-right corner) */}
         <button
           type="button"
           onClick={goHome}
-          className="absolute top-5 right-5 bg-gray-100 p-2 rounded-full shadow hover:bg-gray-200 transition cursor-pointer"
+          className="absolute top-5 right-5 bg-gray-500 p-2 rounded-full shadow hover:bg-gray-400 transition cursor-pointer"
         >
-          <Home className="w-6 h-6 text-gray-700" />
+          <Home className="w-6 h-6 text-gray-200" />
         </button>
 
         {/* Title */}
-        <h2 className="text-3xl font-extrabold text-gray-800 mb-2 text-center">
+        <h2 className="text-3xl font-extrabold text-gray-300 mb-2 text-center">
           Buy Your Dream Car
         </h2>
-        <p className="text-gray-500 text-center mb-8">
+        <p className="text-gray-300 text-center mb-8">
           Fill out the details to proceed with your car purchase 🚗
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Full Name */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Full Name
             </label>
             <input
@@ -83,13 +83,13 @@ const CarBuyForm = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
             />
           </div>
 
           {/* Phone */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Phone</label>
+            <label className="block text-gray-300 font-medium mb-2">Phone</label>
             <input
               type="number"
               name="phone"
@@ -97,13 +97,13 @@ const CarBuyForm = () => {
               value={formData.phone}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
             />
           </div>
 
           {/* Email */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">Email</label>
+            <label className="block text-gray-300 font-medium mb-2">Email</label>
             <input
               type="email"
               name="email"
@@ -111,13 +111,13 @@ const CarBuyForm = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
             />
           </div>
 
           {/* Select Car */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Select Car
             </label>
             <select
@@ -138,7 +138,7 @@ const CarBuyForm = () => {
 
           {/* Color */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Color</label>
+            <label className="block text-gray-300 font-medium mb-2">Color</label>
             <select
               name="color"
               value={formData.color}
@@ -157,8 +157,8 @@ const CarBuyForm = () => {
 
           {/* Price Range */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              Price Range
+            <label className="block text-gray-300 font-medium mb-2">
+              Price
             </label>
             <input
               type="text"
@@ -167,13 +167,13 @@ const CarBuyForm = () => {
               value={formData.priceRange}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
             />
           </div>
 
           {/* Address */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Address
             </label>
             <textarea
@@ -182,14 +182,14 @@ const CarBuyForm = () => {
               value={formData.address}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
               rows="3"
             ></textarea>
           </div>
 
           {/* Payment Method */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Payment Method
             </label>
             <select
@@ -210,7 +210,7 @@ const CarBuyForm = () => {
 
           {/* Test Drive Option */}
           <div className="md:col-span-2">
-            <label className="block text-gray-700 font-medium mb-2">
+            <label className="block text-gray-300 font-medium mb-2">
               Want a Test Drive?
             </label>
             <select

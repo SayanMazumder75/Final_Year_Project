@@ -4,9 +4,9 @@ import logo from "../images/logo.png"
 
 const Header = () => {
   return (
-    <div className="bg-gray-100">
+    <div>
       {/* Header */}
-      <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
+      <header className="flex justify-between items-center bg-gray-300 p-4 rounded-lg shadow-md">
         {/* Logo */}
         <div className="pl-12 md:pl-0">
           <img 

@@ -76,7 +76,7 @@ const handleAdd = () => {
 
 
   return (
-    <div className="min-h-screen flex bg-gray-700">
+    <div className="flex h-screen bg-gray-700 overflow-hidden">
       {/* Sidebar */}
       <div className="md:sticky md:top-0 h-screen">
         <Sidebar open={open} setOpen={setOpen} />
@@ -90,14 +90,14 @@ const handleAdd = () => {
         ></div>
       )}
 
-      {/* Main Area */}
-      <div
-        className={`flex-1 flex flex-col transition-opacity duration-300 ${
-          open
-            ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
-            : "opacity-100"
-        }`}
-      >
+        {/* Main scrollable area */}
+        <div
+          className={`flex-1 flex flex-col overflow-y-auto overflow-x-hidden transition-opacity duration-300 ${
+            open
+              ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
+              : "opacity-100"
+          }`}
+        >
         {/* Header */}
         {!open && (
           <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">

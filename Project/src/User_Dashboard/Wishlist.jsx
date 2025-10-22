@@ -46,6 +46,37 @@ const Wishlist = () => {
             price: { rent: "$160/day", buy: "$65,000" },
             img: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=800&q=80",
         },
+        {
+            id:6,
+            name: " Mercedes-Benz E-Class",
+            price: { rent: "$170/day", buy: "$70,000"},
+            img : "https://stimg.cardekho.com/images/carexteriorimages/930x620/Mercedes-Benz/E-Class/9790/1728652931654/front-view-118.jpg",
+        },
+        {
+            id:7,
+            name: " Jaguar XF",
+            price: { rent: "$120/day", buy: "$50,000"},
+            img : "https://stimg.cardekho.com/images/car-images/930x620/Jaguar/XF/5437/1581327491979/228_Loire-Blue_131c2d.jpg",
+        },
+        {
+            id:8,
+            name: " Jaguar F-Pace",
+            price: { rent: "$150/day", buy: "$65,000"},
+            img : "https://stimg.cardekho.com/images/carexteriorimages/630x420/Jaguar/F-Pace/10644/1755774688332/front-left-side-47.jpg?tr=w-664",
+        },
+        {
+           id:9,
+            name: " Range Rover ",
+            price: { rent: "$190/day", buy: "$90,000"},
+            img : "https://stimg.cardekho.com/images/carexteriorimages/930x620/Land-Rover/Range-Rover/11540/1719037924320/side-view-(left)-90.jpg?imwidth=890&impolicy=resize",
+        },
+        {
+            id:10,
+            name: " Lexus LM ",
+            price: { rent: "$200/day", buy: "$1,00,000"},
+            img : "https://stimg.cardekho.com/images/carexteriorimages/930x620/Lexus/LM/11604/1750066752466/front-left-side-47.jpg",
+        },
+
     ];
 
     // Get wishlisted vehicles

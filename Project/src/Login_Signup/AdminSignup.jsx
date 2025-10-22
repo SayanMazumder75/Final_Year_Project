@@ -116,6 +116,11 @@ export default function AdminSignup() {
         </div>
 
         {/* Right Section: Form */}
+
+        <div className="absolute top-0 right-0 p-5 cursor-pointer" 
+                    onClick={() => window.location.href = "/"}>
+                    <Home size={20} className="text-yellow-400" />
+                  </div>
         <div className="w-full md:w-1/2 p-6 sm:p-8 overflow-y-auto">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-yellow-400 mb-2 tracking-tight drop-shadow-md">
             Register Your Car Shop

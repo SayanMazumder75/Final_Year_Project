@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock,Home } from "lucide-react";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -51,6 +51,11 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-blue-950 to-slate-900 p-6">
       <div className="w-full max-w-lg bg-white/10 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8">
+        <div className="absolute top-0 right-0 p-2 cursor-pointer" 
+          onClick={() => window.location.href = "/"}
+          >
+          <Home size={20} className="text-yellow-400" />
+        </div>
         {/* Heading */}
         <h2 className="text-4xl font-bold text-center text-white mb-2 tracking-tight">
           Login Account
@@ -123,7 +128,7 @@ export default function Login() {
           </a>
         </p>
         <p className="text-sm text-gray-400 text-center mt-5">
-          Admin?{" "}
+          Owner?{" "}
           <a href="/AdminLogin" className="text-blue-400 hover:underline">
             Click here
           </a>

@@ -122,6 +122,10 @@ export default function Signup() {
           </div>
         </div>
 
+          <div className="absolute top-0 right-0 p-5 cursor-pointer" 
+            onClick={() => window.location.href = "/"}>
+            <Home size={20} className="text-yellow-400" />
+          </div>
         {/* Right: Form */}
         <div className="w-full md:w-1/2 p-6 sm:p-8 overflow-y-auto">
           <h2 className="text-2xl sm:text-4xl font-bold text-center text-white mb-2 tracking-tight">

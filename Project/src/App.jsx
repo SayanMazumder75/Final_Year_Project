@@ -23,8 +23,8 @@ import Car2 from "./Pages/car2";
 import Car3 from "./Pages/car3";
 import Car4 from "./Pages/car4";
 import Car5 from "./Pages/car5";
-
-
+import WebOwnerLogin from "./Login_Signup/WebOwnerLogin";
+import WebOwnerDashboard from "./Admin_Control/WebOwnerDashboard";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -67,6 +67,9 @@ function App() {
           <Route path="/Rental_Vehicles" element={<Rental_Vehicles />} />
           <Route path="/Payments" element={<Payments />} />
 
+          {/* Web_Admin_Control */}
+          <Route path="/WebOwnerDashboard" element={<WebOwnerDashboard />} />
+
           {/* User Dashboard routes */}
           <Route path="/User_Dashboard" element={<User_Dashboard />} />
           <Route path="/wishlist" element={<Wishlist />} />
@@ -77,6 +80,7 @@ function App() {
           <Route path="/AdminSignup" element={<AdminSignup />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/PostAd" element={<PostAd />} />
+          <Route path="/WebOwnerLogin" element={<WebOwnerLogin />} />
         </Routes>
       )}
     </>

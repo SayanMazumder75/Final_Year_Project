@@ -32,6 +32,7 @@ export default function AdminSignup() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [current, setCurrent] = useState(0);
+  const [loadingLocation, setLoadingLocation] = useState(false);
 
   const images = [showroom1, showroom2];
 
@@ -43,7 +44,58 @@ export default function AdminSignup() {
   }, [images.length]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setLoadingLocation(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`
+          );
+
+          if (!response.ok) {
+            throw new Error("Reverse geocoding failed");
+          }
+
+          const data = await response.json();
+          const detectedAddress = data.display_name || "";
+          // Try to extract postcode if available
+          const postal = data.address?.postcode || "";
+
+          setForm((prev) => ({
+            ...prev,
+            address: detectedAddress,
+            pin: postal || prev.pin,
+          }));
+        } catch (err) {
+          console.error("Location error:", err);
+          alert("Failed to fetch address. Try again or enter manually.");
+        } finally {
+          setLoadingLocation(false);
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("Unable to retrieve location. Check permissions and try again.");
+        setLoadingLocation(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0,
+      }
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -55,20 +107,19 @@ export default function AdminSignup() {
     }
 
     try {
-     const payload = {
-      ownerName: form.ownerName,
-      email: form.email,
-      password: form.password,
-      userType: "owner",
-      ownerCode: import.meta.env.VITE_OWNER_CODE,
-      contactNumber: form.number,
-      shopAddress: form.address,
-      pinCode: form.pin,
-      shopName: form.shopName,
-      businessRegId: form.registration,
-      profilePic: form.profilePic,
+      const payload = {
+        ownerName: form.ownerName,
+        email: form.email,
+        password: form.password,
+        userType: "owner",
+        ownerCode: import.meta.env.VITE_OWNER_CODE,
+        contactNumber: form.number,
+        shopAddress: form.address,
+        pinCode: form.pin,
+        shopName: form.shopName,
+        businessRegId: form.registration,
+        profilePic: form.profilePic,
       };
-
 
       console.log("sending payload:", payload);
 
@@ -214,7 +265,7 @@ export default function AdminSignup() {
               <div className="relative">
                 <Phone className="absolute left-3 top-2.5 text-gray-400" size={18} />
                 <input
-                  type="number"
+                  type="tel"
                   name="number"
                   value={form.number}
                   onChange={handleChange}
@@ -225,7 +276,7 @@ export default function AdminSignup() {
               </div>
             </div>
 
-            {/* Address */}
+            {/* Address with Auto Detect (icon button) */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Shop Address
@@ -238,9 +289,41 @@ export default function AdminSignup() {
                   onChange={handleChange}
                   required
                   rows={2}
-                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-900/70 text-white border border-gray-700 focus:ring-2 focus:ring-yellow-500 outline-none resize-none"
+                  className="w-full pl-10 pr-12 py-2 rounded-lg bg-gray-900/70 text-white border border-gray-700 focus:ring-2 focus:ring-yellow-500 outline-none resize-none"
                   placeholder="Street, City, State"
                 />
+                <button
+                  type="button"
+                  onClick={handleGetLocation}
+                  disabled={loadingLocation}
+                  className="absolute right-2 top-2.5 bg-yellow-500 hover:bg-yellow-400 text-black p-1.5 rounded-full transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  title="Get Current Location"
+                >
+                  {loadingLocation ? (
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
+                  ) : (
+                    <MapPin size={18} />
+                  )}
+                </button>
               </div>
             </div>
 
@@ -252,7 +335,7 @@ export default function AdminSignup() {
               <div className="relative">
                 <MapPin className="absolute left-3 top-2.5 text-gray-400" size={18} />
                 <input
-                  type="number"
+                  type="text"
                   name="pin"
                   value={form.pin}
                   onChange={handleChange}
@@ -285,7 +368,7 @@ export default function AdminSignup() {
                     if (file) {
                       const reader = new FileReader();
                       reader.onloadend = () => {
-                        setForm({ ...form, profilePic: reader.result });
+                        setForm((prev) => ({ ...prev, profilePic: reader.result }));
                       };
                       reader.readAsDataURL(file);
                     }

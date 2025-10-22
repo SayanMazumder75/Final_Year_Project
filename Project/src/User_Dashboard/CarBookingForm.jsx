@@ -30,12 +30,22 @@ const CarRentalForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const handleSubmit = (e) => {
+  //backend connection
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(
-      `🚗 Rental Confirmed!\n\nName: ${formData.name}\nPhone: ${formData.phone}\nEmail: ${formData.email}\nCar: ${formData.car}\nPickup: ${formData.pickupLocation} on ${formData.pickupDate} at ${formData.pickupTime}\nDropoff: ${formData.dropoffLocation} on ${formData.dropoffDate}\nPayment: ${formData.payment}`
-    );
+     try {
+    const response = await fetch("http://localhost:5000/api/rental", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    if (data.success) alert("Rental confirmed!");
+    else alert("Failed to submit");
+  } catch (err) {
+    alert("Error submitting form");
+  }
+    
   };
 
   const goHome = () => {

@@ -4,6 +4,7 @@ import Footer from "../Homepage/Footer";
 import Sidebar from "./Sidebar";
 import './Profile.css';
 
+
 const OwnerManagement = () => {
   const [owners, setOwners] = useState([]);
   const [newOwner, setNewOwner] = useState({
@@ -11,6 +12,22 @@ const OwnerManagement = () => {
     phone: "+91 ",
     city: "",
     dealershipName: ""
+  });
+
+// Remove or comment out the Profile component since it's not being used
+// export default function Profile() {
+  const [admin, setAdmin] = useState({
+    // profilepic:
+    //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQVE3Ygc1sWvufaY_668044fRxmL_9CB349g&s",
+    // fullname: "Rashmika Mandanna",
+    // username: "Rashmika_user",
+    // email: "Rashmika2@gmail.com",
+    // phone: "4567890123",
+    // role: "Admin",
+    // datejoined: "2025-01-13",
+    // status: "Active",
+    // password: "123",
+
   });
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);

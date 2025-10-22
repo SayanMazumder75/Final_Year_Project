@@ -8,10 +8,17 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload'); // to upload files
 
 // CORS configuration to allow requests from frontend and credentials
+// app.use(cors({
+//   origin: 'http://localhost:5173', // frontend URL
+//   credentials: true // allow cookies
+// }));
 app.use(cors({
-  origin: 'http://localhost:5173', // frontend URL
-  credentials: true // allow cookies
+  origin: ['http://localhost:5173', 'http://localhost:5174'], // both ports
+  credentials: true
 }));
+
+
+
 
 // Middlewares
 app.use(express.json({ limit: '10mb' }));  // increase JSON limit
@@ -30,22 +37,52 @@ app.use('/api', require('./Routes/categoryRoutes'));    // category routes
 app.use('/api', require('./Routes/upload'));            // upload routes
 app.use('/api', require('./Routes/productRouter'));     // product routes
 
+
+
 // Test endpoint
 app.get('/', (req, res) => {
   res.send('Hello from the server!');
 });
 
+// // MongoDB connection
+// const URI = process.env.MONGO_URI;
+// const connectDB = async () => {
+//   try {
+//     await mongoose.connect(URI);
+//     console.log('Connected to MongoDB');
+//   } catch (error) {
+//     console.error('Error connecting to MongoDB:', error);
+//   }
+// };
+// connectDB();
 // MongoDB connection
 const URI = process.env.MONGO_URI;
 const connectDB = async () => {
   try {
     await mongoose.connect(URI);
     console.log('Connected to MongoDB');
+    
+    // 🔥 ADD THE FIX HERE 🔥
+    const db = mongoose.connection.db;
+    try {
+      // Drop the problematic email index if it exists
+      await db.collection('owners').dropIndex('email_1');
+      console.log('✅ Fixed duplicate email index');
+    } catch (error) {
+      console.log('ℹ️ Email index already removed or not present');
+    }
+    // 🔥 END OF FIX 🔥
+    
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);
   }
 };
 connectDB();
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 // Start server
 app.listen(PORT, () => {

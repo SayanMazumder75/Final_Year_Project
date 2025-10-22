@@ -46,7 +46,7 @@ const Sidebar = () => {
         ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:w-30 `}
       >
         {/* Logo */} 
-        <h1 className="text-xl font-bold text-black text-center"> Admin</h1>
+        <h1 className="text-xl font-bold text-black text-center"> Owner</h1>
 
         {/* Menu */}
         <nav className="space-y-0.5 mt-3 flex flex-col">

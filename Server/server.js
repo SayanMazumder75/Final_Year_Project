@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
-const mongoose = require('mongoose');
-require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const fileUpload = require('express-fileupload'); // to upload files
+const fileUpload = require('express-fileupload'); // for file uploads
+const connectDB = require('./config/db'); // CommonJS import
+require('dotenv').config();
 
+<<<<<<< Updated upstream
 // CORS configuration to allow requests from frontend and credentials
 // app.use(cors({
 //   origin: 'http://localhost:5173', // frontend URL
@@ -14,6 +15,11 @@ const fileUpload = require('express-fileupload'); // to upload files
 // }));
 app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:5174'], // both ports
+=======
+// CORS configuration
+app.use(cors({
+  origin: 'http://localhost:5173', // frontend URL
+>>>>>>> Stashed changes
   credentials: true
 }));
 
@@ -21,21 +27,25 @@ app.use(cors({
 
 
 // Middlewares
-app.use(express.json({ limit: '10mb' }));  // increase JSON limit
-app.use(express.urlencoded({ limit: '10mb', extended: true })); // handle form data
-
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cookieParser());
 app.use(fileUpload({
   useTempFiles: true,
-  limits: { fileSize: 10 * 1024 * 1024 } // limit file uploads to 10 MB
+  limits: { fileSize: 10 * 1024 * 1024 } // 10 MB
 }));
 
+// Connect to MongoDB
+connectDB();
+
 // Routes
-app.use('/user', require('./Routes/userRoutes'));       // user routes
-app.use('/owner', require('./Routes/ownerRoutes'));     // owner routes
-app.use('/api', require('./Routes/categoryRoutes'));    // category routes
-app.use('/api', require('./Routes/upload'));            // upload routes
-app.use('/api', require('./Routes/productRouter'));     // product routes
+app.use('/user', require('./Routes/userRoutes'));
+app.use('/owner', require('./Routes/ownerRoutes'));
+app.use('/api', require('./Routes/categoryRoutes'));
+app.use('/api', require('./Routes/upload'));
+app.use('/api', require('./Routes/productRouter'));
+app.use('/api/rental', require('./Routes/rentalRoutes'));
+app.use('/api/buyer', require('./Routes/buyRoutes'));
 
 
 
@@ -44,6 +54,7 @@ app.get('/', (req, res) => {
   res.send('Hello from the server!');
 });
 
+<<<<<<< Updated upstream
 // // MongoDB connection
 // const URI = process.env.MONGO_URI;
 // const connectDB = async () => {
@@ -79,12 +90,17 @@ const connectDB = async () => {
 };
 connectDB();
 
+=======
+>>>>>>> Stashed changes
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+<<<<<<< Updated upstream
 
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+=======
+>>>>>>> Stashed changes

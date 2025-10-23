@@ -36,13 +36,24 @@ const CarBuyForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(
-      `🚘 Car Purchase Request Submitted!\n\nName: ${formData.name}\nPhone: ${formData.phone}\nEmail: ${formData.email}\nCar: ${formData.car}\nColor: ${formData.color}\nPrice Range: ${formData.priceRange}\nAddress: ${formData.address}\nPayment: ${formData.payment}\nTest Drive: ${formData.testDrive}`
-    );
-  };
+  //buyer backend 
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+     try {
+    const response = await fetch("http://localhost:5000/api/buyer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    if (data.success) alert("Buyer confirmed!");
+    else alert("Failed to submit");
+  } catch (err) {
+    alert("Error submitting form");
+  }
+    
+  };
   const goHome = () => {
     window.location.href = "/User_Dashboard"; // redirect to homepage
   };
@@ -91,7 +102,7 @@ const CarBuyForm = () => {
           <div>
             <label className="block text-gray-700 font-medium mb-2">Phone</label>
             <input
-              type="number"
+              type="tel"
               name="phone"
               placeholder="+91 9876543210"
               value={formData.phone}

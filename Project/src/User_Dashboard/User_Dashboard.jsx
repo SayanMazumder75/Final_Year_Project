@@ -3,7 +3,7 @@ import Header from "../Admin_Panel/Header";
 import rental from "./rental.jpg";
 import rental2 from "./rental2.jpg";
 import { Link } from "react-router-dom";
-
+import AfterLogin from "./AfterLogin";
 
 // Cars Data (Dynamic)
 const carsData = [
@@ -107,7 +107,7 @@ export default function User_Dashboard() {
         <Header />
 
         {/* Wishlist Navigation Bar */}
-        <div className="bg-yellow-500 py-3 px-6">
+        {/* <div className="bg-yellow-500 py-3 px-6">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <span className="text-black font-bold text-lg">
               ❤ My Wishlist: {wishlist.length} {wishlist.length === 1 ? 'item' : 'items'}
@@ -119,7 +119,7 @@ export default function User_Dashboard() {
               View Wishlist
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Hero Section */}
@@ -139,76 +139,13 @@ export default function User_Dashboard() {
           <p className="mt-4 text-lg md:text-xl">
             Flexible plans to buy or rent premium cars at the best prices.
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4">
-            <Link to="/booking">
-              <button className="px-6 py-3 bg-green-500 hover:bg-green-700 text-black font-semibold rounded-lg shadow-lg transition">
-                Rent a Car
-              </button>
-            </Link>
-            <Link to="/buying">
-              <button className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-lg shadow-lg transition">
-                Buy a Car
-              </button>
-            </Link>
-          </div>
+          
         </div>
       </section>
 
       {/* Popular Cars Section with Wishlist Buttons */}
-      <section className="py-16 px-6 sm:px-12 md:px-20 bg-gray-400">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          Popular Cars
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {carsData.map((car) => (
-            <div
-              key={car.id}
-              className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition duration-300 relative"
-            >
-              {/* Wishlist Heart Button */}
-              <button
-                onClick={() => toggleWishlist(car.id)}
-                className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-lg hover:scale-110 transition duration-300 z-10 text-2xl"
-                title={isInWishlist(car.id) ? "Remove from wishlist" : "Add to wishlist"}
-              >
-                {isInWishlist(car.id) ? '❤' : '🤍'}
-              </button>
-
-              <img
-                src={car.img}
-                alt={car.name}
-                className="w-full h-56 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold">{car.name}</h3>
-                <p className="text-gray-600">
-                  Rent: {car.price.rent} | Buy: {car.price.buy}
-                </p>
-                <div className="flex gap-3 mt-4">
-
-                  <Link to="/booking" className="flex-1">
-                    <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition">
-                      Rent
-                    </button>
-                  </Link>
-                  <Link to="/buying" className="flex-1">
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
-                      Buy
-                    </button>
-
-                  </Link>
-                  <Link to={`/car/${car.id}`} className="flex-1">
-                    <button className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition">
-                      Details
-                    </button>
-
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
+      <section className="py-16 px-6 sm:px-12 md:px-20 bg-gray-400 ">
+        <AfterLogin />
       </section>
 
       {/* Testimonials */}
@@ -239,26 +176,20 @@ export default function User_Dashboard() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-gradient-to-r bg-gray-400 to-black text-center text-white px-6">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Ready to Start Your Journey?
+      <section className="py-20 bg-gradient-to-r from-gray-700 via-gray-900 to-black text-center text-white px-6">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
+          Your Dream Car Awaits
         </h2>
-        <p className="mb-6 text-lg md:text-xl">
-          Book your car today — rent or buy with just a click.
+        <p className="mb-8 text-lg md:text-xl max-w-2xl mx-auto">
+          Explore our premium collection of cars and make your journey unforgettable. Whether it's renting for a weekend getaway or buying your ultimate ride, we make it seamless and hassle-free.
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link to="/booking">
-            <button className="bg-black hover:bg-gray-800 px-8 py-3 rounded-lg text-lg font-semibold transition">
-              Rent a Car
-            </button>
-          </Link>
-          <Link to="/buying">
-            <button className="bg-white hover:bg-gray-400 text-black px-8 py-3 rounded-lg text-lg font-semibold transition">
-              Buy a Car
-            </button>
-          </Link>
-        </div>
+        <Link to="/wishlist">
+          <button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 rounded-xl text-lg transition-shadow shadow-lg hover:shadow-xl">
+            Explore Wishlist
+          </button>
+        </Link>
       </section>
+
 
       {/* Footer - CORRECTED VERSION */}
       <footer className="bg-gray-900 text-gray-300 py-10 px-6 sm:px-12 md:px-20">

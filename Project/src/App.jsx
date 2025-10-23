@@ -25,6 +25,9 @@ import Car4 from "./Pages/car4";
 import Car5 from "./Pages/car5";
 import WebOwnerLogin from "./Login_Signup/WebOwnerLogin";
 import WebOwnerDashboard from "./Admin_Control/WebOwnerDashboard";
+import AfterLogin from "./User_Dashboard/AfterLogin";
+import Buy from "./User_Dashboard/Buy";
+import Rent from "./User_Dashboard/Rent";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -73,7 +76,11 @@ function App() {
           {/* User Dashboard routes */}
           <Route path="/User_Dashboard" element={<User_Dashboard />} />
           <Route path="/wishlist" element={<Wishlist />} />
-
+          <Route path="/AfterLogin" element={<AfterLogin />} />
+          <Route path="/Buy" element={<Buy />} />
+          <Route path="/Rent" element={<Rent />} />
+         
+          
           {/* Authentication routes */}
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Login" element={<Login />} />

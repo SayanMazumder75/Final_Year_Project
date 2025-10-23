@@ -37,7 +37,7 @@ export default function Login() {
       console.log("Response:", data);
 
       if (response.ok) {
-        alert("Login successful!");
+      
         window.location.href = "/User_Dashboard";
       } else {
         alert(data.msg || "Login failed. Please try again.");

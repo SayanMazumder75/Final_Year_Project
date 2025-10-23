@@ -38,7 +38,7 @@ function Homepage() {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  const User_Dashboard = () => navigate("/User_Dashboard");
+  const User_Dashboard = () => navigate("/Login");
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-700">

@@ -33,7 +33,7 @@ export default function AdminLogin() {
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("userType", data.userType);
 
-    alert("Admin logged in successfully!");
+    
     window.location.href = "/Profile"; // redirect to admin dashboard
 
   } catch (err) {

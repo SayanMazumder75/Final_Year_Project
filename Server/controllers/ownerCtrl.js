@@ -9,7 +9,7 @@ const createRefreshToken = (owner) => jwt.sign(owner, process.env.REFRESH_TOKEN_
 const ownerCtrl = {
   register: async (req, res) => {
     try {
-      const { ownerName, shopName, businessRegId, email, contactNumber, shopAddress, pinCode, password, ownerCode,profilePic  } = req.body;
+      const { ownerName, shopName, businessRegId, email, contactNumber, shopAddress, pinCode, password, ownerCode } = req.body;
 
       if (ownerCode !== process.env.OWNER_SECRET) {
         return res.status(403).json({ msg: "Invalid owner code" });
@@ -23,7 +23,7 @@ const ownerCtrl = {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newOwner = new OwnerProfile({
-        ownerName, shopName, businessRegId, email, contactNumber, shopAddress, pinCode, password: hashedPassword,profilePic 
+        ownerName, shopName, businessRegId, email, contactNumber, shopAddress, pinCode, password: hashedPassword
       });
 
       await newOwner.save();
@@ -38,7 +38,7 @@ const ownerCtrl = {
         sameSite: 'Lax'
       });
 
-      res.status(201).json({ msg: "Owner registered successfully", ownerId: newOwner._id, accessToken,owner: newOwner });
+      res.status(201).json({ msg: "Owner registered successfully", ownerId: newOwner._id, accessToken });
 
     } catch (err) {
       res.status(500).json({ msg: err.message });

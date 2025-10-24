@@ -11,11 +11,9 @@ const Sidebar = () => {
 
   const menuItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <Home size={15} /> },
-    { name: "Users", path: "/Users", icon: <UsersRound  size={15} /> },
     { name: "Sell Vehicles", path: "/Sell_Vehicles", icon: <Car size={15} /> },
     { name: "Rental Vehicles", path: "/Rental_Vehicles", icon: <Car size={15} /> },
     { name: "Payments", path: "/Payments", icon: <IndianRupee  size={15} /> },
-    { name: "Setting", path: "/Setting", icon: <Settings size={15} /> },
     { name: "Profile", path: "/Profile", icon: <UserPen size={15} /> },
 
   ];

@@ -2,306 +2,197 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "../Homepage/Footer";
 import Sidebar from "./Sidebar";
-import './Profile.css';
+import Update from "./Update"; // <-- import edit form
 
-
-const OwnerManagement = () => {
-  const [owners, setOwners] = useState([]);
-  const [newOwner, setNewOwner] = useState({
-    name: "",
-    phone: "+91 ",
-    city: "",
-    dealershipName: ""
-  });
-
-// Remove or comment out the Profile component since it's not being used
-// export default function Profile() {
-  const [admin, setAdmin] = useState({
-    // profilepic:
-    //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQVE3Ygc1sWvufaY_668044fRxmL_9CB349g&s",
-    // fullname: "Rashmika Mandanna",
-    // username: "Rashmika_user",
-    // email: "Rashmika2@gmail.com",
-    // phone: "4567890123",
-    // role: "Admin",
-    // datejoined: "2025-01-13",
-    // status: "Active",
-    // password: "123",
-
-  });
-  const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(false);
+export default function Profile() {
+  const [owner, setOwner] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Use your existing backend URL
-  const API_URL = "http://localhost:5000/owner";
+  const [editing, setEditing] = useState(false);
+  const [formData, setFormData] = useState({});
 
-  // Fetch owners from your backend
-  const fetchOwners = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${API_URL}/owners`, {
-        credentials: 'include' // Important for cookies/sessions
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch owners: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      setOwners(data);
-      setError("");
-    } catch (err) {
-      setError("Error fetching owners: " + err.message);
-      console.error("Fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Load owners on component mount
   useEffect(() => {
-    fetchOwners();
+    const fetchOwner = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          setError("You must be logged in to view this page.");
+          setLoading(false);
+          return;
+        }
+
+        const res = await fetch("http://localhost:5000/owner/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) throw new Error(`Failed to fetch profile: ${res.status}`);
+
+        const data = await res.json();
+
+        if (!data.profilePic) {
+          data.profilePic = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+        } else {
+          data.profilePic = `http://localhost:5000${data.profilePic}`;
+        }
+
+        setOwner(data);
+        setFormData({
+          ownerName: data.ownerName || "",
+          username: data.username || "",
+          email: data.email || "",
+          contactNumber: data.contactNumber || "",
+          shopName: data.shopName || "",
+          businessRegId: data.businessRegId || "",
+          shopAddress: data.shopAddress || "",
+          pinCode: data.pinCode || "",
+        });
+
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchOwner();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewOwner(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  // Add owner to your backend
-  const handleAddOwner = async (e) => {
-    e.preventDefault();
-    
-    if (!newOwner.name || !newOwner.dealershipName || !newOwner.city) {
-      alert("Please fill all required fields!");
-      return;
-    }
-
+  const handleProfileUpdate = async () => {
     try {
-      setLoading(true);
-      const response = await fetch(`${API_URL}/owners`, {
-        method: 'POST',
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch("http://localhost:5000/owner/me", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        credentials: 'include',
-        body: JSON.stringify(newOwner),
+        body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      if (!res.ok) throw new Error("Failed to update profile");
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to add owner');
+      const updated = await res.json();
+      if (!updated.profilePic) {
+        updated.profilePic = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+      } else {
+        updated.profilePic = `http://localhost:5000${updated.profilePic}`;
       }
 
-      // Update local state
-      setOwners(prev => [...prev, data]);
-      setNewOwner({
-        name: "",
-        phone: "+91 ",
-        city: "",
-        dealershipName: ""
-      });
-      setShowForm(false);
-      setError("");
-      alert("Owner added successfully!");
+      setOwner(updated);
+      setEditing(false);
+      alert("Profile updated successfully!");
     } catch (err) {
-      setError("Error adding owner: " + err.message);
-      console.error("Add owner error:", err);
-      alert(err.message || "Failed to add owner. Please try again.");
-    } finally {
-      setLoading(false);
+      console.error(err);
+      alert(err.message);
     }
   };
 
-  // Delete owner from your backend
-  const handleDeleteOwner = async (ownerId) => {
-    if (!window.confirm("Are you sure you want to delete this owner?")) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const response = await fetch(`${API_URL}/owners/${ownerId}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to delete owner');
-      }
-
-      // Update local state
-      setOwners(prev => prev.filter(owner => owner._id !== ownerId));
-      setError("");
-      alert("Owner deleted successfully!");
-    } catch (err) {
-      setError("Error deleting owner: " + err.message);
-      console.error("Delete error:", err);
-      alert(err.message || "Failed to delete owner. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (loading) return <p className="text-white p-6">Loading owner profile...</p>;
+  if (error) return <p className="text-red-500 p-6">{error}</p>;
 
   return (
-    <div className="admin-container">
-      {/* Header */}
-      <Header />
-      
-      <div className="admin-main">
-        {/* Sidebar */}
-        <Sidebar />
-        
-        {/* Main Content */}
-        <div className="admin-content">
-          <div className="owner-management">
-            {/* Header Section */}
-            <div className="owner-header">
-              <h2>Owner Management</h2>
-              <button 
-                className="add-owner-btn"
-                onClick={() => setShowForm(!showForm)}
-                disabled={loading}
+    <div className="flex h-screen bg-gray-700">
+      <Sidebar open={open} setOpen={setOpen} />
+      <div className="flex-1 flex flex-col">
+        <Header />
+        <div className="bg-gray-700 flex items-center justify-center p-6">
+          <div className="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-6">
+            <div className="flex items-center space-x-6 border-b pb-4 mb-4">
+              <img
+                src={owner.profilePic}
+                alt="Profile"
+                className="w-24 h-24 rounded-full object-cover border-4 border-blue-400"
+              />
+              <div>
+                <h2 className="text-2xl font-semibold">{owner.ownerName}</h2>
+                <p className="text-gray-600">@{owner.username || "owner_user"}</p>
+                <span
+                  className={`px-3 py-1 text-sm rounded-full ${
+                    owner.status === "Active"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {owner.status || "Active"}
+                </span>
+              </div>
+            </div>
+
+            {/* View or Edit Mode */}
+            {!editing ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <p className="text-gray-500 text-sm">Email</p>
+                    <p className="font-medium">{owner.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Phone</p>
+                    <p className="font-medium">{owner.contactNumber}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Shop Name</p>
+                    <p className="font-medium">{owner.shopName}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Business Reg ID</p>
+                    <p className="font-medium">{owner.businessRegId}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Shop Address</p>
+                    <p className="font-medium">{owner.shopAddress}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Pin Code</p>
+                    <p className="font-medium">{owner.pinCode}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Role</p>
+                    <p className="font-medium">{owner.role || "Owner"}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Date Joined</p>
+                    <p className="font-medium">
+                      {new Date(owner.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex justify-end mt-6 space-x-4">
+                  <button
+                    onClick={() => setEditing(true)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-xl shadow hover:bg-blue-600"
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                onClick={() => handleFeatureComing("Change Password")}
+                className="px-4 py-2 bg-green-300 rounded-xl shadow hover:bg-green-500"
               >
-                {showForm ? 'Cancel' : '+ Add Owner'}
+                Change Password
               </button>
-            </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="error-message">
-                {error}
-              </div>
-            )}
-
-            {/* Loading Spinner */}
-            {loading && (
-              <div className="loading-spinner">
-                Loading...
-              </div>
-            )}
-
-            {/* Add Owner Form */}
-            {showForm && (
-              <div className="add-owner-form">
-                <h3>Add New Owner</h3>
-                <form onSubmit={handleAddOwner}>
-                  <div className="form-group">
-                    <label>Owner Name *</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={newOwner.name}
-                      onChange={handleInputChange}
-                      placeholder="Enter owner name"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Phone Number</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={newOwner.phone}
-                      onChange={handleInputChange}
-                      placeholder="+91 1234567890"
-                      disabled={loading}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Dealership Name *</label>
-                    <input
-                      type="text"
-                      name="dealershipName"
-                      value={newOwner.dealershipName}
-                      onChange={handleInputChange}
-                      placeholder="Enter dealership name"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>City *</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={newOwner.city}
-                      onChange={handleInputChange}
-                      placeholder="Enter city"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-
-                  <div className="form-actions">
-                    <button 
-                      type="submit" 
-                      className="submit-btn"
-                      disabled={loading}
-                    >
-                      {loading ? 'Adding...' : 'Add Owner'}
-                    </button>
-                  </div>
-                </form>
-              </div>
-            )}
-
-            {/* Owners List */}
-            <div className="owners-list">
-              <h3>Existing Owners ({owners.length})</h3>
-              {owners.length === 0 && !loading ? (
-                <div className="no-owners">
-                  <p>No owners added yet. Click "Add Owner" to get started.</p>
                 </div>
-              ) : (
-                <div className="owners-grid">
-                  {owners.map(owner => (
-                    <div key={owner._id} className="owner-card">
-                      <div className="owner-info">
-                        <h4>{owner.dealershipName}</h4>
-                        <p><strong>Owner:</strong> {owner.name}</p>
-                        <p><strong>Phone:</strong> {owner.phone}</p>
-                        <p><strong>City:</strong> {owner.city}</p>
-                        <p className="owner-date">
-                          Added: {new Date(owner.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <div className="owner-actions">
-                        <button className="edit-btn" disabled={loading}>
-                          Edit
-                        </button>
-                        <button 
-                          className="delete-btn"
-                          onClick={() => handleDeleteOwner(owner._id)}
-                          disabled={loading}
-                        >
-                          {loading ? 'Deleting...' : 'Delete'}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+
+                
+              </>
+            ) : (
+              <Update
+                formData={formData}
+                setFormData={setFormData}
+                handleProfileUpdate={handleProfileUpdate}
+                cancelEdit={() => setEditing(false)}
+              />
+            )}
           </div>
         </div>
+        <Footer />
       </div>
-      
-      {/* Footer */}
-      <Footer />
     </div>
   );
-};
+}
 
-export default OwnerManagement;
+
+

@@ -74,9 +74,10 @@ if (!fs.existsSync(uploadsDir)) {
 
 // CORS configuration
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: ['http://localhost:5173', 'http://localhost:5174'], // frontend URLs
   credentials: true
 }));
+
 
 // Middlewares
 app.use(express.json({ limit: '10mb' }));
@@ -101,7 +102,7 @@ app.use('/api', require('./Routes/upload'));
 app.use('/api', require('./Routes/productRouter'));
 app.use('/api/rental', require('./Routes/rentalRoutes'));
 app.use('/api/buyer', require('./Routes/buyRoutes'));
-
+app.use('/api', require('./Routes/paymentsroutes')); // <-- payment routes
 // Test endpoint
 app.get('/', (req, res) => {
   res.send('Hello from the server!');

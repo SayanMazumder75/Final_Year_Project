@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Home } from "lucide-react"; // Icon from lucide-react
+import { useNavigate } from "react-router-dom";
+import { Home } from "lucide-react";
 
 const CarBuyForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -14,57 +16,40 @@ const CarBuyForm = () => {
     testDrive: "",
   });
 
-  const carOptions = [
-    "Tesla Model 3",
-    "BMW X5",
-    "Audi A4",
-    "Mercedes GLA",
-    "Toyota Fortuner",
-    "Hyundai Creta",
-  ];
-
- 
-
+  const carOptions = ["Tesla Model 3","BMW X5","Audi A4","Mercedes GLA","Toyota Fortuner","Hyundai Creta"];
   const colorOptions = ["White", "Black", "Blue", "Red", "Silver", "Gray"];
-
   const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking", "Cash"];
-
-  const testDriveOptions = ["Yes", "No"];
+  const testDriveOptions = ["Yes","No"];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  //buyer backend 
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-     try {
-    const response = await fetch("http://localhost:5000/api/buyer", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    const data = await response.json();
-    if (data.success) alert("Buyer confirmed!");
-    else alert("Failed to submit");
-  } catch (err) {
-    alert("Error submitting form");
-  }
-    
-  };
-  const goHome = () => {
-    window.location.href = "/User_Dashboard"; // redirect to homepage
+    // validate required fields
+    const requiredFields = ["name","phone","email","car","color","priceRange","address","payment"];
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        alert(`Please fill ${field}`);
+        return;
+      }
+    }
+
+    // Navigate to payment page with form data
+    navigate("/PaymentPage", { state: { formData } });
   };
 
-  return (
+  const goHome = () => navigate("/User_Dashboard");
+
+ return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-500 to-gray-200">
       <form
         onSubmit={handleSubmit}
         className="relative bg-gray-700 p-10 rounded-2xl shadow-2xl w-full max-w-2xl transition hover:shadow-xl"
       >
-        {/* Home Icon (top-right corner) */}
+        {/* Home Button */}
         <button
           type="button"
           onClick={goHome}
@@ -78,11 +63,12 @@ const CarBuyForm = () => {
           Buy Your Dream Car
         </h2>
         <p className="text-gray-300 text-center mb-8">
-          Fill out the details to proceed with your car purchase 🚗
+          Fill out the details 🚗
         </p>
 
+        {/* Form Fields */}
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Full Name */}
+          {/* Name */}
           <div>
             <label className="block text-gray-300 font-medium mb-2">
               Full Name
@@ -94,7 +80,7 @@ const CarBuyForm = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
@@ -108,7 +94,7 @@ const CarBuyForm = () => {
               value={formData.phone}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
@@ -122,11 +108,11 @@ const CarBuyForm = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
-          {/* Select Car */}
+          {/* Car Selection */}
           <div className="md:col-span-2">
             <label className="block text-gray-300 font-medium mb-2">
               Select Car
@@ -136,7 +122,7 @@ const CarBuyForm = () => {
               value={formData.car}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
             >
               <option value="">-- Choose a Car --</option>
               {carOptions.map((car, idx) => (
@@ -155,7 +141,7 @@ const CarBuyForm = () => {
               value={formData.color}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
             >
               <option value="">-- Choose Color --</option>
               {colorOptions.map((color, idx) => (
@@ -168,9 +154,7 @@ const CarBuyForm = () => {
 
           {/* Price Range */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">
-              Price
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Price</label>
             <input
               type="text"
               name="priceRange"
@@ -178,7 +162,7 @@ const CarBuyForm = () => {
               value={formData.priceRange}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
 
@@ -189,13 +173,13 @@ const CarBuyForm = () => {
             </label>
             <textarea
               name="address"
-              placeholder="Enter your full address"
               value={formData.address}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-blue-500 outline-none"
               rows="3"
-            ></textarea>
+              placeholder="123 Street Name, City, State, ZIP"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
+            />
           </div>
 
           {/* Payment Method */}
@@ -208,7 +192,7 @@ const CarBuyForm = () => {
               value={formData.payment}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
             >
               <option value="">-- Choose Payment Method --</option>
               {paymentOptions.map((method, idx) => (
@@ -229,7 +213,7 @@ const CarBuyForm = () => {
               value={formData.testDrive}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
             >
               <option value="">-- Select --</option>
               {testDriveOptions.map((option, idx) => (
@@ -244,13 +228,13 @@ const CarBuyForm = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full mt-8 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md transition cursor-pointer"
+          className="w-full mt-8 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 shadow-md transition cursor-pointer"
         >
-          Submit Purchase Request
+          Proceed to Payment
         </button>
       </form>
     </div>
   );
 };
- 
+
 export default CarBuyForm;

@@ -3,12 +3,14 @@ import { User, Users, Car, LogOut } from "lucide-react";
 
 export default function Sidebar({ activeTab, setActiveTab }) {
   return (
-    <div className="md:w-64 w-full bg-gray-800 flex flex-col md:h-screen">
-      <div className="p-6 text-2xl font-bold text-yellow-400 text-center md:text-left">
+    <div className="bg-gray-800 flex flex-row md:flex-col w-full md:w-50 md:h-screen">
+      {/* Dashboard title */}
+      <div className="p-4 md:p-6 text-2xl font-bold text-yellow-400 text-center md:text-left flex-shrink-0">
         Dashboard
       </div>
-      <div className="flex md:flex-col flex-row justify-around md:justify-start flex-1 space-y-0 md:space-y-2">
-        {/* Tab buttons */}
+
+      {/* Tab buttons */}
+      <div className="flex-1 flex flex-row md:flex-col justify-around md:justify-start items-center md:items-start space-y-0 md:space-y-2">
         <button
           onClick={() => setActiveTab("users")}
           className={`flex items-center p-4 hover:bg-gray-700 transition w-full md:w-auto justify-center md:justify-start ${

@@ -28,7 +28,7 @@ import WebOwnerDashboard from "./Admin_Control/WebOwnerDashboard";
 import AfterLogin from "./User_Dashboard/AfterLogin";
 import Buy from "./User_Dashboard/Buy";
 import Rent from "./User_Dashboard/Rent";
-
+import { PaymentPage, PaymentSuccess } from './PaymentPage/PaymentPage'; 
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -88,6 +88,9 @@ function App() {
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/PostAd" element={<PostAd />} />
           <Route path="/WebOwnerLogin" element={<WebOwnerLogin />} />
+          {/* Payment routes */}
+          <Route path="/PaymentPage" element={<PaymentPage />} />
+          <Route path="/PaymentSuccess" element={<PaymentSuccess />} />
         </Routes>
       )}
     </>

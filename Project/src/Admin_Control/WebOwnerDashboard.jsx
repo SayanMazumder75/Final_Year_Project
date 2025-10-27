@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import CarOwnersPage from "./CarOwnersPage";
 // import CarsPage from "./CarsPage";
-// import UsersPage from "./UsersPage";
+import UsersPage from "./UsersPage";
 
 export default function WebOwnerDashboard() {
   const [activeTab, setActiveTab] = useState("users");
@@ -16,7 +16,7 @@ export default function WebOwnerDashboard() {
 
       {/* Main Content */}
       <div className="flex-1 h-screen overflow-auto p-4 sm:p-6 md:p-8">
-        {activeTab === "users"}
+        {activeTab === "users" && <UsersPage/>}
         {activeTab === "carOwners" && <CarOwnersPage />}
         {activeTab === "cars"}
       </div>

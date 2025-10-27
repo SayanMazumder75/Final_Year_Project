@@ -406,6 +406,24 @@ export default function PostAd() {
                 <div key={`ph-${i}`} className="hidden md:block rounded border border-dashed border-gray-200 bg-white h-20" />
               ))}
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 mt-4">Ad Type *</label>
+              <select
+                name="adType"
+                value={form.adType}
+                onChange={handleChange}
+                className={`mt-1 block w-full rounded-md border px-3 py-2 ${
+                  errors.adType ? "border-red-500" : "border-blue-500 focus:border-blue-600 focus:ring-3 focus:ring-blue-600"
+                }`}
+                required
+              >
+                <option value="">Select option</option>
+                <option value="sell">For Sell</option>
+                <option value="rent">For Rent</option>
+              </select>
+              {errors.adType && <p className="text-sm text-red-500 mt-1">{errors.adType}</p>}
+            </div>
           </section>
 
           <section>
@@ -464,6 +482,7 @@ export default function PostAd() {
                     price: "",
                     state: "",
                     phone: "",
+                    adType: "",
                   });
                   setErrors({});
                   handleClearAllImages();

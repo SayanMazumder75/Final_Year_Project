@@ -80,7 +80,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div className="flex-1 px-3 sm:px-6 pt-4 sm:pt-6 pb-6 sm:pb-8 overflow-x-auto md:max-w-1500">
+        <div className="flex-1 px-3 sm:px-6 pt-4 sm:pt-6 pb-6 sm:pb-8 overflow-x-hidden md:max-w-1500">
           <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
             {/* Search */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-5 gap-3">

@@ -1,11 +1,12 @@
 // PostAd.jsx
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Header from "./Header";
 
 const MAX_IMAGES = 20;
 const YEARS = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i); // last 30 years
 
 export default function PostAd() {
+  
   const [form, setForm] = useState({
     brand: "",
     year: "",
@@ -41,6 +42,42 @@ export default function PostAd() {
     // optional: images minimum? not required here
     return e;
   }
+  const [owner, setOwner] = useState(null);
+  useEffect(() => {
+      const fetchOwner = async () => {
+        try {
+          const token = localStorage.getItem("accessToken");
+          if (!token) {
+            setError("You must be logged in to view this page.");
+            setLoading(false);
+            return;
+          }
+  
+          const res = await fetch("http://localhost:5000/owner/me", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+  
+          if (!res.ok) throw new Error(`Failed to fetch profile: ${res.status}`);
+  
+          const data = await res.json();
+  
+          setOwner(data);
+          setFormData({
+           
+            email: data.email || "",
+            
+          });
+  
+          setLoading(false);
+        } catch (err) {
+          console.error(err);
+          setError(err.message);
+          setLoading(false);
+        }
+      };
+  
+      fetchOwner();
+    }, []);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -114,14 +151,14 @@ export default function PostAd() {
 
   return (
     
-    <div className="min-h-screen bg-gray-50 flex justify-center p-6 md:p-12 fixed inset-0 overflow-auto">
-      <div className="max-w-4xl w-full bg-white shadow-sm border rounded-lg flex flex-col">
+    <div className="min-h-screen bg-gray-500 flex justify-center p-6 md:p-12 fixed inset-0 overflow-auto">
+      <div className="max-w-4xl w-full bg-gray-200 shadow-sm border rounded-lg flex flex-col">
         {/* Sticky Header */}
-        <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">
+        <div className="md:w-full shadow-md sticky top-0 z-10 bg-gray-100">
             <Header />
         </div>
         {/* Page Title */}
-        <header className="px-6 py-5 border-b sticky top-16 bg-white z-10">
+        <header className="px-6 py-3 border-b sticky top-16 bg-white z-10">
           <h1 className="text-center text-lg md:text-2xl font-semibold">POST YOUR AD</h1>
         </header>
         <div className="flex-1 overflow-y-auto max-h-[calc(100vh-150px)] p-6">
@@ -133,6 +170,19 @@ export default function PostAd() {
           )}
 
           <section>
+            <div>
+              <input
+                name="email"
+                value={owner?.email}
+                onChange={handleChange}
+                readOnly
+                className={`mt-1 mb-3 block w-full rounded-md border px-3 py-2 ${
+                  errors.brand ? "border-red-500" : "border-blue-500 focus:border-blue-600 focus:ring-3 focus:ring-blue-600 text-center coursor-not-allowed"
+                }`}
+                placeholder="Your Email Address"
+              />
+            </div>
+
             <h2 className="text-sm font-medium text-gray-700 mb-3">INCLUDE SOME DETAILS</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -393,13 +443,11 @@ export default function PostAd() {
                   placeholder="+91 98765 43210"
                 />
                 {errors.phone && <p className="text-sm text-red-500 mt-1">{errors.phone}</p>}
-                <p className="text-xs text-gray-400 mt-1">We will send a verification code to this number.</p>
               </div>
             </div>
           </section>
 
-          <footer className="flex items-center justify-between pt-4 border-t">
-            <div className="text-sm text-gray-600">Review your details before posting.</div>
+            <div className="font-medium text-sm text-gray-600">Review your details before posting.</div>
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -433,7 +481,6 @@ export default function PostAd() {
                 {submitting ? "Posting..." : "Post now"}
               </button>
             </div>
-          </footer>
         </form>
       </div>
     </div>

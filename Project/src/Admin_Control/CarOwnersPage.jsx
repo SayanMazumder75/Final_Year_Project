@@ -8,7 +8,8 @@ export default function CarOwnersPage() {
   useEffect(() => {
     const fetchOwners = async () => {
       try {
-        const res = await fetch("http://localhost:5000/owner/owners");
+        // Fetch all owners
+const res = await fetch("http://localhost:5000/api/owner/owners");
         if (!res.ok) throw new Error(`Failed to fetch owners: ${res.status}`);
         const data = await res.json();
 
@@ -34,9 +35,9 @@ export default function CarOwnersPage() {
   if (!window.confirm("Are you sure you want to delete this owner?")) return;
 
   try {
-    // ✅ Updated URL to match backend route: /owners/:id
-    const res = await fetch(`http://localhost:5000/owner/owners/${ownerId}`, {
-      method: "DELETE",
+    // Delete owner
+const res = await fetch(`http://localhost:5000/api/owner/owners/${ownerId}`, {
+  method: "DELETE",
     });
 
     const data = await res.json();

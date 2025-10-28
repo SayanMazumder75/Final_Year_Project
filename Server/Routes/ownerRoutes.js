@@ -27,7 +27,7 @@ router.get('/test', (req, res) => {
   res.send('Owner routes working!');
 });
 
-// Fetch all owners (admin/public)
+// Fetch all owners (public/admin)
 router.get('/owners', async (req, res) => {
   try {
     const owners = await OwnerProfile.find().select('-password');

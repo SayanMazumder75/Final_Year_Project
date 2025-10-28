@@ -7,14 +7,14 @@ const fs = require('fs');
 // ===== Token Generators =====
 const createAccessToken = (owner) =>
   jwt.sign(
-    { id: owner._id, email: owner.email, userType: owner.userType || "owner" },
+    { id: owner._id, email: owner.email, userType: owner.userType || "Owner" },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "1d" }
   );
 
 const createRefreshToken = (owner) =>
   jwt.sign(
-    { id: owner._id, email: owner.email, userType: owner.userType || "owner" },
+    { id: owner._id, email: owner.email, userType: owner.userType || "Owner" },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "7d" }
   );
@@ -45,9 +45,7 @@ const ownerCtrl = {
         return res.status(400).json({ msg: 'Email already exists.' });
 
       if (password.length < 6)
-        return res
-          .status(400)
-          .json({ msg: 'Password must be at least 6 characters.' });
+        return res.status(400).json({ msg: 'Password must be at least 6 characters.' });
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -80,13 +78,12 @@ const ownerCtrl = {
 
       await newOwner.save();
 
-      // Fixed: pass full owner object
       const accessToken = createAccessToken(newOwner);
       const refreshToken = createRefreshToken(newOwner);
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: '/api/owner/refresh_token',
+        path: '/owner/refresh_token',
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax',
       });
@@ -95,6 +92,7 @@ const ownerCtrl = {
         msg: 'Owner registered successfully',
         ownerId: newOwner._id,
         accessToken,
+        userType: newOwner.userType || "Owner",
       });
     } catch (err) {
       console.error('[ownerCtrl] Register Error:', err.message);
@@ -113,7 +111,6 @@ const ownerCtrl = {
       const isMatch = await bcrypt.compare(password, owner.password);
       if (!isMatch) return res.status(400).json({ msg: 'Incorrect password.' });
 
-      // Fixed: pass full owner object
       const accessToken = createAccessToken(owner);
       const refreshToken = createRefreshToken(owner);
 
@@ -127,7 +124,7 @@ const ownerCtrl = {
       res.json({
         msg: 'Login successful',
         ownerId: owner._id,
-        userType: owner.userType,
+        userType: owner.userType || "Owner",
         accessToken,
       });
     } catch (err) {
@@ -166,33 +163,32 @@ const ownerCtrl = {
   // GET OWNER PROFILE
   getOwnerProfile: async (req, res) => {
     try {
-      console.log('[ownerCtrl] getOwnerProfile triggered for:', req.user.id);
-
       const owner = await OwnerProfile.findById(req.user.id).select('-password');
-      if (!owner) {
-        console.log('[ownerCtrl] Owner not found for ID:', req.user.id);
-        return res.status(404).json({ msg: 'Owner not found' });
-      }
+      if (!owner) return res.status(404).json({ msg: 'Owner not found' });
 
       res.json(owner);
     } catch (err) {
-      console.error('[ownerCtrl] Error fetching owner profile:', err.message);
+      console.error('[ownerCtrl] getOwnerProfile Error:', err.message);
       res.status(500).json({ msg: err.message });
     }
   },
-  //update 
-    updateOwnerProfile: async (req, res) => {
+
+  // UPDATE OWNER PROFILE
+  updateOwnerProfile: async (req, res) => {
     try {
       const updates = req.body;
-      const updatedOwner = await Owner.findByIdAndUpdate(req.user.id, updates, {
-        new: true,
-      }).select('-password');
+      const updatedOwner = await OwnerProfile.findByIdAndUpdate(
+        req.user.id,
+        updates,
+        { new: true }
+      ).select('-password');
 
       if (!updatedOwner)
         return res.status(404).json({ msg: 'Owner not found' });
 
       res.json(updatedOwner);
     } catch (err) {
+      console.error('[ownerCtrl] updateOwnerProfile Error:', err.message);
       res.status(500).json({ msg: err.message });
     }
   },

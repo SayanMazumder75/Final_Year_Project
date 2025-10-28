@@ -2,6 +2,15 @@ const router = require('express').Router();
 const ownerCtrl = require('../controllers/ownerCtrl');
 const auth = require('../middleware/auth');
 const OwnerProfile = require('../models/ownerProfileModel');
+const fileUpload = require('express-fileupload'); // ✅ Add this
+
+// -------------------------------
+// Enable file upload only for owner routes
+// -------------------------------
+router.use(fileUpload({
+  useTempFiles: true,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+}));
 
 // -------------------------------
 // AUTH + REGISTRATION ROUTES

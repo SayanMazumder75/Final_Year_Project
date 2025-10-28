@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "../Homepage/Footer";
+import PostAd from "./PostAd";
+import { useNavigate } from "react-router-dom";
 import {
   LineChart,
   Line,
@@ -66,14 +68,15 @@ export default function Dashboard() {
     { id: 3, model: "Ford Mustang", rentPerDay: 120, availability: "Available" },
   ]);
 
-  // Disabled Add Handler
-  const handleAdd = () => {
-    setSuccessMessage("ℹ️ Adding new cars is disabled now");
-    setTimeout(() => setSuccessMessage(""), 3000);
-  };
+  const navigate = useNavigate();
+
+const handleAdd = () => {
+  navigate("/PostAd"); // this will open PostAd page
+};
+
 
   return (
-    <div className="min-h-screen flex bg-gray-700">
+    <div className="flex h-screen bg-gray-700 overflow-hidden">
       {/* Sidebar */}
       <div className="md:sticky md:top-0 h-screen">
         <Sidebar open={open} setOpen={setOpen} />
@@ -87,14 +90,14 @@ export default function Dashboard() {
         ></div>
       )}
 
-      {/* Main Area */}
-      <div
-        className={`flex-1 flex flex-col transition-opacity duration-300 ${
-          open
-            ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
-            : "opacity-100"
-        }`}
-      >
+        {/* Main scrollable area */}
+        <div
+          className={`flex-1 flex flex-col overflow-y-auto overflow-x-hidden transition-opacity duration-300 ${
+            open
+              ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
+              : "opacity-100"
+          }`}
+        >
         {/* Header */}
         {!open && (
           <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">
@@ -137,21 +140,12 @@ export default function Dashboard() {
                 </tbody>
               </table>
 
-              {/* Disabled Add New Car Form */}
-              <div className="mt-4 flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0 opacity-50 pointer-events-none">
-                <input type="text" placeholder="Car Model" className="border rounded px-3 py-2 flex-1 w-full" disabled />
-                <input type="number" placeholder="Year" className="border rounded px-3 py-2 w-full md:w-28" disabled />
-                <input type="number" placeholder="Price" className="border rounded px-3 py-2 w-full md:w-36" disabled />
-                <input type="file" accept="image/*" className="border rounded px-3 py-2 w-full md:w-48" disabled />
-              </div>
-
-              {/* Disabled Add Button (Still clickable for message) */}
               <div className="mt-4">
                 <button
                   onClick={handleAdd}
                   className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
                 >
-                  Add (Disabled)
+                  Add
                 </button>
               </div>
 
@@ -163,53 +157,32 @@ export default function Dashboard() {
               )}
             </div>
           </div>
-
-          {/* Orders by Customer */}
-          <div className="bg-white rounded-lg shadow-md p-5">
-            <h2 className="text-xl font-semibold mb-3">Orders by Customer</h2>
-            <table className="min-w-full border border-gray-200 text-left">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-4 py-2 border">Customer</th>
-                  <th className="px-4 py-2 border">Car</th>
-                  <th className="px-4 py-2 border">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 border">{order.customer}</td>
-                    <td className="px-4 py-2 border">{order.car}</td>
-                    <td className="px-4 py-2 border">{order.date}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
+          
           {/* Available Rent Cars */}
-          <div className="bg-white rounded-lg shadow-md p-5">
-            <h2 className="text-xl font-semibold mb-3">Available Rent Cars</h2>
-            <table className="min-w-full border border-gray-200 text-left">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-4 py-2 border">Model</th>
-                  <th className="px-4 py-2 border">Rent/Day (₹)</th>
-                  <th className="px-4 py-2 border">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rentCars.map((car) => (
-                  <tr key={car.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 border">{car.model}</td>
-                    <td className="px-4 py-2 border">{car.rentPerDay}</td>
-                    <td className="px-4 py-2 border">{car.availability}</td>
+          <div className="md:col-span-2">
+            <div className="bg-white rounded-lg shadow-md p-5">
+              <h2 className="text-xl font-semibold mb-3">Available Rent Cars</h2>
+              <table className="min-w-full border border-gray-200 text-left">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 border">Model</th>
+                    <th className="px-4 py-2 border">Rent/Day (₹)</th>
+                    <th className="px-4 py-2 border">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {rentCars.map((car) => (
+                    <tr key={car.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-2 border">{car.model}</td>
+                      <td className="px-4 py-2 border">{car.rentPerDay}</td>
+                      <td className="px-4 py-2 border">{car.availability}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-
+          
           {/* Company Growth */}
           <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
             <h2 className="text-lg font-semibold">Company Growth</h2>

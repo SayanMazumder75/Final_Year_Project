@@ -11,11 +11,9 @@ const Sidebar = () => {
 
   const menuItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <Home size={15} /> },
-    { name: "Users", path: "/Users", icon: <UsersRound  size={15} /> },
     { name: "Sell Vehicles", path: "/Sell_Vehicles", icon: <Car size={15} /> },
     { name: "Rental Vehicles", path: "/Rental_Vehicles", icon: <Car size={15} /> },
     { name: "Payments", path: "/Payments", icon: <IndianRupee  size={15} /> },
-    { name: "Setting", path: "/Setting", icon: <Settings size={15} /> },
     { name: "Profile", path: "/Profile", icon: <UserPen size={15} /> },
 
   ];
@@ -46,7 +44,7 @@ const Sidebar = () => {
         ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:w-30 `}
       >
         {/* Logo */} 
-        <h1 className="text-xl font-bold text-black text-center"> Admin</h1>
+        <h1 className="text-xl font-bold text-black text-center"> Owner</h1>
 
         {/* Menu */}
         <nav className="space-y-0.5 mt-3 flex flex-col">

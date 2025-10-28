@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-10">
+    <footer className="bg-gray-900 text-gray-300 py-5">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
         {/* About Us */}
         <div>
@@ -52,7 +52,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Text */}
-      <div className="text-center text-sm text-gray-500 mt-6 border-t border-gray-700 pt-4">
+      <div className="text-center text-sm text-gray-500 mt-3 border-t border-gray-700 pt-4">
         © {new Date().getFullYear()} KEYS TO FREEDOM. All Rights Reserved.
       </div>
     </footer>

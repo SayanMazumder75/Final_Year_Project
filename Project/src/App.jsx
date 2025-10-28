@@ -16,22 +16,33 @@ import Login from "./Login_Signup/Login";
 import Preloader from "./Preloader";
 import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
-
+import PostAd from "./Admin_Panel/PostAd";
+import Wishlist from "./User_Dashboard/Wishlist";
+import Car1 from "./Pages/car1";
+import Car2 from "./Pages/car2";
+import Car3 from "./Pages/car3";
+import Car4 from "./Pages/car4";
+import Car5 from "./Pages/car5";
+import WebOwnerLogin from "./Login_Signup/WebOwnerLogin";
+import WebOwnerDashboard from "./Admin_Control/WebOwnerDashboard";
+import AfterLogin from "./User_Dashboard/AfterLogin";
+import Buy from "./User_Dashboard/Buy";
+import Rent from "./User_Dashboard/Rent";
+import { PaymentPage, PaymentSuccess } from './PaymentPage/PaymentPage'; 
+import { RentPaymentPage, RentPaymentSuccess } from "./PaymentPage/RentPaymentPage";
 function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time (e.g. fetching user data, assets, etc.)
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); // 2 seconds
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      {/* Preloader shows first */}
       <Preloader loading={loading} />
 
       {/* Show routes only after preloader is done */}
@@ -41,6 +52,16 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/booking" element={<CarBookingForm />} />
           <Route path="/buying" element={<CarBuyForm />} />
+
+          {/* Car detail routes - MOVED INSIDE THE MAIN ROUTES */}
+          <Route path="/car/1" element={<Car1 />} />
+          <Route path="/car/2" element={<Car2 />} />
+          <Route path="/car/3" element={<Car3 />} />
+          <Route path="/car/4" element={<Car4 />} />
+          <Route path="/car/5" element={<Car5 />} />
+
+         
+
           {/* Admin Panel routes */}
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/Users" element={<Users />} />
@@ -49,11 +70,30 @@ function App() {
           <Route path="/Sell_Vehicles" element={<Sell_Vehicles />} />
           <Route path="/Rental_Vehicles" element={<Rental_Vehicles />} />
           <Route path="/Payments" element={<Payments />} />
+
+          {/* Web_Admin_Control */}
+          <Route path="/WebOwnerDashboard" element={<WebOwnerDashboard />} />
+
+          {/* User Dashboard routes */}
           <Route path="/User_Dashboard" element={<User_Dashboard />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/AfterLogin" element={<AfterLogin />} />
+          <Route path="/Buy" element={<Buy />} />
+          <Route path="/Rent" element={<Rent />} />
+         
+          
+          {/* Authentication routes */}
           <Route path="/Signup" element={<Signup />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/AdminSignup" element={<AdminSignup />} />
           <Route path="/AdminLogin" element={<AdminLogin />} />
+          <Route path="/PostAd" element={<PostAd />} />
+          <Route path="/WebOwnerLogin" element={<WebOwnerLogin />} />
+          {/* Payment routes */}
+          <Route path="/PaymentPage" element={<PaymentPage />} />
+          <Route path="/PaymentSuccess" element={<PaymentSuccess />} />
+          <Route path="/RentPaymentSuccess" element={<RentPaymentSuccess />} />
+          <Route path="/RentPaymentPage" element={<RentPaymentPage />} />
         </Routes>
       )}
     </>
@@ -61,5 +101,3 @@ function App() {
 }
 
 export default App;
-
-

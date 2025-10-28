@@ -26,6 +26,7 @@ export default function Signup() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [current, setCurrent] = useState(0);
+  const [loadingLocation, setLoadingLocation] = useState(false);
 
   const images = [rental, rental2];
 
@@ -40,16 +41,98 @@ export default function Signup() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  // ✅ Fetch user's current address using Geolocation + Geoapify
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    setLoadingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        const url = `https://api.geoapify.com/v1/geocode/reverse?format=json&lat=${latitude}&lon=${longitude}&apiKey=5acb781bc81749e9bcbfc96768ea77ad`;
+
+        try {
+          const res = await fetch(url);
+          const data = await res.json();
+
+          if (data.results && data.results.length > 0) {
+            const address = data.results[0].formatted;
+            setForm((prev) => ({ ...prev, address }));
+          } else {
+            alert("No address found for this location.");
+          }
+        } catch (error) {
+          console.error("Error fetching location:", error);
+          alert("Error fetching location. Please try again.");
+        } finally {
+          setLoadingLocation(false);
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("Unable to get location. Please check permissions.");
+        setLoadingLocation(false);
+      }
+    );
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup Data:", form);
+
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          userType: "user",
+          phoneNumber: form.number,
+          address: form.address,
+          pincode: form.pin,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.msg || "Registration failed");
+      } else {
+        alert("Registered successfully!");
+        console.log("Server Response:", data);
+        setForm({
+          name: "",
+          email: "",
+          number: "",
+          address: "",
+          pin: "",
+          password: "",
+          confirmPassword: "",
+        });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-blue-950 to-slate-900 p-4 sm:p-6">
-       <div className="flex flex-col md:flex-row w-full max-w-6xl bg-white/10 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden h-screen md:h-[80vh]">
-        {/* Left: Sliding Images */}
-        <div className="  w-full md:w-1/2 relative h-64 md:h-full">
+      <div className="flex flex-col md:flex-row w-full max-w-6xl bg-white/10 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden h-screen md:h-[80vh]">
+        {/* Left Image Section */}
+        <div className="w-full md:w-1/2 relative h-64 md:h-full">
           <img
             src={images[current]}
             alt="slide"
@@ -60,7 +143,6 @@ export default function Signup() {
               Capturing Moments, Creating Memories
             </p>
           </div>
-          {/* Dots */}
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-2">
             {images.map((_, index) => (
               <span
@@ -140,7 +222,7 @@ export default function Signup() {
               </div>
             </div>
 
-            {/* Address */}
+            {/* Address + Get Location Button */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Address
@@ -153,9 +235,41 @@ export default function Signup() {
                   onChange={handleChange}
                   required
                   rows={2}
-                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-900/70 text-white border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                  className="w-full pl-10 pr-20 py-2 rounded-lg bg-gray-900/70 text-white border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
                   placeholder="Street, City, State"
                 />
+                <button
+                  type="button"
+                  onClick={handleGetLocation}
+                  disabled={loadingLocation}
+                  className="absolute right-2 top-2.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white p-1.5 rounded-full transition disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
+                  title="Get Current Location"
+                >
+                  {loadingLocation ? (
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
+                  ) : (
+                    <MapPin size={18} />
+                  )}
+                </button>
               </div>
             </div>
 
@@ -178,7 +292,7 @@ export default function Signup() {
               </div>
             </div>
 
-            {/* Password */}
+            {/* Password Fields */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Password
@@ -204,7 +318,6 @@ export default function Signup() {
               </div>
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Confirm Password
@@ -230,7 +343,7 @@ export default function Signup() {
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               type="submit"
               className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-semibold transition-all duration-300 shadow-lg"
@@ -245,12 +358,13 @@ export default function Signup() {
               Login here
             </a>
           </p>
+
           <p className="text-sm text-gray-400 text-center mt-5">
-          Signup as Shop Owner?{" "}
-          <a href="/AdminSignup" className="text-blue-400 hover:underline">
-            Click here
-          </a>
-        </p>
+            Signup as Shop Owner?{" "}
+            <a href="/AdminSignup" className="text-blue-400 hover:underline">
+              Click here
+            </a>
+          </p>
         </div>
       </div>
     </div>

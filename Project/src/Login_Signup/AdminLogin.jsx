@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, ShieldCheck } from "lucide-react";
-
+import { Eye, EyeOff, Mail, Lock, ShieldCheck,Home } from "lucide-react";
+import axios from "axios";
 export default function AdminLogin() {
   const [form, setForm] = useState({
     email: "",
@@ -13,11 +13,35 @@ export default function AdminLogin() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Admin Login Data:", form);
-    // Add admin login API call here
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/owner/login", // your backend login URL
+      form, // automatically sent as JSON
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    // Optional: check if user is admin
+    // if (data.userType !== "owner") {
+    //   alert("You are not an owner!");
+    //   return;
+    // }
+
+    // Save token
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("userType", data.userType);
+    localStorage.setItem("ownerId", data.ownerId);
+
+    
+    window.location.href = "/Profile"; // redirect to admin dashboard
+
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.msg || "Login failed");
+  }
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-gray-800 p-6">
@@ -31,11 +55,15 @@ export default function AdminLogin() {
           <div className="bg-yellow-500/20 p-4 rounded-full border border-yellow-500/40">
             <ShieldCheck size={40} className="text-yellow-400" />
           </div>
+          <div className="absolute top-0 right-0 p-2 cursor-pointer" 
+            onClick={() => window.location.href = "/"}>
+            <Home size={20} className="text-yellow-400" />
+          </div>
         </div>
 
         {/* Heading */}
         <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-yellow-400 mb-1 tracking-tight">
-          Admin Login Panel
+          Owner Login Panel
         </h2>
         <p className="text-gray-300 text-center mb-6 text-sm sm:text-base">
           Secure access to your management dashboard 👨‍💼
@@ -47,7 +75,7 @@ export default function AdminLogin() {
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">
-              Admin Email
+              Owner Email
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-2.5 text-gray-400" size={18} />
@@ -58,7 +86,7 @@ export default function AdminLogin() {
                 onChange={handleChange}
                 required
                 className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-900/70 text-white border border-gray-700 focus:ring-2 focus:ring-yellow-500 outline-none"
-                placeholder="admin@dealership.com"
+                placeholder="owner@dealership.com"
               />
             </div>
           </div>
@@ -77,7 +105,7 @@ export default function AdminLogin() {
                 onChange={handleChange}
                 required
                 className="w-full pl-10 pr-10 py-2 rounded-lg bg-gray-900/70 text-white border border-gray-700 focus:ring-2 focus:ring-yellow-500 outline-none"
-                placeholder="Admin@1234"
+                placeholder="Owner@1234"
               />
               <button
                 type="button"
@@ -104,14 +132,14 @@ export default function AdminLogin() {
             type="submit"
             className="w-full py-3 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-black font-semibold uppercase tracking-wide transition-all duration-300 shadow-xl"
           >
-            Login as Admin
+            Login as Owner
           </button>
         </form>
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-400 space-y-2">
           <p>
-            Not an admin?{" "}
+            Not an owner?{" "}
             <a href="/Login" className="text-yellow-400 hover:underline">
               Go to User Login
             </a>

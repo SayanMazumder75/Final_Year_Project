@@ -11,22 +11,23 @@ router.post('/login', ownerCtrl.login);
 router.post('/refresh_token', ownerCtrl.refreshToken);
 
 // -------------------------------
-// FETCH LOGGED-IN OWNER PROFILE
+// OWNER PROFILE ROUTES
 // -------------------------------
-router.get('/me', auth, async (req, res) => {
-  try {
-    const owner = await OwnerProfile.findById(req.user.id).select('-password');
-    if (!owner) return res.status(404).json({ msg: "Owner not found" });
 
-    res.json(owner);
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
+// Get current owner profile
+router.get('/me', auth, ownerCtrl.getOwnerProfile);
+
+// Update current owner profile
+router.put('/profile', auth, ownerCtrl.updateOwnerProfile);
+
+// -------------------------------
+// TEST + ADMIN ROUTES
+// -------------------------------
+router.get('/test', (req, res) => {
+  res.send('Owner routes working!');
 });
 
-// -------------------------------
-// FETCH ALL OWNERS (PUBLIC)
-// -------------------------------
+// Fetch all owners (admin/public)
 router.get('/owners', async (req, res) => {
   try {
     const owners = await OwnerProfile.find().select('-password');
@@ -36,21 +37,17 @@ router.get('/owners', async (req, res) => {
   }
 });
 
-// -------------------------------
-// DELETE OWNER BY ID
-// -------------------------------
+// Delete owner by ID (admin only)
 router.delete('/owners/:id', async (req, res) => {
   try {
     const deletedOwner = await OwnerProfile.findByIdAndDelete(req.params.id);
-
     if (!deletedOwner) {
-      return res.status(404).json({ msg: "Owner not found" });
+      return res.status(404).json({ msg: 'Owner not found' });
     }
-
-    res.json({ msg: "Owner deleted successfully" });
+    res.json({ msg: 'Owner deleted successfully' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: "Delete failed" });
+    res.status(500).json({ msg: 'Delete failed' });
   }
 });
 

@@ -18,7 +18,7 @@ export default function AdminLogin() {
 
   try {
     const { data } = await axios.post(
-      "http://localhost:5000/owner/login", // your backend login URL
+      "http://localhost:5000/api/owner/login", // your backend login URL
       form, // automatically sent as JSON
       { headers: { "Content-Type": "application/json" } }
     );
@@ -32,6 +32,7 @@ export default function AdminLogin() {
     // Save token
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("userType", data.userType);
+    localStorage.setItem("ownerId", data.ownerId);
 
     
     window.location.href = "/Profile"; // redirect to admin dashboard

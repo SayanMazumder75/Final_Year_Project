@@ -6,8 +6,6 @@ const CarRentalSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     email: { type: String, required: true },
     car: { type: String, required: true },
-    pickupLocation: { type: String },
-    dropoffLocation: { type: String },
     pickupDate: { type: String, required: true },
     dropoffDate: { type: String, required: true },
     pickupTime: { type: String, required: true },

@@ -29,6 +29,7 @@ import AfterLogin from "./User_Dashboard/AfterLogin";
 import Buy from "./User_Dashboard/Buy";
 import Rent from "./User_Dashboard/Rent";
 import { PaymentPage, PaymentSuccess } from './PaymentPage/PaymentPage'; 
+import { RentPaymentPage, RentPaymentSuccess } from "./PaymentPage/RentPaymentPage";
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -91,6 +92,8 @@ function App() {
           {/* Payment routes */}
           <Route path="/PaymentPage" element={<PaymentPage />} />
           <Route path="/PaymentSuccess" element={<PaymentSuccess />} />
+          <Route path="/RentPaymentSuccess" element={<RentPaymentSuccess />} />
+          <Route path="/RentPaymentPage" element={<RentPaymentPage />} />
         </Routes>
       )}
     </>

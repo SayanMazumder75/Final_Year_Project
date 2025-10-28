@@ -1,55 +1,28 @@
-// product model file (product model is created for CRUD operations on products)
-// it stores product details like product_id, title, price, description, content, category, images etc
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// create product schema
-const productSchema = new mongoose.Schema({
-    product_id: {
-        type: String,
-        required: true,
-        trim: true, // removes whitespace
-        unique: true
+const adSchema = new mongoose.Schema({
+    user:{
+        type: mongoose.Schema.Types.ObjectId, //reference to User collection
+        ref: "OwnerProfile", //ownerProfileModel name
+        required: true
     },
-    title: {
-        type: String,
-        required: true,
-        trim: true
+    brand:{ type: String, required: true},
+    year:{ type: Number, required: true},
+    fuel:{
+        type:String,
+        enum:["Petrol", "Diesel", "Electric", "CNG/Hybrid"],
+        required: true
     },
-    price: {
-        type: Number,
-        required: true,
-        trim: true
-    },
-    description: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    content: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    Images: {
-        type: Object,
-        required: true,
-        default: {}
-    },
-    category: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    checked: {
-        type: Boolean,
-        default: false
-    },
-    sold: {
-        type: Number,
-        default: 0
-    }
-}, {
-    timestamps: true
-});
+    transmission:{ type: String, enum: ["Manual", "Automatic"], required: true},
+    kmsDriven: {type: Number, required: true},
+    noOfOwners: {type: String, enum:["1st","2nd","3rd","4th"],required:true},
+    adTitle: {type: String, required: true },
+    description:{type: String, required: true},
+    price: {type: Number, required: true},
+    photos: [{type:String}],
+    state:{type:String, required: true},
+    mobilePhone: {type: String, required:true},
+}, {timestamps: true});
 
-module.exports = mongoose.model('Product', productSchema);
+
+module.exports = mongoose.model("Ad", adSchema);

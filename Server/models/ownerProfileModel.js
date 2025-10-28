@@ -10,6 +10,7 @@ const ownerProfileSchema = new mongoose.Schema({
   pinCode: { type: String, required: true },
   password: { type: String, required: true },
   profilePic: { type: String},
+  userType:{type:String, default:"owner"}
 }, { timestamps: true });
 
 module.exports = mongoose.model('OwnerProfile', ownerProfileSchema);

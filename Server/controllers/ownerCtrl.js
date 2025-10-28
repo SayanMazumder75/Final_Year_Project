@@ -4,12 +4,24 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
 
+// ===== Token Generators =====
 const createAccessToken = (owner) =>
-  jwt.sign(owner, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
-const createRefreshToken = (owner) =>
-  jwt.sign(owner, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+  jwt.sign(
+    { id: owner._id, email: owner.email, userType: owner.userType || "owner" },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "1d" }
+  );
 
+const createRefreshToken = (owner) =>
+  jwt.sign(
+    { id: owner._id, email: owner.email, userType: owner.userType || "owner" },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: "7d" }
+  );
+
+// ===== Controller =====
 const ownerCtrl = {
+  // REGISTER OWNER
   register: async (req, res) => {
     try {
       const {
@@ -29,26 +41,29 @@ const ownerCtrl = {
       }
 
       const existingOwner = await OwnerProfile.findOne({ email });
-      if (existingOwner) return res.status(400).json({ msg: 'Email already exists.' });
+      if (existingOwner)
+        return res.status(400).json({ msg: 'Email already exists.' });
 
       if (password.length < 6)
-        return res.status(400).json({ msg: 'Password must be at least 6 characters.' });
+        return res
+          .status(400)
+          .json({ msg: 'Password must be at least 6 characters.' });
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Handle uploaded file with express-fileupload
+      // Handle uploaded profile picture
       const profilePic = req.files?.profilePic;
       let profilePicPath = '';
 
       if (profilePic) {
         const uploadsDir = path.join(__dirname, '../uploads');
-        if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir); // ensure folder exists
+        if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
 
         const fileName = `${Date.now()}_${profilePic.name}`;
         const uploadPath = path.join(uploadsDir, fileName);
 
-        await profilePic.mv(uploadPath); // move file to uploads folder
-        profilePicPath = `/uploads/${fileName}`; // save relative path in DB
+        await profilePic.mv(uploadPath);
+        profilePicPath = `/uploads/${fileName}`;
       }
 
       const newOwner = new OwnerProfile({
@@ -60,17 +75,18 @@ const ownerCtrl = {
         shopAddress,
         pinCode,
         password: hashedPassword,
-        profilePic: profilePicPath, // save path in DB
+        profilePic: profilePicPath,
       });
 
       await newOwner.save();
 
-      const accessToken = createAccessToken({ id: newOwner._id, email: newOwner.email });
-      const refreshToken = createRefreshToken({ id: newOwner._id, email: newOwner.email });
+      // Fixed: pass full owner object
+      const accessToken = createAccessToken(newOwner);
+      const refreshToken = createRefreshToken(newOwner);
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: '/owner/refresh_token',
+        path: '/api/owner/refresh_token',
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax',
       });
@@ -81,10 +97,12 @@ const ownerCtrl = {
         accessToken,
       });
     } catch (err) {
+      console.error('[ownerCtrl] Register Error:', err.message);
       res.status(500).json({ msg: err.message });
     }
   },
 
+  // LOGIN OWNER
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -95,8 +113,9 @@ const ownerCtrl = {
       const isMatch = await bcrypt.compare(password, owner.password);
       if (!isMatch) return res.status(400).json({ msg: 'Incorrect password.' });
 
-      const accessToken = createAccessToken({ id: owner._id, email: owner.email });
-      const refreshToken = createRefreshToken({ id: owner._id, email: owner.email });
+      // Fixed: pass full owner object
+      const accessToken = createAccessToken(owner);
+      const refreshToken = createRefreshToken(owner);
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
@@ -105,12 +124,19 @@ const ownerCtrl = {
         sameSite: 'Lax',
       });
 
-      res.json({ msg: 'Login successful', ownerId: owner._id, accessToken });
+      res.json({
+        msg: 'Login successful',
+        ownerId: owner._id,
+        userType: owner.userType,
+        accessToken,
+      });
     } catch (err) {
+      console.error('[ownerCtrl] Login Error:', err.message);
       res.status(500).json({ msg: err.message });
     }
   },
 
+  // REFRESH TOKEN
   refreshToken: async (req, res) => {
     try {
       const rf_token = req.cookies.refreshToken;
@@ -120,8 +146,8 @@ const ownerCtrl = {
       const owner = await OwnerProfile.findById(verified.id);
       if (!owner) return res.status(400).json({ msg: 'Owner not found.' });
 
-      const accessToken = createAccessToken({ id: owner._id, email: owner.email });
-      const refreshToken = createRefreshToken({ id: owner._id, email: owner.email });
+      const accessToken = createAccessToken(owner);
+      const refreshToken = createRefreshToken(owner);
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
@@ -132,7 +158,42 @@ const ownerCtrl = {
 
       res.json({ accessToken });
     } catch (err) {
+      console.error('[ownerCtrl] Refresh Token Error:', err.message);
       res.status(403).json({ msg: 'Invalid refresh token.' });
+    }
+  },
+
+  // GET OWNER PROFILE
+  getOwnerProfile: async (req, res) => {
+    try {
+      console.log('[ownerCtrl] getOwnerProfile triggered for:', req.user.id);
+
+      const owner = await OwnerProfile.findById(req.user.id).select('-password');
+      if (!owner) {
+        console.log('[ownerCtrl] Owner not found for ID:', req.user.id);
+        return res.status(404).json({ msg: 'Owner not found' });
+      }
+
+      res.json(owner);
+    } catch (err) {
+      console.error('[ownerCtrl] Error fetching owner profile:', err.message);
+      res.status(500).json({ msg: err.message });
+    }
+  },
+  //update 
+    updateOwnerProfile: async (req, res) => {
+    try {
+      const updates = req.body;
+      const updatedOwner = await Owner.findByIdAndUpdate(req.user.id, updates, {
+        new: true,
+      }).select('-password');
+
+      if (!updatedOwner)
+        return res.status(404).json({ msg: 'Owner not found' });
+
+      res.json(updatedOwner);
+    } catch (err) {
+      res.status(500).json({ msg: err.message });
     }
   },
 };

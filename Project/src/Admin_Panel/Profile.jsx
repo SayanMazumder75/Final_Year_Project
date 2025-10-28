@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "../Homepage/Footer";
 import Sidebar from "./Sidebar";
-import Update from "./Update"; // <-- import edit form
+import Update from "./Update";
 
 export default function Profile() {
   const [owner, setOwner] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({});
 
@@ -23,24 +22,48 @@ export default function Profile() {
           return;
         }
 
-        const res = await fetch("http://localhost:5000/owner/me", {
-          headers: { Authorization: `Bearer ${token}` },
+        console.log("Fetching owner profile with token:", token.substring(0, 20) + "...");
+
+        // FIX 1: Use the correct endpoint - either '/owner/me' or '/api/owner/me'
+        // Based on your server.js, you're mounting at '/owner', so use '/owner/me'
+        const res = await fetch("http://localhost:5000/api/owner/me", {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
         });
 
-        if (!res.ok) throw new Error(`Failed to fetch profile: ${res.status}`);
+        console.log("Response status:", res.status);
 
-        const data = await res.json();
-
-        if (!data.profilePic) {
-          data.profilePic = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
-        } else {
-          data.profilePic = `http://localhost:5000${data.profilePic}`;
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error("Server response:", errorText);
+          throw new Error(`Failed to fetch profile: ${res.status}`);
         }
 
-        setOwner(data);
+        const data = await res.json();
+        console.log("Owner data received:", data);
+
+        // FIX 2: Handle profile picture correctly
+        let profilePicUrl = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+        if (data.profilePic) {
+          // If it's already a full URL, use it directly
+          if (data.profilePic.startsWith('http')) {
+            profilePicUrl = data.profilePic;
+          } else {
+            // If it's a path, construct the full URL
+            profilePicUrl = `http://localhost:5000${data.profilePic}`;
+          }
+        }
+
+        const ownerData = {
+          ...data,
+          profilePic: profilePicUrl
+        };
+
+        setOwner(ownerData);
         setFormData({
           ownerName: data.ownerName || "",
-          username: data.username || "",
           email: data.email || "",
           contactNumber: data.contactNumber || "",
           shopName: data.shopName || "",
@@ -51,7 +74,7 @@ export default function Profile() {
 
         setLoading(false);
       } catch (err) {
-        console.error(err);
+        console.error("Fetch error:", err);
         setError(err.message);
         setLoading(false);
       }
@@ -60,10 +83,11 @@ export default function Profile() {
     fetchOwner();
   }, []);
 
+  // FIX 3: Update the PUT endpoint to match your backend
   const handleProfileUpdate = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      const res = await fetch("http://localhost:5000/owner/me", {
+      const res = await fetch("http://localhost:5000/api/owner/profile", { // You'll need to create this endpoint
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -75,13 +99,18 @@ export default function Profile() {
       if (!res.ok) throw new Error("Failed to update profile");
 
       const updated = await res.json();
-      if (!updated.profilePic) {
-        updated.profilePic = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
-      } else {
-        updated.profilePic = `http://localhost:5000${updated.profilePic}`;
+      
+      let profilePicUrl = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+      if (updated.profilePic) {
+        profilePicUrl = updated.profilePic.startsWith('http') 
+          ? updated.profilePic 
+          : `http://localhost:5000${updated.profilePic}`;
       }
 
-      setOwner(updated);
+      setOwner({
+        ...updated,
+        profilePic: profilePicUrl
+      });
       setEditing(false);
       alert("Profile updated successfully!");
     } catch (err) {
@@ -90,8 +119,13 @@ export default function Profile() {
     }
   };
 
+  const handleFeatureComing = (feature) => {
+    alert(`${feature} feature coming soon!`);
+  };
+
   if (loading) return <p className="text-white p-6">Loading owner profile...</p>;
-  if (error) return <p className="text-red-500 p-6">{error}</p>;
+  if (error) return <p className="text-red-500 p-6">Error: {error}</p>;
+  if (!owner) return <p className="text-white p-6">No owner data found.</p>;
 
   return (
     <div className="flex h-screen bg-gray-700">
@@ -108,15 +142,11 @@ export default function Profile() {
               />
               <div>
                 <h2 className="text-2xl font-semibold">{owner.ownerName}</h2>
-                <p className="text-gray-600">@{owner.username || "owner_user"}</p>
+                <p className="text-gray-600">{owner.email}</p>
                 <span
-                  className={`px-3 py-1 text-sm rounded-full ${
-                    owner.status === "Active"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
+                  className={`px-3 py-1 text-sm rounded-full bg-green-100 text-green-700`}
                 >
-                  {owner.status || "Active"}
+                  {owner.userType || "Owner"}
                 </span>
               </div>
             </div>
@@ -141,7 +171,7 @@ export default function Profile() {
                     <p className="text-gray-500 text-sm">Business Reg ID</p>
                     <p className="font-medium">{owner.businessRegId}</p>
                   </div>
-                  <div>
+                  <div className="sm:col-span-2">
                     <p className="text-gray-500 text-sm">Shop Address</p>
                     <p className="font-medium">{owner.shopAddress}</p>
                   </div>
@@ -151,12 +181,12 @@ export default function Profile() {
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Role</p>
-                    <p className="font-medium">{owner.role || "Owner"}</p>
+                    <p className="font-medium">{owner.userType || "Owner"}</p>
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Date Joined</p>
                     <p className="font-medium">
-                      {new Date(owner.createdAt).toLocaleDateString()}
+                      {owner.createdAt ? new Date(owner.createdAt).toLocaleDateString() : "N/A"}
                     </p>
                   </div>
                 </div>
@@ -169,14 +199,12 @@ export default function Profile() {
                     Edit Profile
                   </button>
                   <button
-                onClick={() => handleFeatureComing("Change Password")}
-                className="px-4 py-2 bg-green-300 rounded-xl shadow hover:bg-green-500"
-              >
-                Change Password
-              </button>
+                    onClick={() => handleFeatureComing("Change Password")}
+                    className="px-4 py-2 bg-green-300 rounded-xl shadow hover:bg-green-500"
+                  >
+                    Change Password
+                  </button>
                 </div>
-
-                
               </>
             ) : (
               <Update
@@ -193,6 +221,3 @@ export default function Profile() {
     </div>
   );
 }
-
-
-

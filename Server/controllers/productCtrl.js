@@ -73,3 +73,14 @@ exports.deleteAd = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.getAdsByCategory = async (req, res) => {
+  const { category } = req.query; // e.g., /api/ads?category=rental
+  try {
+    const ads = category ? await Ad.find({ category }) : await Ad.find();
+    res.json(ads);
+  } catch (err) {
+    console.error("Error fetching ads by category:", err.message);
+    res.status(500).json({ message: err.message });
+  }
+};

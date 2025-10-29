@@ -17,10 +17,21 @@ router.post(
   productCtrl.createAd
 );
 
-// Get single ad
-router.get("/:id", productCtrl.getAdById);
+// Get ads by category
+router.get("/", productCtrl.getAdsByCategory);
+
 
 // Delete ad (only owner)
 router.delete("/:id", auth, authOwner, productCtrl.deleteAd);
+exports.getAdsByCategory = async (req, res) => {
+  const { category } = req.query; // e.g., /ads?category=rental
+  try {
+    const ads = category ? await Ad.find({ category }) : await Ad.find();
+    res.json(ads);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 
 module.exports = router;

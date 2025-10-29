@@ -1,37 +1,28 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Home } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom"; // ✅ added useLocation
 
 const CarRentalForm = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ to get data from Rent.jsx
-
-  // ✅ get car details from previous page (Rent.jsx)
-  const { car, amount } = location.state || {};
+  const location = useLocation();
+  const carData = location.state?.carData || {};
 
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
-    car: car?.name || "", // prefilled from previous page
-    price: amount || "", // added new field for price
+    car: carData.name || "",
+    price: carData.price || "",
     pickupLocation: "",
     dropoffLocation: "",
     pickupDate: "",
     dropoffDate: "",
     pickupTime: "",
     payment: "",
+    ownerEmail: carData.email || "",
   });
 
-  const carOptions = [
-    "Tesla Model S",
-    "BMW X5",
-    "Audi A6",
-    "Mercedes C-Class",
-    "Toyota Corolla",
-  ];
-
-  const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking"];
+  const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking", "Cash"];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,25 +35,25 @@ const CarRentalForm = () => {
       "name",
       "phone",
       "email",
-      "price",
       "car",
+      "price",
       "pickupDate",
       "dropoffDate",
+      "pickupTime",
       "payment",
-
     ];
+
     for (let field of requiredFields) {
       if (!formData[field]) {
         alert(`Please fill ${field}`);
         return;
       }
     }
+
     navigate("/RentPaymentPage", { state: { formData } });
   };
 
-  const goHome = () => {
-    window.location.href = "/User_Dashboard";
-  };
+  const goHome = () => navigate("/User_Dashboard");
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-500 to-gray-200">
@@ -79,20 +70,17 @@ const CarRentalForm = () => {
           <Home className="w-6 h-6 text-gray-200" />
         </button>
 
-        {/* Title */}
         <h2 className="text-3xl font-extrabold text-gray-300 mb-2 text-center">
-          Car Rental Form
+          Rent Your Dream Car
         </h2>
         <p className="text-gray-300 text-center mb-8">
           Fill in your details to rent a car 🚘
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Full Name */}
+          {/* Name */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">
-              Full Name
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Full Name</label>
             <input
               type="text"
               name="name"
@@ -106,11 +94,9 @@ const CarRentalForm = () => {
 
           {/* Phone */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">
-              Phone
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Phone</label>
             <input
-              type="number"
+              type="tel"
               name="phone"
               placeholder="+91 9876543210"
               value={formData.phone}
@@ -122,9 +108,7 @@ const CarRentalForm = () => {
 
           {/* Email */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Email
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Email</label>
             <input
               type="email"
               name="email"
@@ -136,11 +120,9 @@ const CarRentalForm = () => {
             />
           </div>
 
-          {/* ✅ Car Name (readonly) */}
+          {/* Car Name (readonly) */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Car Name
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Car Name</label>
             <input
               type="text"
               name="car"
@@ -150,15 +132,13 @@ const CarRentalForm = () => {
             />
           </div>
 
-          {/* ✅ Price (readonly) */}
+          {/* Price (readonly) */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Price
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Price</label>
             <input
               type="text"
               name="price"
-              value={`${formData.price}`}
+              value={formData.price}
               readOnly
               className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
             />
@@ -166,9 +146,7 @@ const CarRentalForm = () => {
 
           {/* Pickup Date */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">
-              Pickup Date
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Pickup Date</label>
             <input
               type="date"
               name="pickupDate"
@@ -181,9 +159,7 @@ const CarRentalForm = () => {
 
           {/* Pickup Time */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">
-              Pickup Time
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Pickup Time</label>
             <input
               type="time"
               name="pickupTime"
@@ -196,9 +172,7 @@ const CarRentalForm = () => {
 
           {/* Dropoff Date */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Dropoff Date
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Dropoff Date</label>
             <input
               type="date"
               name="dropoffDate"
@@ -211,9 +185,7 @@ const CarRentalForm = () => {
 
           {/* Payment Method */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Payment Method
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Payment Method</label>
             <select
               name="payment"
               value={formData.payment}

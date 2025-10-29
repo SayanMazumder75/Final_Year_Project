@@ -13,6 +13,7 @@ const adSchema = new mongoose.Schema({
         enum:["Petrol", "Diesel", "Electric", "CNG/Hybrid"],
         required: true
     },
+    email:{ type: String, required: true},
     transmission:{ type: String, enum: ["Manual", "Automatic"], required: true},
     kmsDriven: {type: Number, required: true},
     noOfOwners: {type: String, enum:["1st","2nd","3rd","4th"],required:true},
@@ -22,6 +23,12 @@ const adSchema = new mongoose.Schema({
     photos: [{type:String}],
     state:{type:String, required: true},
     mobilePhone: {type: String, required:true},
+    adType: {
+  type: String,
+  enum: ["sell", "rent"],
+  required: true,
+},
+
 }, {timestamps: true});
 
 

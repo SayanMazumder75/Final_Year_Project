@@ -231,14 +231,14 @@ export default function PostAd() {
             <InputField label="Ad title *" name="title" value={form.title} onChange={handleChange} placeholder="Ad title" error={errors.title}/>
             <InputField label="Description *" name="description" value={form.description} onChange={handleChange} placeholder="Description" error={errors.description}/>
 
-            <InputField label="Price (₹) *" name="price" value={form.price} onChange={handleChange} placeholder="e.g. 350000" error={errors.price}/>
+            <InputField label="Price (₹) *" type="number" name="price" value={form.price} onChange={handleChange} placeholder="e.g. 350000" error={errors.price}/>
 
             <ImageUploader images={images} setImages={setImages}/>
 
             <SelectField label="Ad Type *" name="adType" value={form.adType} onChange={handleChange} options={["sell","rent"]} error={errors.adType} placeholder="Select option"/>
 
             <SelectField label="State *" name="state" value={form.state} onChange={handleChange} options={STATES} error={errors.state} placeholder="Select state"/>
-            <InputField label="Mobile Phone *" name="phone" value={form.phone} onChange={handleChange} placeholder="e.g. 9876543210" error={errors.phone}/>
+            <InputField label="Mobile Phone *" type="number" name="phone" value={form.phone} onChange={handleChange} placeholder="e.g. 9876543210" error={errors.phone}/>
 
             <button type="submit" disabled={submitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md mt-4">
               {submitting ? "Posting..." : "Post Ad"}

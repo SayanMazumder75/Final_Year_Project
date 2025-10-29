@@ -1,19 +1,28 @@
 const Rental = require("../models/rentalModel");
-
+const Ad = require("../models/productModel");
 //create new rental
-exports.createRental = async (req,res) =>{
-    try{
-        const rental = new Rental(req.body);
-        await rental.save();
-        res.status(201).json({
-            success: true,
-            message: "Rental booking created successfully",
-            rental,
-        })
-    } catch(eroor){
-        res.status(500).json({ success: false, message: error.message });
-    }
+exports.createRental = async (req, res) => {
+  try {
+    // Find the ad to get the ownerEmail
+    const ad = await Ad.findOne({ title: req.body.car }); // assuming 'car' matches ad title
+
+    const rental = new Rental({
+      ...req.body,
+      ownerEmail: ad ? ad.email : null, // ✅ lowercase 'email'
+    });
+
+    await rental.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Rental booking created successfully",
+      rental,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
+
 
 //get all rentals
 

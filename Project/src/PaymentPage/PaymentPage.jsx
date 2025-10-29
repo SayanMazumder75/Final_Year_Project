@@ -37,13 +37,14 @@ export const PaymentPage = () => {
   }
 
   // Parse numeric amount safely
-  const numericPrice = parseInt(formData.priceRange.replace(/[^0-9]/g, ""), 10);
-  const amount = numericPrice * 100; // convert to paise
+  const numericPrice = parseInt(formData.priceRange?.toString().replace(/[^0-9]/g, ""), 10);
+if (isNaN(numericPrice) || numericPrice <= 0) {
+  alert("Invalid price");
+  navigate("/User_Dashboard");
+  return;
+}
+const amount = numericPrice * 100; // convert to paise
 
-  if (isNaN(amount) || amount <= 0) {
-    alert("Invalid price");
-    return;
-  }
 
     const res = await loadRazorpayScript();
     if (!res || !window.Razorpay) { 

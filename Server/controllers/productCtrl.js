@@ -52,6 +52,7 @@ exports.createAd = async (req, res) => {
 
     // Map frontend fields to schema
     const adData = {
+      email: req.body.email,
       user: req.user.id, // from auth middleware
       brand: req.body.brand,
       year: Number(req.body.year),
@@ -65,6 +66,7 @@ exports.createAd = async (req, res) => {
       state: req.body.state,
       mobilePhone: req.body.phone,
       photos: imageUrls,
+      adType: req.body.adType,
     };
 
     // Save Ad

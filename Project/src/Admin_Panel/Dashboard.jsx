@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "../Homepage/Footer";
-import PostAd from "./PostAd";
 import { useNavigate } from "react-router-dom";
 import {
   LineChart,
@@ -20,7 +19,12 @@ import {
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false); // sidebar toggle
+  const [ads, setAds] = useState([]);
+  const [loadingAds, setLoadingAds] = useState(true);
+  const [errorAds, setErrorAds] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  const navigate = useNavigate();
 
   // Dummy Growth Data
   const [growthData] = useState([
@@ -47,34 +51,50 @@ export default function Dashboard() {
     { month: "Dec", sales: 420 },
   ]);
 
-  // Available Cars
-  const [cars] = useState([
-    { id: 1, model: "Tesla Model 3", year: 2023, price: 100000 },
-    { id: 2, model: "BMW X5", year: 2022, price: 130000 },
-    { id: 3, model: "Audi A6", year: 2021, price: 200000 },
-  ]);
+  const handleAdd = () => navigate("/PostAd"); // open PostAd page
 
-  // Dummy Orders by Customers
-  const [orders] = useState([
-    { id: 1, customer: "John Doe", car: "Tesla Model 3", date: "2025-08-10" },
-    { id: 2, customer: "Alice Smith", car: "BMW X5", date: "2025-08-15" },
-    { id: 3, customer: "Robert Brown", car: "Audi A6", date: "2025-08-25" },
-  ]);
+  // Fetch owner-specific ads
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        const res = await fetch("http://localhost:5000/api/product/my-ads", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+        setAds(data);
+      } catch (err) {
+        setErrorAds(err.message);
+      } finally {
+        setLoadingAds(false);
+      }
+    };
+    fetchAds();
+  }, []);
 
-  // Dummy Available Rent Cars
-  const [rentCars] = useState([
-    { id: 1, model: "Toyota Corolla", rentPerDay: 50, availability: "Available" },
-    { id: 2, model: "Honda Civic", rentPerDay: 60, availability: "Rented" },
-    { id: 3, model: "Ford Mustang", rentPerDay: 120, availability: "Available" },
-  ]);
+    // Edit ad
+  const handleEdit = (ad) => {
+    localStorage.setItem("editAd", JSON.stringify(ad));
+    navigate("/PostAd");
+  };
 
-  const navigate = useNavigate();
+  // Delete ad
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this ad?")) return;
 
-const handleAdd = () => {
-  navigate("/PostAd"); // this will open PostAd page
-};
-
-
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(`http://localhost:5000/api/product/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      setAds((prev) => prev.filter((ad) => ad._id !== id));
+    } catch (err) {
+      alert("Error deleting ad: " + err.message);
+    }
+  };
   return (
     <div className="flex h-screen bg-gray-700 overflow-hidden">
       {/* Sidebar */}
@@ -90,14 +110,14 @@ const handleAdd = () => {
         ></div>
       )}
 
-        {/* Main scrollable area */}
-        <div
-          className={`flex-1 flex flex-col overflow-y-auto overflow-x-hidden transition-opacity duration-300 ${
-            open
-              ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
-              : "opacity-100"
-          }`}
-        >
+      {/* Main scrollable area */}
+      <div
+        className={`flex-1 flex flex-col overflow-y-auto overflow-x-hidden transition-opacity duration-300 ${
+          open
+            ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
+            : "opacity-100"
+        }`}
+      >
         {/* Header */}
         {!open && (
           <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">
@@ -107,82 +127,65 @@ const handleAdd = () => {
 
         {/* Dashboard Content */}
         <main className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Available Car Models */}
+          {/* Owner Ads Section */}
           <div className="md:col-span-2">
-            <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
-              <h2 className="text-xl font-semibold mb-3">Available Car Models</h2>
-
-              <table className="min-w-full border border-gray-200 text-left">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="px-4 py-2 border">Model</th>
-                    <th className="px-4 py-2 border">Year</th>
-                    <th className="px-4 py-2 border">Price (₹)</th>
-                    <th className="px-4 py-2 border">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cars.map((car) => (
-                    <tr key={car.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-2 border">{car.model}</td>
-                      <td className="px-4 py-2 border">{car.year}</td>
-                      <td className="px-4 py-2 border">{car.price}</td>
-                      <td className="px-4 py-2 border space-x-2">
-                        <button disabled className="text-gray-400 cursor-not-allowed">
-                          Edit
-                        </button>
-                        <button disabled className="text-gray-400 cursor-not-allowed">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <div className="mt-4">
+            <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-gray-800">My Ads</h2>
                 <button
                   onClick={handleAdd}
-                  className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                  className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
                 >
-                  Add
+                  Add New Ad
                 </button>
               </div>
 
-              {/* Message */}
-              {successMessage && (
-                <div className="text-blue-600 font-semibold mt-2">
-                  {successMessage}
+              {loadingAds ? (
+                <p className="text-gray-500">Loading...</p>
+              ) : errorAds ? (
+                <p className="text-red-500">{errorAds}</p>
+              ) : ads.length === 0 ? (
+                <p className="text-gray-600">No ads found</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {ads.map((ad) => (
+                    <div
+                      key={ad._id}
+                      className="bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition p-5 relative flex flex-col"
+                    >
+                      {/* Edit/Delete Buttons */}
+                      <div className="absolute top-3 right-3 flex space-x-2">
+                      
+                        <button
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm transition"
+                          onClick={() => handleDelete(ad._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+
+                      {/* Ad Content */}
+                      <h3 className="font-semibold text-lg text-gray-800 mb-2">{ad.title}</h3>
+                      <div className="text-gray-600 text-sm space-y-1">
+                        <p><span className="font-medium">Brand:</span> {ad.brand}</p>
+                        <p><span className="font-medium">Year:</span> {ad.year}</p>
+                        <p><span className="font-medium">Fuel:</span> {ad.fuel}</p>
+                        <p><span className="font-medium">Transmission:</span> {ad.transmission}</p>
+                        <p><span className="font-medium">KMs Driven:</span> {ad.kmsDriven}</p>
+                        <p><span className="font-medium">No Of Owners:</span> {ad.noOfOwners}</p>
+                        <p><span className="font-medium">Price:</span> ₹{ad.price}</p>
+                        <p><span className="font-medium">State:</span> {ad.state}</p>
+                        <p><span className="font-medium">Phone:</span> {ad.mobilePhone}</p>
+                        <p><span className="font-medium">Ad Type:</span> {ad.adType}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
           </div>
-          
-          {/* Available Rent Cars */}
-          <div className="md:col-span-2">
-            <div className="bg-white rounded-lg shadow-md p-5">
-              <h2 className="text-xl font-semibold mb-3">Available Rent Cars</h2>
-              <table className="min-w-full border border-gray-200 text-left">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="px-4 py-2 border">Model</th>
-                    <th className="px-4 py-2 border">Rent/Day (₹)</th>
-                    <th className="px-4 py-2 border">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rentCars.map((car) => (
-                    <tr key={car.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-2 border">{car.model}</td>
-                      <td className="px-4 py-2 border">{car.rentPerDay}</td>
-                      <td className="px-4 py-2 border">{car.availability}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          
+
+
           {/* Company Growth */}
           <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
             <h2 className="text-lg font-semibold">Company Growth</h2>

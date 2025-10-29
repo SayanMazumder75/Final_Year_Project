@@ -1,61 +1,54 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Admin_Panel/Header";
-import { Link, useNavigate } from "react-router-dom"; // ✅ Added useNavigate
-import rental from "./rental.jpg";
+import { Link } from "react-router-dom";
 import rental2 from "./rental2.jpg";
 
-// Cars Data
-// const carsData = [
-//   { id: 1, name: "Toyota Corolla", price: { rent: "$45/day", buy: "$20,000" }, img: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=800&q=80" },
-//   { id: 2, name: "BMW 5 Series", price: { rent: "$120/day", buy: "$55,000" }, img: "https://i2.wp.com/www.ispravochnik.com/cdn/pictures/1_5ecfd6273fa1a.jpg" },
-//   { id: 3, name: "Honda Civic", price: { rent: "$50/day", buy: "$22,000" }, img: rental2 },
-//   { id: 4, name: "Audi A6", price: { rent: "$150/day", buy: "$60,000" }, img: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=800&q=80" },
-// ];
-
 export default function Rent() {
+  const [cars, setCars] = useState([]);
   const [wishlist, setWishlist] = useState([]);
-  const navigate = useNavigate(); // ✅ Added for redirection
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const carsData = [
-    {
-      id: 1,
-      name: "Toyota Camry",
-      price: { rent: "75/day" },
-      img: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: 2,
-      name: "BMW 5",
-      price: { rent: "120/day" },
-      img: "https://i2.wp.com/www.ispravochnik.com/cdn/pictures/1_5ecfd6273fa1a.jpg",
-    },
-    {
-      id: 3,
-      name: "Honda Civic",
-      price: { rent: "150/day" },
-      img: rental2,
-    },
-    {
-      id: 4,
-      name: "Audi A6",
-      price: { rent: "60/day" },
-      img: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=800&q=80",
-    },
-  ];
+  // Load wishlist from localStorage
+  useEffect(() => {
+    const savedWishlist = localStorage.getItem("vehicleWishlist");
+    if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
+  }, []);
 
+  // Fetch rent cars from backend
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/product/get");
+        if (!res.ok) throw new Error("Failed to fetch cars");
+        const data = await res.json();
+        // Filter only cars for rent
+        const rentCars = data.filter((car) => car.adType === "rent");
+        setCars(rentCars);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCars();
+  }, []);
+
+  // Toggle wishlist
   const toggleWishlist = (id) => {
-    setWishlist((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+    const idStr = id.toString();
+    const updated = wishlist.includes(idStr)
+      ? wishlist.filter((i) => i !== idStr)
+      : [...wishlist, idStr];
+    setWishlist(updated);
+    localStorage.setItem("vehicleWishlist", JSON.stringify(updated));
   };
 
-  const isInWishlist = (id) => wishlist.includes(id);
+  const isInWishlist = (id) => wishlist.includes(id.toString());
 
-  // ✅ Navigate to booking with car + amount
-  const handleRent = (car) => {
-    const amount = parseInt(car.price.rent.replace(/[^0-9]/g, ""));
-    navigate("/booking", { state: { car, amount } });
-  };
+  if (loading) return <p className="text-center mt-10">Loading cars...</p>;
+  if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
@@ -65,7 +58,7 @@ export default function Rent() {
       <section
         className="relative h-[25rem] flex items-center justify-center"
         style={{
-          backgroundImage: `url(${rental})`,
+          backgroundImage: `url(${rental2})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -74,7 +67,7 @@ export default function Rent() {
         <div className="relative text-center text-white">
           <h1 className="text-4xl md:text-6xl font-bold">Rent a Car</h1>
           <p className="mt-4 text-lg md:text-xl">
-            Choose from our collection of top-rated rental cars.
+            Drive your dream car without the commitment of ownership.
           </p>
         </div>
       </section>
@@ -86,43 +79,44 @@ export default function Rent() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {carsData.map((car) => (
+          {cars.map((car) => (
             <div
-              key={car.id}
+              key={car._id}
               className="bg-white rounded-2xl shadow-lg overflow-hidden relative hover:shadow-2xl transition"
             >
               {/* Wishlist */}
               <button
-                onClick={() => toggleWishlist(car.id)}
+                onClick={() => toggleWishlist(car._id)}
                 className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md text-2xl"
-                title={
-                  isInWishlist(car.id)
-                    ? "Remove from wishlist"
-                    : "Add to wishlist"
-                }
               >
-                {isInWishlist(car.id) ? "❤" : "🤍"}
+                {isInWishlist(car._id) ? "❤" : "🤍"}
               </button>
 
+              {/* Car Image */}
               <img
-                src={car.img}
-                alt={car.name}
+                src={car.photos && car.photos[0]}
+                alt={car.brand || car.title}
                 className="w-full h-56 object-cover"
               />
+
+              {/* Car Details */}
               <div className="p-6">
-                <h3 className="text-xl font-bold">{car.name}</h3>
-                <p className="text-gray-600 mb-4">Rent: {car.price.rent}</p>
+                <h3 className="text-xl font-bold">{car.brand || car.title}</h3>
+                <p className="text-gray-600 mb-4">Rent: ₹{car.price}</p>
+                <p className="text-gray-600 mb-4">gmail: {car.email}</p>
 
                 <div className="flex gap-3">
-                  {/* ✅ Rent Button triggers handleRent */}
-                  <button
-                    onClick={() => handleRent(car)}
-                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition"
+                  <Link
+                    to="/booking"
+                    state={{ carData: { name: car.brand || car.title, price: car.price, ownerEmail: car.owner?.email || "", carId: car._id } }}
+                    className="flex-1"
                   >
-                    Rent
-                  </button>
+                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
+                      Rent
+                    </button>
+                  </Link>
 
-                  <Link to={`/car/${car.id}`} className="flex-1">
+                  <Link to={`/car/${car._id}`} className="flex-1">
                     <button className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition">
                       Details
                     </button>

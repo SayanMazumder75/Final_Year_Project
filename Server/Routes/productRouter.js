@@ -111,6 +111,20 @@ exports.createAd = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+// Get ads for logged-in owner (exclude images)
+router.get("/my-ads", auth, authOwner, async (req, res) => {
+  try {
+    // req.user.email comes from auth middleware (JWT decoded)
+    const ownerEmail = req.user.email;
 
+    const ads = await Product.find({ email: ownerEmail })
+      .select("-images") // exclude images array
+      .sort({ createdAt: -1 }); // newest first
 
+    res.json(ads);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 module.exports = router;

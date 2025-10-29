@@ -13,7 +13,7 @@ import {
   Wrench,
   CreditCard,
   Headphones,
-} from "lucide-react";
+} from "lucide-react";  
 
 import logo from "/src/images/logo.png";
 import car1 from "/src/assets/Car5.jpg";

@@ -11,6 +11,7 @@ const CarBuySchema = new mongoose.Schema(
     address: { type: String, required: true },
     payment: { type: String, required: true },
     testDrive: { type: String, required: true },
+    ownerEmail: { type: String, required: true },
   },
   { timestamps: true }
 );

@@ -106,7 +106,7 @@ export default function Buy() {
                 <div className="flex gap-3">
                   <Link
                     to="/buying"
-                    state={{ carData: { name: car.brand || car.title, price: car.price } }}
+                    state={{ carData: { name: car.brand || car.title, price: car.price,ownerEmail: car.email || car.ownerEmail || "", } }}
                     className="flex-1"
                   >
                     <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">

@@ -19,17 +19,23 @@ const CarRentalForm = () => {
     dropoffDate: "",
     pickupTime: "",
     payment: "",
-    ownerEmail: carData.email || "",
+    ownerEmail: carData.ownerEmail || "",
   });
 
-  const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking", "Cash"];
+  const paymentOptions = [
+    "Credit Card",
+    "Debit Card",
+    "UPI",
+    "Net Banking",
+    "Cash",
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const requiredFields = [
       "name",
@@ -50,7 +56,23 @@ const CarRentalForm = () => {
       }
     }
 
-    navigate("/RentPaymentPage", { state: { formData } });
+    try {
+      const res = await fetch("http://localhost:5000/api/rental", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData), // includes ownerEmail
+      });
+
+      if (!res.ok) throw new Error("Failed to save rental");
+
+      const data = await res.json();
+      console.log("Rental saved:", data);
+
+      navigate("/RentPaymentPage", { state: { formData } });
+    } catch (err) {
+      console.error(err);
+      alert("Error saving rental. Please try again.");
+    }
   };
 
   const goHome = () => navigate("/User_Dashboard");
@@ -80,7 +102,9 @@ const CarRentalForm = () => {
         <div className="grid md:grid-cols-2 gap-6">
           {/* Name */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">Full Name</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Full Name
+            </label>
             <input
               type="text"
               name="name"
@@ -94,7 +118,9 @@ const CarRentalForm = () => {
 
           {/* Phone */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">Phone</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Phone
+            </label>
             <input
               type="tel"
               name="phone"
@@ -108,7 +134,9 @@ const CarRentalForm = () => {
 
           {/* Email */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Email</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -119,10 +147,28 @@ const CarRentalForm = () => {
               className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
+          {/* Owner Email */}
+          <div className="md:col-span-2">
+            <label className="block text-gray-300 font-medium mb-2">
+              OwnerEmail
+            </label>
+            <input
+              type="email"
+              name="ownerEmail"
+              placeholder="john@example.com"
+              value={formData.ownerEmail}
+              onChange={handleChange}
+              required
+              disabled
+              className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
+            />
+          </div>
 
           {/* Car Name (readonly) */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Car Name</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Car Name
+            </label>
             <input
               type="text"
               name="car"
@@ -134,7 +180,9 @@ const CarRentalForm = () => {
 
           {/* Price (readonly) */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Price</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Price
+            </label>
             <input
               type="text"
               name="price"
@@ -146,7 +194,9 @@ const CarRentalForm = () => {
 
           {/* Pickup Date */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">Pickup Date</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Pickup Date
+            </label>
             <input
               type="date"
               name="pickupDate"
@@ -159,7 +209,9 @@ const CarRentalForm = () => {
 
           {/* Pickup Time */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">Pickup Time</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Pickup Time
+            </label>
             <input
               type="time"
               name="pickupTime"
@@ -172,7 +224,9 @@ const CarRentalForm = () => {
 
           {/* Dropoff Date */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Dropoff Date</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Dropoff Date
+            </label>
             <input
               type="date"
               name="dropoffDate"
@@ -185,7 +239,9 @@ const CarRentalForm = () => {
 
           {/* Payment Method */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Payment Method</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Payment Method
+            </label>
             <select
               name="payment"
               value={formData.payment}

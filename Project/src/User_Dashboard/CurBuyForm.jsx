@@ -17,6 +17,7 @@ const CarBuyForm = () => {
     address: "",
     payment: "",
     testDrive: "",
+    ownerEmail: carData.ownerEmail || "",
   });
 
   const colorOptions = ["White", "Black", "Blue", "Red", "Silver", "Gray"];
@@ -103,6 +104,22 @@ const CarBuyForm = () => {
               className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
+            {/* Owner Email */}
+            <div className="md:col-span-2">
+            <label className="block text-gray-300 font-medium mb-2">OwnerEmail</label>
+            <input
+              type="email"
+              name="ownerEmail"
+              placeholder="john@example.com"
+              value={formData.ownerEmail}
+              onChange={handleChange}
+              disabled
+              required
+              className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
+            />
+          </div>
+
+
 
           {/* Car Name - Disabled */}
           <div className="md:col-span-2">
@@ -112,7 +129,7 @@ const CarBuyForm = () => {
               name="car"
               value={formData.car}
               disabled
-              className="w-full px-4 py-3 border rounded-lg bg-gray-300 text-gray-700 outline-none"
+              className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
             />
           </div>
 
@@ -124,7 +141,7 @@ const CarBuyForm = () => {
               name="priceRange"
               value={formData.priceRange}
               disabled
-              className="w-full px-4 py-3 border rounded-lg bg-gray-300 text-gray-700 outline-none"
+              className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
             />
           </div>
 

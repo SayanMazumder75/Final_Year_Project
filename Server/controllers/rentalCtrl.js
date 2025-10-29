@@ -1,14 +1,21 @@
+// controllers/rentalCtrl.js
 const Rental = require("../models/rentalModel");
 const Ad = require("../models/productModel");
-//create new rental
+
 exports.createRental = async (req, res) => {
   try {
-    // Find the ad to get the ownerEmail
-    const ad = await Ad.findOne({ title: req.body.car }); // assuming 'car' matches ad title
+    console.log("📥 Received rental data:", req.body);
+
+    // ✅ FIX: use adTitle instead of title
+    const ad = await Ad.findOne({ adTitle: req.body.car });
+
+    if (!ad) {
+      console.warn("⚠️ No matching ad found for car:", req.body.car);
+    }
 
     const rental = new Rental({
       ...req.body,
-      ownerEmail: ad ? ad.email : null, // ✅ lowercase 'email'
+      ownerEmail: ad ? ad.Email || ad.ownerEmail || ad.email : req.body.ownerEmail, // fallback to frontend
     });
 
     await rental.save();
@@ -19,6 +26,7 @@ exports.createRental = async (req, res) => {
       rental,
     });
   } catch (error) {
+    console.error("❌ Rental creation failed:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

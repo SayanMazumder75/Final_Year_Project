@@ -108,9 +108,17 @@ export default function Rent() {
                 <div className="flex gap-3">
                   <Link
                     to="/booking"
-                    state={{ carData: { name: car.brand || car.title, price: car.price, ownerEmail: car.owner?.email || "", carId: car._id } }}
+                    state={{
+                      carData: {
+                        name: car.brand || car.title,
+                        price: car.price,
+                        ownerEmail: car.email || car.ownerEmail || "",
+                        carId: car._id,
+                      },
+                    }}
                     className="flex-1"
                   >
+
                     <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
                       Rent
                     </button>

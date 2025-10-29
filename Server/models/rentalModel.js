@@ -10,7 +10,7 @@ const CarRentalSchema = new mongoose.Schema(
     dropoffDate: { type: String, required: true },
     pickupTime: { type: String, required: true },
     payment: { type: String, required: true },
-    ownerEmail: { type: String }, // <-- Add this
+    ownerEmail: { type: String, required: true}, // <-- Add this
 
   },
   { timestamps: true }

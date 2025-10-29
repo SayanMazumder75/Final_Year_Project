@@ -8,37 +8,37 @@ const buyCars = [
   {
     id: 5,
     name: "Mercedes C-Class",
-    price: { rent: "$160/day", buy: "$65,000" },
+    price: {buy: "65,000" },
     img: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: 6,
     name: "Mercedes-Benz E-Class",
-    price: { rent: "$170/day", buy: "$70,000" },
+    price: {buy: "70,000" },
     img: "https://stimg.cardekho.com/images/carexteriorimages/930x620/Mercedes-Benz/E-Class/9790/1728652931654/front-view-118.jpg",
   },
   {
     id: 7,
     name: "Jaguar XF",
-    price: { rent: "$120/day", buy: "$50,000" },
+    price: {buy: "50,000" },
     img: "https://stimg.cardekho.com/images/car-images/930x620/Jaguar/XF/5437/1581327491979/228_Loire-Blue_131c2d.jpg",
   },
   {
     id: 8,
     name: "Jaguar F-Pace",
-    price: { rent: "$150/day", buy: "$65,000" },
+    price: {buy: "65,000" },
     img: "https://stimg.cardekho.com/images/carexteriorimages/630x420/Jaguar/F-Pace/10644/1755774688332/front-left-side-47.jpg?tr=w-664",
   },
   {
     id: 9,
     name: "Range Rover",
-    price: { rent: "$190/day", buy: "$90,000" },
+    price: {buy: "90,000" },
     img: "https://stimg.cardekho.com/images/carexteriorimages/930x620/Land-Rover/Range-Rover/11540/1719037924320/side-view-(left)-90.jpg?imwidth=890&impolicy=resize",
   },
   {
     id: 10,
     name: "Lexus LM",
-    price: { rent: "$200/day", buy: "$100,000" },
+    price: {buy: "100,000" },
     img: "https://stimg.cardekho.com/images/carexteriorimages/930x620/Lexus/LM/11604/1750066752466/front-left-side-47.jpg",
   },
 ];
@@ -111,11 +111,17 @@ export default function Buy() {
                 <p className="text-gray-600 mb-4">Buy: {car.price.buy}</p>
 
                 <div className="flex gap-3">
-                  <Link to="/buying" className="flex-1">
+                  {/* Pass car name and price via state */}
+                  <Link
+                    to="/buying"
+                    state={{ carData: { name: car.name, price: car.price.buy } }}
+                    className="flex-1"
+                  >
                     <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
                       Buy
                     </button>
                   </Link>
+
                   <Link to={`/car/${car.id}`} className="flex-1">
                     <button className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition">
                       Details
@@ -127,20 +133,21 @@ export default function Buy() {
           ))}
         </div>
       </section>
-        {/* Call to Action */}
-        <section className="py-20 bg-gradient-to-r from-gray-700 via-gray-900 to-black text-center text-white px-6">
+
+      {/* Call to Action */}
+      <section className="py-20 bg-gradient-to-r from-gray-700 via-gray-900 to-black text-center text-white px-6">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
-            Own Your Dream Car
+          Own Your Dream Car
         </h2>
         <p className="mb-8 text-lg md:text-xl max-w-2xl mx-auto">
-            Take the next step towards owning a premium vehicle. Explore our exclusive collection, find the car that fits your style, and enjoy a seamless purchase experience with flexible options tailored just for you.
+          Take the next step towards owning a premium vehicle. Explore our exclusive collection, find the car that fits your style, and enjoy a seamless purchase experience with flexible options tailored just for you.
         </p>
         <Link to="/Wishlist">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-shadow shadow-lg hover:shadow-xl">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-shadow shadow-lg hover:shadow-xl">
             Your Wishlist Awaits
-            </button>
+          </button>
         </Link>
-        </section>
+      </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-300 py-10 text-center">

@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { Home } from "lucide-react"; // Import Home icon
+import { Home } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom"; // ✅ added useLocation
 
 const CarRentalForm = () => {
+  const navigate = useNavigate();
+  const location = useLocation(); // ✅ to get data from Rent.jsx
+
+  // ✅ get car details from previous page (Rent.jsx)
+  const { car, amount } = location.state || {};
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
-    car: "",
+    car: car?.name || "", // prefilled from previous page
+    price: amount || "", // added new field for price
     pickupLocation: "",
     dropoffLocation: "",
     pickupDate: "",
@@ -23,41 +31,46 @@ const CarRentalForm = () => {
     "Toyota Corolla",
   ];
 
-
   const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking"];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  //backend connection
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-     try {
-    const response = await fetch("http://localhost:5000/api/rental", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    const data = await response.json();
-    if (data.success) alert("Rental confirmed!");
-    else alert("Failed to submit");
-  } catch (err) {
-    alert("Error submitting form");
-  }
-    
+    const requiredFields = [
+      "name",
+      "phone",
+      "email",
+      "price",
+      "car",
+      "pickupDate",
+      "dropoffDate",
+      "payment",
+
+    ];
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        alert(`Please fill ${field}`);
+        return;
+      }
+    }
+    navigate("/RentPaymentPage", { state: { formData } });
   };
 
   const goHome = () => {
-    window.location.href = "/User_Dashboard"; //redirect to home page
+    window.location.href = "/User_Dashboard";
   };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-500 to-gray-200">
       <form
         onSubmit={handleSubmit}
         className="relative bg-gray-700 p-10 rounded-2xl shadow-2xl w-full max-w-2xl transition hover:shadow-xl"
       >
-        {/* Home Icon (inside the form - top-right corner) */}
+        {/* Home Button */}
         <button
           type="button"
           onClick={goHome}
@@ -75,7 +88,7 @@ const CarRentalForm = () => {
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Name */}
+          {/* Full Name */}
           <div>
             <label className="block text-gray-300 font-medium mb-2">
               Full Name
@@ -93,7 +106,9 @@ const CarRentalForm = () => {
 
           {/* Phone */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">Phone</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Phone
+            </label>
             <input
               type="number"
               name="phone"
@@ -107,7 +122,9 @@ const CarRentalForm = () => {
 
           {/* Email */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Email</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -116,6 +133,34 @@ const CarRentalForm = () => {
               onChange={handleChange}
               required
               className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
+            />
+          </div>
+
+          {/* ✅ Car Name (readonly) */}
+          <div className="md:col-span-2">
+            <label className="block text-gray-300 font-medium mb-2">
+              Car Name
+            </label>
+            <input
+              type="text"
+              name="car"
+              value={formData.car}
+              readOnly
+              className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
+            />
+          </div>
+
+          {/* ✅ Price (readonly) */}
+          <div className="md:col-span-2">
+            <label className="block text-gray-300 font-medium mb-2">
+              Price
+            </label>
+            <input
+              type="text"
+              name="price"
+              value={`${formData.price}`}
+              readOnly
+              className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
             />
           </div>
 
@@ -164,27 +209,6 @@ const CarRentalForm = () => {
             />
           </div>
 
-          {/* Car Selection */}
-          <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Select Car
-            </label>
-            <select
-              name="car"
-              value={formData.car}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2  focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option value="">-- Choose a Car --</option>
-              {carOptions.map((car, idx) => (
-                <option key={idx} value={car}>
-                  {car}
-                </option>
-              ))}
-            </select>
-          </div>
-
           {/* Payment Method */}
           <div className="md:col-span-2">
             <label className="block text-gray-300 font-medium mb-2">
@@ -207,12 +231,12 @@ const CarRentalForm = () => {
           </div>
         </div>
 
-        {/* Submit */}
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full mt-8 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 shadow-md transition cursor-pointer"
         >
-          Confirm Rental
+          Proceed to Payment
         </button>
       </form>
     </div>

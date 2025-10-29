@@ -1,25 +1,27 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Home } from "lucide-react";
 
 const CarBuyForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const carData = location.state?.carData || {};
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
-    car: "",
+    car: carData.name || "",
     color: "",
-    priceRange: "",
+    priceRange: carData.price || "",
     address: "",
     payment: "",
     testDrive: "",
   });
 
-  const carOptions = ["Tesla Model 3","BMW X5","Audi A4","Mercedes GLA","Toyota Fortuner","Hyundai Creta"];
   const colorOptions = ["White", "Black", "Blue", "Red", "Silver", "Gray"];
   const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking", "Cash"];
-  const testDriveOptions = ["Yes","No"];
+  const testDriveOptions = ["Yes", "No"];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,28 +30,24 @@ const CarBuyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // validate required fields
-    const requiredFields = ["name","phone","email","car","color","priceRange","address","payment"];
+    const requiredFields = ["name", "phone", "email", "color", "address", "payment"];
     for (let field of requiredFields) {
       if (!formData[field]) {
         alert(`Please fill ${field}`);
         return;
       }
     }
-
-    // Navigate to payment page with form data
     navigate("/PaymentPage", { state: { formData } });
   };
 
   const goHome = () => navigate("/User_Dashboard");
 
- return (
+  return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-500 to-gray-200">
       <form
         onSubmit={handleSubmit}
         className="relative bg-gray-700 p-10 rounded-2xl shadow-2xl w-full max-w-2xl transition hover:shadow-xl"
       >
-        {/* Home Button */}
         <button
           type="button"
           onClick={goHome}
@@ -58,21 +56,15 @@ const CarBuyForm = () => {
           <Home className="w-6 h-6 text-gray-200" />
         </button>
 
-        {/* Title */}
         <h2 className="text-3xl font-extrabold text-gray-300 mb-2 text-center">
           Buy Your Dream Car
         </h2>
-        <p className="text-gray-300 text-center mb-8">
-          Fill out the details 🚗
-        </p>
+        <p className="text-gray-300 text-center mb-8">Fill out the details 🚗</p>
 
-        {/* Form Fields */}
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Name */}
+          {/* Full Name */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">
-              Full Name
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Full Name</label>
             <input
               type="text"
               name="name"
@@ -112,25 +104,28 @@ const CarBuyForm = () => {
             />
           </div>
 
-          {/* Car Selection */}
+          {/* Car Name - Disabled */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Select Car
-            </label>
-            <select
+            <label className="block text-gray-300 font-medium mb-2">Car Name</label>
+            <input
+              type="text"
               name="car"
               value={formData.car}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-            >
-              <option value="">-- Choose a Car --</option>
-              {carOptions.map((car, idx) => (
-                <option key={idx} value={car}>
-                  {car}
-                </option>
-              ))}
-            </select>
+              disabled
+              className="w-full px-4 py-3 border rounded-lg bg-gray-300 text-gray-700 outline-none"
+            />
+          </div>
+
+          {/* Price - Disabled */}
+          <div className="md:col-span-2">
+            <label className="block text-gray-300 font-medium mb-2">Price</label>
+            <input
+              type="text"
+              name="priceRange"
+              value={formData.priceRange}
+              disabled
+              className="w-full px-4 py-3 border rounded-lg bg-gray-300 text-gray-700 outline-none"
+            />
           </div>
 
           {/* Color */}
@@ -145,32 +140,14 @@ const CarBuyForm = () => {
             >
               <option value="">-- Choose Color --</option>
               {colorOptions.map((color, idx) => (
-                <option key={idx} value={color}>
-                  {color}
-                </option>
+                <option key={idx} value={color}>{color}</option>
               ))}
             </select>
           </div>
 
-          {/* Price Range */}
-          <div>
-            <label className="block text-gray-300 font-medium mb-2">Price</label>
-            <input
-              type="text"
-              name="priceRange"
-              placeholder="₹10,00,000 - ₹20,00,000"
-              value={formData.priceRange}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
-            />
-          </div>
-
           {/* Address */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Address
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Address</label>
             <textarea
               name="address"
               value={formData.address}
@@ -184,9 +161,7 @@ const CarBuyForm = () => {
 
           {/* Payment Method */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Payment Method
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Payment Method</label>
             <select
               name="payment"
               value={formData.payment}
@@ -196,18 +171,14 @@ const CarBuyForm = () => {
             >
               <option value="">-- Choose Payment Method --</option>
               {paymentOptions.map((method, idx) => (
-                <option key={idx} value={method}>
-                  {method}
-                </option>
+                <option key={idx} value={method}>{method}</option>
               ))}
             </select>
           </div>
 
-          {/* Test Drive Option */}
+          {/* Test Drive */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">
-              Want a Test Drive?
-            </label>
+            <label className="block text-gray-300 font-medium mb-2">Want a Test Drive?</label>
             <select
               name="testDrive"
               value={formData.testDrive}
@@ -217,15 +188,12 @@ const CarBuyForm = () => {
             >
               <option value="">-- Select --</option>
               {testDriveOptions.map((option, idx) => (
-                <option key={idx} value={option}>
-                  {option}
-                </option>
+                <option key={idx} value={option}>{option}</option>
               ))}
             </select>
           </div>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full mt-8 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 shadow-md transition cursor-pointer"

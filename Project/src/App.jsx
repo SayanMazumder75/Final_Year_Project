@@ -18,11 +18,7 @@ import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
 import PostAd from "./Admin_Panel/PostAd";
 import Wishlist from "./User_Dashboard/Wishlist";
-import Car1 from "./Pages/car1";
-import Car2 from "./Pages/car2";
-import Car3 from "./Pages/car3";
-import Car4 from "./Pages/car4";
-import Car5 from "./Pages/car5";
+
 import WebOwnerLogin from "./Login_Signup/WebOwnerLogin";
 import WebOwnerDashboard from "./Admin_Control/WebOwnerDashboard";
 import AfterLogin from "./User_Dashboard/AfterLogin";
@@ -30,6 +26,8 @@ import Buy from "./User_Dashboard/Buy";
 import Rent from "./User_Dashboard/Rent";
 import { PaymentPage, PaymentSuccess } from './PaymentPage/PaymentPage'; 
 import { RentPaymentPage, RentPaymentSuccess } from "./PaymentPage/RentPaymentPage";
+import BuyDetails from "./Pages/BuyDetails";
+import Details from "./Pages/Details";
 
 // Import chatbot images
 import sendIcon from "./assets/send-icon.png";
@@ -382,13 +380,7 @@ function App() {
             <Route path="/booking" element={<CarBookingForm />} />
             <Route path="/buying" element={<CarBuyForm />} />
 
-            {/* Car detail routes */}
-            <Route path="/car/1" element={<Car1 />} />
-            <Route path="/car/2" element={<Car2 />} />
-            <Route path="/car/3" element={<Car3 />} />
-            <Route path="/car/4" element={<Car4 />} />
-            <Route path="/car/5" element={<Car5 />} />
-
+           
             {/* Admin Panel routes */}
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/Users" element={<Users />} />
@@ -415,6 +407,12 @@ function App() {
             <Route path="/AdminLogin" element={<AdminLogin />} />
             <Route path="/PostAd" element={<PostAd />} />
             <Route path="/WebOwnerLogin" element={<WebOwnerLogin />} />
+
+            {/* Details */}
+            <Route path="/Details" element={<Details/>} />
+            <Route path="/BuyDetails" element={<BuyDetails/>} />
+            
+            
             
             {/* Payment routes */}
             <Route path="/PaymentPage" element={<PaymentPage />} />
@@ -422,6 +420,8 @@ function App() {
             <Route path="/RentPaymentSuccess" element={<RentPaymentSuccess />} />
             <Route path="/RentPaymentPage" element={<RentPaymentPage />} />
           </Routes>
+
+          
 
           {/* CHATBOT - Shows on all pages */}
           {isChatOpen && (

@@ -124,8 +124,30 @@ export default function Rent() {
                     </button>
                   </Link>
 
-                  <Link to={`/car/${car._id}`} className="flex-1">
-                    <button className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition">
+                  <Link
+                    to="/details"
+                    state={{
+                      carData: {
+                        name: car.brand || car.title,
+                        price: car.price,
+                        ownerEmail: car.owner?.email || "",
+                        description: car.description,
+                        adTitle: car.adTitle,   // Add this line
+                        carId: car._id,
+                        brand: car.brand,
+                        year: car.year,
+                        fuel: car.fuel,
+                        transmission: car.transmission,
+                        kmsDriven: car.kmsDriven,
+                        noOfOwners: car.noOfOwners,
+                        photos: car.photos,
+                        state: car.state,
+                        phoneNumber: car.phoneNumber,
+                      },
+                    }}
+                    className="flex-1"
+                  >
+                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
                       Details
                     </button>
                   </Link>

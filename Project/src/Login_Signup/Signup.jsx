@@ -41,7 +41,7 @@ export default function Signup() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ✅ Fetch user's current address using Geolocation + Geoapify
+  // Fetch user's current address using Geolocation + Geoapify
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser.");
@@ -171,7 +171,10 @@ export default function Signup() {
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-2.5 text-gray-400" size={18} />
+                <User
+                  className="absolute left-3 top-2.5 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="text"
                   name="name"
@@ -190,7 +193,10 @@ export default function Signup() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-2.5 text-gray-400" size={18} />
+                <Mail
+                  className="absolute left-3 top-2.5 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="email"
                   name="email"
@@ -209,7 +215,10 @@ export default function Signup() {
                 Phone Number
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-2.5 text-gray-400" size={18} />
+                <Phone
+                  className="absolute left-3 top-2.5 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="number"
                   name="number"
@@ -228,7 +237,10 @@ export default function Signup() {
                 Address
               </label>
               <div className="relative">
-                <Home className="absolute left-3 top-2.5 text-gray-400" size={18} />
+                <Home
+                  className="absolute left-3 top-2.5 text-gray-400"
+                  size={18}
+                />
                 <textarea
                   name="address"
                   value={form.address}
@@ -279,7 +291,10 @@ export default function Signup() {
                 PIN Code
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-2.5 text-gray-400" size={18} />
+                <MapPin
+                  className="absolute left-3 top-2.5 text-gray-400"
+                  size={18}
+                />
                 <input
                   type="number"
                   name="pin"
@@ -298,7 +313,10 @@ export default function Signup() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-2.5 text-gray-400" size={18} />
+                <Lock
+                  className="absolute left-3 top-2.5 text-gray-400"
+                  size={18}
+                />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
@@ -323,7 +341,10 @@ export default function Signup() {
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-2.5 text-gray-400" size={18} />
+                <Lock
+                  className="absolute left-3 top-2.5 text-gray-400"
+                  size={18}
+                />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="confirmPassword"

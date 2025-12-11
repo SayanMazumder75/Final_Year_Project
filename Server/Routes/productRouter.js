@@ -3,7 +3,7 @@ const router = express.Router();
 const productCtrl = require("../controllers/productCtrl");
 const auth = require("../middleware/auth");
 const authOwner = require("../middleware/authOwner");
-const upload = require("../middleware/upload"); // <-- Added multer middleware
+const upload = require("../middleware/upload");
 
 // Get all ads
 router.get("/get", productCtrl.getAds);
@@ -24,7 +24,7 @@ router.get("/", productCtrl.getAdsByCategory);
 // Delete ad (only owner)
 router.delete("/:id", auth, authOwner, productCtrl.deleteAd);
 exports.getAdsByCategory = async (req, res) => {
-  const { category } = req.query; // e.g., /ads?category=rental
+  const { category } = req.query;
   try {
     const ads = category ? await Ad.find({ category }) : await Ad.find();
     res.json(ads);
@@ -119,8 +119,7 @@ router.get("/my-ads", auth, authOwner, async (req, res) => {
 
     const ads = await Product.find({ email: ownerEmail })
       .select("-images") // exclude images array
-      .sort({ createdAt: -1 }); // newest first
-
+      .sort({ createdAt: -1 }); 
     res.json(ads);
   } catch (err) {
     console.error(err);

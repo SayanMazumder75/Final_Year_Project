@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
 
-// ===== Token Generators =====
+//  Token Generators 
 const createAccessToken = (owner) =>
   jwt.sign(
     { id: owner._id, email: owner.email, userType: owner.userType || "Owner" },
@@ -19,7 +19,7 @@ const createRefreshToken = (owner) =>
     { expiresIn: "7d" }
   );
 
-// ===== Controller =====
+//  Controller 
 const ownerCtrl = {
   // REGISTER OWNER
   register: async (req, res) => {

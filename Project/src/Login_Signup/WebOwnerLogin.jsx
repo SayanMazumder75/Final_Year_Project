@@ -31,7 +31,6 @@ export default function WebOwnerLogin() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-gray-800 p-6">
       <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-8 relative overflow-hidden">
-
         {/* Decorative Glow */}
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
 
@@ -52,14 +51,16 @@ export default function WebOwnerLogin() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-2.5 text-gray-400" size={18} />
+              <Mail
+                className="absolute left-3 top-2.5 text-gray-400"
+                size={18}
+              />
               <input
                 type="email"
                 name="email"
@@ -78,7 +79,10 @@ export default function WebOwnerLogin() {
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-2.5 text-gray-400" size={18} />
+              <Lock
+                className="absolute left-3 top-2.5 text-gray-400"
+                size={18}
+              />
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"

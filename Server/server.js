@@ -50,7 +50,7 @@ connectDB();
 // Routes
 // -----------------------------
 app.use('/user', require('./Routes/userRoutes'));
-app.use('/api/owner', require('./Routes/ownerRoutes')); // ✅ Use /api prefix for clarity
+app.use('/api/owner', require('./Routes/ownerRoutes')); //   Use /api prefix for clarity
 app.use('/api', require('./Routes/categoryRoutes'));
 app.use('/api', require('./Routes/upload'));
 app.use('/api/product', require('./Routes/productRouter'));
@@ -60,7 +60,7 @@ app.use('/api', require('./Routes/paymentsroutes'));
 
 // 🧠 Optional: route logger (for debugging)
 if (app._router && app._router.stack) {
-  console.log("✅ Registered routes:");
+  console.log("  Registered routes:");
   app._router.stack.forEach((middleware) => {
     if (middleware.route) {
       console.log(`→ Direct route: ${Object.keys(middleware.route.methods)} ${middleware.route.path}`);

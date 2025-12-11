@@ -1,5 +1,3 @@
-//category model file(category model is created for CRUD operations on categories)
-//it stores category name and timestamps like electronic, fashion etc
 const mongoose = require('mongoose');
 
 //create category schema

@@ -21,17 +21,30 @@ const CarBuyForm = () => {
   });
 
   const colorOptions = ["White", "Black", "Blue", "Red", "Silver", "Gray"];
-  const paymentOptions = ["Credit Card", "Debit Card", "UPI", "Net Banking", "Cash"];
+  const paymentOptions = [
+    "Credit Card",
+    "Debit Card",
+    "UPI",
+    "Net Banking",
+    "Cash",
+  ];
   const testDriveOptions = ["Yes", "No"];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const requiredFields = ["name", "phone", "email", "color", "address", "payment"];
+    const requiredFields = [
+      "name",
+      "phone",
+      "email",
+      "color",
+      "address",
+      "payment",
+    ];
     for (let field of requiredFields) {
       if (!formData[field]) {
         alert(`Please fill ${field}`);
@@ -60,12 +73,16 @@ const CarBuyForm = () => {
         <h2 className="text-3xl font-extrabold text-gray-300 mb-2 text-center">
           Buy Your Dream Car
         </h2>
-        <p className="text-gray-300 text-center mb-8">Fill out the details 🚗</p>
+        <p className="text-gray-300 text-center mb-8">
+          Fill out the details 🚗
+        </p>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Full Name */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">Full Name</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Full Name
+            </label>
             <input
               type="text"
               name="name"
@@ -79,7 +96,9 @@ const CarBuyForm = () => {
 
           {/* Phone */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">Phone</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Phone
+            </label>
             <input
               type="tel"
               name="phone"
@@ -93,7 +112,9 @@ const CarBuyForm = () => {
 
           {/* Email */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Email</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -104,9 +125,11 @@ const CarBuyForm = () => {
               className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
-            {/* Owner Email */}
-            <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">OwnerEmail</label>
+          {/* Owner Email */}
+          <div className="md:col-span-2">
+            <label className="block text-gray-300 font-medium mb-2">
+              OwnerEmail
+            </label>
             <input
               type="email"
               name="ownerEmail"
@@ -119,11 +142,11 @@ const CarBuyForm = () => {
             />
           </div>
 
-
-
           {/* Car Name - Disabled */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Car Name</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Car Name
+            </label>
             <input
               type="text"
               name="car"
@@ -135,7 +158,9 @@ const CarBuyForm = () => {
 
           {/* Price - Disabled */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Price</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Price
+            </label>
             <input
               type="text"
               name="priceRange"
@@ -147,7 +172,9 @@ const CarBuyForm = () => {
 
           {/* Color */}
           <div>
-            <label className="block text-gray-300 font-medium mb-2">Color</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Color
+            </label>
             <select
               name="color"
               value={formData.color}
@@ -157,14 +184,18 @@ const CarBuyForm = () => {
             >
               <option value="">-- Choose Color --</option>
               {colorOptions.map((color, idx) => (
-                <option key={idx} value={color}>{color}</option>
+                <option key={idx} value={color}>
+                  {color}
+                </option>
               ))}
             </select>
           </div>
 
           {/* Address */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Address</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Address
+            </label>
             <textarea
               name="address"
               value={formData.address}
@@ -178,7 +209,9 @@ const CarBuyForm = () => {
 
           {/* Payment Method */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Payment Method</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Payment Method
+            </label>
             <select
               name="payment"
               value={formData.payment}
@@ -188,14 +221,18 @@ const CarBuyForm = () => {
             >
               <option value="">-- Choose Payment Method --</option>
               {paymentOptions.map((method, idx) => (
-                <option key={idx} value={method}>{method}</option>
+                <option key={idx} value={method}>
+                  {method}
+                </option>
               ))}
             </select>
           </div>
 
           {/* Test Drive */}
           <div className="md:col-span-2">
-            <label className="block text-gray-300 font-medium mb-2">Want a Test Drive?</label>
+            <label className="block text-gray-300 font-medium mb-2">
+              Want a Test Drive?
+            </label>
             <select
               name="testDrive"
               value={formData.testDrive}
@@ -205,7 +242,9 @@ const CarBuyForm = () => {
             >
               <option value="">-- Select --</option>
               {testDriveOptions.map((option, idx) => (
-                <option key={idx} value={option}>{option}</option>
+                <option key={idx} value={option}>
+                  {option}
+                </option>
               ))}
             </select>
           </div>

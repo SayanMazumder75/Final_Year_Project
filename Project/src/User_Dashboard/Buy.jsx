@@ -8,7 +8,7 @@ export default function Buy() {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // ✅ Added for redirection
+  const navigate = useNavigate(); // Added for redirection
 
   
   // Load wishlist from localStorage
@@ -122,7 +122,7 @@ export default function Buy() {
                         price: car.price,
                         ownerEmail: car.owner?.email || "",
                         description: car.description,
-                        adTitle: car.adTitle,   // Add this line
+                        adTitle: car.adTitle,  
                         carId: car._id,
                         brand: car.brand,
                         year: car.year,

@@ -5,7 +5,7 @@ body, html {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden; /* ✅ Prevents horizontal overflow globally */
+  overflow-x: hidden; /*   Prevents horizontal overflow globally */
   box-sizing: border-box;
 }
 

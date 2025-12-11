@@ -2,7 +2,7 @@ const router = require('express').Router();
 const ownerCtrl = require('../controllers/ownerCtrl');
 const auth = require('../middleware/auth');
 const OwnerProfile = require('../models/ownerProfileModel');
-const fileUpload = require('express-fileupload'); // ✅ Add this
+const fileUpload = require('express-fileupload'); //   Add this
 
 // -------------------------------
 // Enable file upload only for owner routes

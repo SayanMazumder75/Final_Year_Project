@@ -18,16 +18,11 @@ export default function AdminLogin() {
 
   try {
     const { data } = await axios.post(
-      "http://localhost:5000/api/owner/login", // your backend login URL
+      "http://localhost:5000/api/owner/login",
       form, // automatically sent as JSON
       { headers: { "Content-Type": "application/json" } }
     );
 
-    // Optional: check if user is admin
-    // if (data.userType !== "owner") {
-    //   alert("You are not an owner!");
-    //   return;
-    // }
 
     // Save token
     localStorage.setItem("accessToken", data.accessToken);
@@ -47,7 +42,7 @@ export default function AdminLogin() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-gray-800 p-6">
       <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-8 relative overflow-hidden">
 
-        {/* Decorative Glow */}
+       
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
 
         {/* Icon Header */}

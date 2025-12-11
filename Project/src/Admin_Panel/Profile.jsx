@@ -24,8 +24,7 @@ export default function Profile() {
 
         console.log("Fetching owner profile with token:", token.substring(0, 20) + "...");
 
-        // FIX 1: Use the correct endpoint - either '/owner/me' or '/api/owner/me'
-        // Based on your server.js, you're mounting at '/owner', so use '/owner/me'
+          
         const res = await fetch("http://localhost:5000/api/owner/me", {
           headers: { 
             Authorization: `Bearer ${token}`,
@@ -44,7 +43,6 @@ export default function Profile() {
         const data = await res.json();
         console.log("Owner data received:", data);
 
-        // FIX 2: Handle profile picture correctly
         let profilePicUrl = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
         if (data.profilePic) {
           // If it's already a full URL, use it directly
@@ -83,11 +81,10 @@ export default function Profile() {
     fetchOwner();
   }, []);
 
-  // FIX 3: Update the PUT endpoint to match your backend
   const handleProfileUpdate = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      const res = await fetch("http://localhost:5000/api/owner/profile", { // You'll need to create this endpoint
+      const res = await fetch("http://localhost:5000/api/owner/profile", { 
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

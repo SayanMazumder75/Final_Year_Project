@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Wishlist = () => {
     const [wishlist, setWishlist] = useState([]);
-    const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'rent', 'buy'
+    const [activeFilter, setActiveFilter] = useState('all');
     const navigate = useNavigate();
 
     // Load wishlist from localStorage on component mount

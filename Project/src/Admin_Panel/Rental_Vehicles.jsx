@@ -4,8 +4,7 @@ import Header from "./Header";
 import Footer from "../Homepage/Footer";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import logo from "../images/logo.png"; // keep your logo file here
-
+import logo from "../images/logo.png";
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -22,7 +21,7 @@ export default function Dashboard() {
         const res = await fetch("http://localhost:5000/api/rental");
         const data = await res.json();
         if (data.success && Array.isArray(data.rentals)) {
-          setRentals(data.rentals.reverse()); // newest first (optional)
+          setRentals(data.rentals.reverse()); 
         } else if (Array.isArray(data)) {
           // in case backend returns raw array
           setRentals(data.reverse());
@@ -61,8 +60,7 @@ export default function Dashboard() {
   useEffect(() => {
     // Reset to first page if filtering reduced items
     if (currentItems.length === 0 && filtered.length > 0) setCurrentPage(1);
-  }, [filtered]); // eslint-disable-line
-
+  }, [filtered]); 
   // Highlight search term in text
   const highlightText = (text) => {
     if (!search) return text || "";
@@ -88,11 +86,9 @@ export default function Dashboard() {
     const imgX = (pageWidth - imgWidth) / 2;
     const imgY = 10;
 
-    // Add logo (imported image url should work in most React builds)
     try {
       doc.addImage(logo, "PNG", imgX, imgY, imgWidth, imgHeight);
     } catch (err) {
-      // if addImage fails (some builds require dataURL), ignore and continue
       console.warn("logo addImage failed:", err);
     }
 
@@ -259,7 +255,6 @@ export default function Dashboard() {
             <div className="bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition">
               <h3 className="text-xs font-medium text-gray-500">This Month (approx)</h3>
               <p className="text-xl font-bold text-green-600 mt-1">{rentals.filter(r => {
-                // crude "this month" count if rental has createdAt or date fields
                 if (!r.pickupDate && !r.createdAt) return false;
                 try {
                   const dateStr = r.pickupDate || r.createdAt;

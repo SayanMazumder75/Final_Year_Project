@@ -118,7 +118,6 @@ export default function Rent() {
                     }}
                     className="flex-1"
                   >
-
                     <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
                       Rent
                     </button>
@@ -132,7 +131,7 @@ export default function Rent() {
                         price: car.price,
                         ownerEmail: car.owner?.email || "",
                         description: car.description,
-                        adTitle: car.adTitle,   // Add this line
+                        adTitle: car.adTitle,
                         carId: car._id,
                         brand: car.brand,
                         year: car.year,

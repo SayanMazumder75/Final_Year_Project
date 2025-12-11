@@ -34,7 +34,7 @@ export const RentPaymentPage = () => {
       return;
     }
 
-    // ✅ Safely fetch price
+    // Safely fetch price
 let amount = 0;
 
 if (formData.price !== undefined && formData.price !== null) {

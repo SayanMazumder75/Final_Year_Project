@@ -10,7 +10,7 @@ export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // ✅ Fetch buyers from backend
+  // Fetch buyers from backend
   useEffect(() => {
     const fetchBuyers = async () => {
       try {
@@ -26,12 +26,12 @@ export default function Dashboard() {
     fetchBuyers();
   }, []);
 
-  // ✅ Search filter
+  // Search filter
   const filteredBuyers = buyers.filter((buyer) =>
     buyer.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // ✅ Pagination
+  // Pagination
   const totalPages = Math.ceil(filteredBuyers.length / itemsPerPage);
   const currentItems = filteredBuyers.slice(
     (currentPage - 1) * itemsPerPage,
@@ -44,7 +44,7 @@ export default function Dashboard() {
     }
   }, [filteredBuyers]);
 
-  // ✅ Stats
+  // Stats
   const totalBuyers = buyers.length;
   const testDriveCount = buyers.filter((b) => b.testDrive === "Yes").length;
   const totalOnlinePayments = buyers.filter(

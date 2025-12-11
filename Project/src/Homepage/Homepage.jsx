@@ -13,7 +13,7 @@ import {
   Wrench,
   CreditCard,
   Headphones,
-} from "lucide-react";  
+} from "lucide-react";
 
 import logo from "/src/images/logo.png";
 import car1 from "/src/assets/Car5.jpg";
@@ -125,57 +125,108 @@ function Homepage() {
       </section>
 
       {/* Featured Vehicles */}
-<section className="py-16 bg-gray-600">
-  <div className="max-w-7xl mx-auto px-6">
-    <h2 className="text-3xl font-bold text-black text-center mb-12">
-      Featured Vehicles
-    </h2>
-    <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {[
-        { img: car1, name: "BMW M4", price: "45,00,000", seats: 4, engine: "3.0L" },
-        { img: car2, name: "Audi A6", price: "52,00,000", seats: 5, engine: "2.8L" },
-        { img: car3, name: "Mercedes C-Class", price: "48,00,000", seats: 5, engine: "2.0L" },
-        { img: car4, name: "Jaguar XF", price: "60,00,000", seats: 5, engine: "3.0L" },
-        { img: car5, name: "Lexus RX", price: "55,00,000", seats: 5, engine: "3.5L" },
-        { img: car6, name: "Porsche 911", price: "1,20,00,000", seats: 2, engine: "3.0L" },
-        { img: car7, name: "Tesla Model S", price: "1,05,00,000", seats: 5, engine: "Electric" },
-        { img: car8, name: "Range Rover Vogue", price: "90,00,000", seats: 5, engine: "3.0L" },
-      ].map((car, i) => (
-        <div
-          key={i}
-          className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1 overflow-hidden"
-        >
-          <div className="relative">
-            <img
-              src={car.img}
-              alt={car.name}
-              className="h-56 w-full object-cover"
-              loading="lazy"
-            />
-            <span className="absolute top-3 left-3 bg-indigo-600 text-white px-3 py-1 rounded-full font-semibold text-sm shadow-lg">
-              ₹{car.price}
-            </span>
-          </div>
-          <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">{car.name}</h3>
-            <div className="flex items-center justify-between text-gray-600 mb-4">
-              <span>{car.seats} Seats</span>
-              <span>{car.engine} Engine</span>
-            </div>
+      <section className="py-16 bg-gray-600">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-black text-center mb-12">
+            Featured Vehicles
+          </h2>
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                img: car1,
+                name: "BMW M4",
+                price: "45,00,000",
+                seats: 4,
+                engine: "3.0L",
+              },
+              {
+                img: car2,
+                name: "Audi A6",
+                price: "52,00,000",
+                seats: 5,
+                engine: "2.8L",
+              },
+              {
+                img: car3,
+                name: "Mercedes C-Class",
+                price: "48,00,000",
+                seats: 5,
+                engine: "2.0L",
+              },
+              {
+                img: car4,
+                name: "Jaguar XF",
+                price: "60,00,000",
+                seats: 5,
+                engine: "3.0L",
+              },
+              {
+                img: car5,
+                name: "Lexus RX",
+                price: "55,00,000",
+                seats: 5,
+                engine: "3.5L",
+              },
+              {
+                img: car6,
+                name: "Porsche 911",
+                price: "1,20,00,000",
+                seats: 2,
+                engine: "3.0L",
+              },
+              {
+                img: car7,
+                name: "Tesla Model S",
+                price: "1,05,00,000",
+                seats: 5,
+                engine: "Electric",
+              },
+              {
+                img: car8,
+                name: "Range Rover Vogue",
+                price: "90,00,000",
+                seats: 5,
+                engine: "3.0L",
+              },
+            ].map((car, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1 overflow-hidden"
+              >
+                <div className="relative">
+                  <img
+                    src={car.img}
+                    alt={car.name}
+                    className="h-56 w-full object-cover"
+                    loading="lazy"
+                  />
+                  <span className="absolute top-3 left-3 bg-indigo-600 text-white px-3 py-1 rounded-full font-semibold text-sm shadow-lg">
+                    ₹{car.price}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                    {car.name}
+                  </h3>
+                  <div className="flex items-center justify-between text-gray-600 mb-4">
+                    <span>{car.seats} Seats</span>
+                    <span>{car.engine} Engine</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
-
+      </section>
 
       {/* Info Section */}
       <section className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10">
         <div className="bg-white shadow-lg rounded-2xl p-8 hover:shadow-xl transition">
           <div className="flex items-center gap-3 mb-4">
             <Users className="text-indigo-600 w-6 h-6" />
-            <h3 className="text-xl font-semibold text-indigo-600">Who We Are</h3>
+            <h3 className="text-xl font-semibold text-indigo-600">
+              Who We Are
+            </h3>
           </div>
           <p className="text-gray-600 leading-relaxed">
             Since our founding in 2010, we’ve helped over{" "}
@@ -252,4 +303,4 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default Homepage;

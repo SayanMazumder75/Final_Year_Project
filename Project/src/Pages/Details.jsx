@@ -30,7 +30,6 @@ export default function Details() {
     setCurrentIndex((prev) => (prev + 1) % photos.length);
 
   const handleRentNow = () => navigate("/CarRentalForm", { state: { carData } });
-  // const handleBuyNow = () => navigate("/BuyCarPage", { state: { carData } });
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-6">

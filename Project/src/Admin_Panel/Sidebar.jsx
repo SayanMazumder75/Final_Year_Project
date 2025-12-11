@@ -5,9 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 const Sidebar = () => { 
   const location = useLocation();
   const [open, setOpen] = useState(false); // toggle sidebar on mobile
-  // Position of the side bar will be fixed on the left side of the screen and no scroll bar will be there
-
-
 
   const menuItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <Home size={15} /> },

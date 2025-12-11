@@ -19,7 +19,7 @@ export default function Preloader({ loading }) {
         loading ? "opacity-100 scale-100" : "opacity-0 scale-95"
       }`}
     >
-      {/* 🚗 Supercar Image */}
+      {/* Supercar Image */}
       <img
         src={supercar}
         alt="Supercar"

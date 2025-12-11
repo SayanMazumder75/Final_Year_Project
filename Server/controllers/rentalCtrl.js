@@ -1,4 +1,4 @@
-// controllers/rentalCtrl.js
+//rentalCtrl.js
 const Rental = require("../models/rentalModel");
 const Ad = require("../models/productModel");
 
@@ -6,7 +6,7 @@ exports.createRental = async (req, res) => {
   try {
     console.log("📥 Received rental data:", req.body);
 
-    // ✅ FIX: use adTitle instead of title
+    //   FIX: use adTitle instead of title
     const ad = await Ad.findOne({ adTitle: req.body.car });
 
     if (!ad) {
@@ -26,7 +26,7 @@ exports.createRental = async (req, res) => {
       rental,
     });
   } catch (error) {
-    console.error("❌ Rental creation failed:", error);
+    console.error(" Rental creation failed:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

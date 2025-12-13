@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import jsPDF from "jspdf";
+import logo from "../images/logo.png";
 
 // ---------------- Payment Page ----------------
 export const RentPaymentPage = () => {
@@ -147,26 +148,116 @@ export const RentPaymentSuccess = () => {
       return;
     }
 
-    const generatePDF = () => {
-      const doc = new jsPDF();
-      doc.setFontSize(18);
-      doc.text("Payment Receipt For Rent", 105, 20, null, null, "center");
-      doc.setFontSize(12);
-      doc.text(`Name: ${formData.name}`, 20, 40);
-      doc.text(`Email: ${formData.email}`, 20, 50);
-      doc.text(`Phone: ${formData.phone}`, 20, 60);
-      doc.text(`Car: ${formData.car}`, 20, 70);
-      doc.text(`Pickup Date: ${formData.pickupDate}`, 20, 80);
-      doc.text(
-        `Amount Paid: ₹${(paymentDetails.amount / 100).toFixed(2)}`,
-        20,
-        90
-      );
-      doc.text(`Payment ID: ${paymentDetails.payment_id}`, 20, 100);
-      doc.text(`Order ID: ${paymentDetails.order_id}`, 20, 110);
-      doc.text(`Date: ${new Date().toLocaleString()}`, 20, 120);
-      doc.save("PaymentReceipt.pdf");
-    };
+   const generatePDF = () => {
+  const doc = new jsPDF("p", "mm", "a4");
+
+  /* ================= PAGE BACKGROUND ================= */
+  doc.setFillColor(15, 23, 42); // slate dark blue
+  doc.rect(0, 0, 210, 297, "F");
+
+  /* ================= LOGO ================= */
+  const img = new Image();
+  img.src = logo;
+
+  img.onload = () => {
+    doc.addImage(img, "PNG", 20, 18, 35, 18);
+
+    /* ================= HEADER ================= */
+    doc.setFontSize(18);
+    doc.setTextColor(255, 255, 255);
+    doc.text("PAYMENT RECEIPT", 160, 30, null, null, "right");
+
+    doc.setFontSize(10);
+    doc.setTextColor(180, 180, 180);
+    doc.text(
+      `Generated on: ${new Date().toLocaleString()}`,
+      160,
+      36,
+      null,
+      null,
+      "right"
+    );
+
+    /* ================= MAIN CONTAINER ================= */
+    doc.setFillColor(30, 41, 59); // card background
+    doc.roundedRect(15, 50, 180, 200, 8, 8, "F");
+
+    /* ================= CUSTOMER ================= */
+    doc.setFontSize(13);
+    doc.setTextColor(56, 189, 248); // cyan
+    doc.text("BILLED TO", 25, 70);
+
+    doc.setFontSize(11);
+    doc.setTextColor(235, 235, 235);
+    doc.text(`Name: ${formData.name}`, 25, 80);
+    doc.text(`Email: ${formData.email}`, 25, 88);
+    doc.text(`Phone: ${formData.phone}`, 25, 96);
+
+    /* ================= RENT DETAILS ================= */
+    doc.setDrawColor(71, 85, 105);
+    doc.line(25, 105, 185, 105);
+
+    doc.setFontSize(13);
+    doc.setTextColor(56, 189, 248);
+    doc.text("RENT DETAILS", 25, 120);
+
+    doc.setFontSize(11);
+    doc.setTextColor(235, 235, 235);
+    doc.text(`Car: ${formData.car}`, 25, 130);
+    doc.text(`Pickup Date: ${formData.pickupDate}`, 25, 138);
+
+    /* ================= PAYMENT SUMMARY ================= */
+    doc.setDrawColor(71, 85, 105);
+    doc.line(25, 148, 185, 148);
+
+    doc.setFontSize(13);
+    doc.setTextColor(56, 189, 248);
+    doc.text("PAYMENT SUMMARY", 25, 163);
+
+    doc.setFontSize(11);
+    doc.setTextColor(235, 235, 235);
+    doc.text(
+      `Total Paid: ₹${(paymentDetails.amount / 100).toFixed(2)}`,
+      25,
+      173
+    );
+    doc.text(`Payment ID: ${paymentDetails.payment_id}`, 25, 181);
+    doc.text(`Order ID: ${paymentDetails.order_id}`, 25, 189);
+
+    /* ================= STATUS BADGE ================= */
+    doc.setFillColor(34, 197, 94); // green
+    doc.roundedRect(130, 165, 50, 16, 6, 6, "F");
+
+    doc.setFontSize(12);
+    doc.setTextColor(255, 255, 255);
+    doc.text("PAID", 155, 176, null, null, "center");
+
+    /* ================= FOOTER ================= */
+    doc.setFontSize(10);
+    doc.setTextColor(148, 163, 184);
+    doc.text(
+      "This is a system-generated receipt and does not require a signature.",
+      105,
+      265,
+      null,
+      null,
+      "center"
+    );
+
+    doc.text(
+      "Thank you for choosing our Car Rental Service.",
+      105,
+      272,
+      null,
+      null,
+      "center"
+    );
+
+    doc.save("Payment_Receipt.pdf");
+  };
+};
+
+
 
     generatePDF();
 

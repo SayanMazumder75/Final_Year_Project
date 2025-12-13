@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import jsPDF from "jspdf";
+import logo from "../images/logo.png";
+
 
 // ---------------- Payment Page ----------------
 export const PaymentPage = () => {
@@ -132,25 +134,115 @@ export const PaymentSuccess = () => {
     }
 
     // Generate PDF
-    const generatePDF = () => {
-      const doc = new jsPDF();
+   const generatePDF = () => {
+  const doc = new jsPDF("p", "mm", "a4");
 
-      doc.setFontSize(18);
-      doc.text("Payment Receipt For Buy Car", 105, 20, null, null, "center");
+  /* ================= PAGE BACKGROUND ================= */
+  doc.setFillColor(15, 23, 42); // dark slate
+  doc.rect(0, 0, 210, 297, "F");
 
-      doc.setFontSize(12);
-      doc.text(`Name: ${formData.name}`, 20, 40);
-      doc.text(`Email: ${formData.email}`, 20, 50);
-      doc.text(`Phone: ${formData.phone}`, 20, 60);
-      doc.text(`Car: ${formData.car}`, 20, 70);
-      doc.text(`Color: ${formData.color}`, 20, 80);
-      doc.text(`Amount Paid: ₹${(paymentDetails.amount / 100).toFixed(2)}`, 20, 90);
-      doc.text(`Payment ID: ${paymentDetails.payment_id}`, 20, 100);
-      doc.text(`Order ID: ${paymentDetails.order_id}`, 20, 110);
-      doc.text(`Date: ${new Date().toLocaleString()}`, 20, 120);
+  /* ================= LOGO ================= */
+  const img = new Image();
+  img.src = logo;
 
-      doc.save("PaymentReceipt.pdf");
-    };
+  img.onload = () => {
+    doc.addImage(img, "PNG", 20, 18, 35, 18);
+
+    /* ================= HEADER ================= */
+    doc.setFontSize(18);
+    doc.setTextColor(255, 255, 255);
+    doc.text("BUY CAR PAYMENT RECEIPT", 160, 30, null, null, "right");
+
+    doc.setFontSize(10);
+    doc.setTextColor(180, 180, 180);
+    doc.text(
+      `Generated on: ${new Date().toLocaleString()}`,
+      160,
+      36,
+      null,
+      null,
+      "right"
+    );
+
+    /* ================= MAIN CARD ================= */
+    doc.setFillColor(30, 41, 59);
+    doc.roundedRect(15, 50, 180, 200, 8, 8, "F");
+
+    /* ================= CUSTOMER DETAILS ================= */
+    doc.setFontSize(13);
+    doc.setTextColor(56, 189, 248);
+    doc.text("CUSTOMER DETAILS", 25, 70);
+
+    doc.setFontSize(11);
+    doc.setTextColor(235, 235, 235);
+    doc.text(`Name: ${formData.name}`, 25, 80);
+    doc.text(`Email: ${formData.email}`, 25, 88);
+    doc.text(`Phone: ${formData.phone}`, 25, 96);
+
+    /* ================= DIVIDER ================= */
+    doc.setDrawColor(71, 85, 105);
+    doc.line(25, 105, 185, 105);
+
+    /* ================= CAR DETAILS ================= */
+    doc.setFontSize(13);
+    doc.setTextColor(56, 189, 248);
+    doc.text("CAR DETAILS", 25, 120);
+
+    doc.setFontSize(11);
+    doc.setTextColor(235, 235, 235);
+    doc.text(`Car Model: ${formData.car}`, 25, 130);
+    doc.text(`Color: ${formData.color}`, 25, 138);
+
+    /* ================= DIVIDER ================= */
+    doc.line(25, 148, 185, 148);
+
+    /* ================= PAYMENT SUMMARY ================= */
+    doc.setFontSize(13);
+    doc.setTextColor(56, 189, 248);
+    doc.text("PAYMENT SUMMARY", 25, 163);
+
+    doc.setFontSize(11);
+    doc.setTextColor(235, 235, 235);
+    doc.text(
+      `Total Amount Paid: ₹${(paymentDetails.amount / 100).toFixed(2)}`,
+      25,
+      173
+    );
+    doc.text(`Payment ID: ${paymentDetails.payment_id}`, 25, 181);
+    doc.text(`Order ID: ${paymentDetails.order_id}`, 25, 189);
+
+    /* ================= STATUS BADGE ================= */
+    doc.setFillColor(34, 197, 94); // green
+    doc.roundedRect(130, 165, 50, 16, 6, 6, "F");
+
+    doc.setFontSize(12);
+    doc.setTextColor(255, 255, 255);
+    doc.text("PAYMENT SUCCESSFUL", 155, 176, null, null, "center");
+
+    /* ================= FOOTER ================= */
+    doc.setFontSize(10);
+    doc.setTextColor(148, 163, 184);
+    doc.text(
+      "This receipt confirms the successful purchase of the vehicle.",
+      105,
+      265,
+      null,
+      null,
+      "center"
+    );
+
+    doc.text(
+      "Thank you for choosing our Car Sales Platform.",
+      105,
+      272,
+      null,
+      null,
+      "center"
+    );
+
+    doc.save("Buy_Car_Payment_Receipt.pdf");
+  };
+};
 
     generatePDF();
 

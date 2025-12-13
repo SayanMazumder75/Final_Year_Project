@@ -35,8 +35,32 @@ const CarRentalForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  /* ================= RENT CALCULATION LOGIC ================= */
+  const calculateDays = () => {
+    if (!formData.pickupDate || !formData.dropoffDate) return 0;
+
+    const pickup = new Date(formData.pickupDate);
+    const dropoff = new Date(formData.dropoffDate);
+
+    const diffTime = dropoff - pickup;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays > 0 ? diffDays : 0;
+  };
+
+  const totalDays = calculateDays();
+
+  const pricePerDay =
+    typeof formData.price === "string"
+      ? parseInt(formData.price.replace(/[^0-9]/g, ""), 10)
+      : Number(formData.price) || 0;
+
+  const totalAmount = totalDays * pricePerDay;
+  /* ========================================================== */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const requiredFields = [
       "name",
       "phone",
@@ -56,11 +80,19 @@ const CarRentalForm = () => {
       }
     }
 
+    if (totalDays <= 0) {
+      alert("Dropoff date must be after pickup date");
+      return;
+    }
+
     try {
       const res = await fetch("http://localhost:5000/api/rental", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData), // includes ownerEmail
+        body: JSON.stringify({
+          ...formData,
+          price: totalAmount, // send total price
+        }),
       });
 
       if (!res.ok) throw new Error("Failed to save rental");
@@ -68,7 +100,14 @@ const CarRentalForm = () => {
       const data = await res.json();
       console.log("Rental saved:", data);
 
-      navigate("/RentPaymentPage", { state: { formData } });
+      navigate("/RentPaymentPage", {
+        state: {
+          formData: {
+            ...formData,
+            price: totalAmount,
+          },
+        },
+      });
     } catch (err) {
       console.error(err);
       alert("Error saving rental. Please try again.");
@@ -147,24 +186,22 @@ const CarRentalForm = () => {
               className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
           </div>
+
           {/* Owner Email */}
           <div className="md:col-span-2">
             <label className="block text-gray-300 font-medium mb-2">
-              OwnerEmail
+              Owner Email
             </label>
             <input
               type="email"
               name="ownerEmail"
-              placeholder="john@example.com"
               value={formData.ownerEmail}
-              onChange={handleChange}
-              required
               disabled
               className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
             />
           </div>
 
-          {/* Car Name (readonly) */}
+          {/* Car */}
           <div className="md:col-span-2">
             <label className="block text-gray-300 font-medium mb-2">
               Car Name
@@ -178,10 +215,10 @@ const CarRentalForm = () => {
             />
           </div>
 
-          {/* Price (readonly) */}
+          {/* Price */}
           <div className="md:col-span-2">
             <label className="block text-gray-300 font-medium mb-2">
-              Price
+              Price (per day)
             </label>
             <input
               type="text"
@@ -235,6 +272,30 @@ const CarRentalForm = () => {
               required
               className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
             />
+          </div>
+
+          {/* Rental Summary Box */}
+          <div className="md:col-span-2 bg-gray-800 border border-gray-600 rounded-xl p-5 shadow-inner">
+            <h3 className="text-lg font-semibold text-gray-200 mb-4">
+              Rental Summary
+            </h3>
+
+            <div className="flex justify-between text-gray-300 mb-2">
+              <span>Price per Day</span>
+              <span>₹ {pricePerDay}</span>
+            </div>
+
+            <div className="flex justify-between text-gray-300 mb-2">
+              <span>Total Days</span>
+              <span>{totalDays}</span>
+            </div>
+
+            <div className="border-t border-gray-600 my-3"></div>
+
+            <div className="flex justify-between text-xl font-bold text-green-400">
+              <span>Total Amount</span>
+              <span>₹ {totalAmount}</span>
+            </div>
           </div>
 
           {/* Payment Method */}

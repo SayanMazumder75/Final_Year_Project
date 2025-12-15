@@ -12,19 +12,65 @@ export default function Dashboard() {
 
   // Fetch buyers from backend
   useEffect(() => {
-    const fetchBuyers = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/buyer");
-        const data = await response.json();
-        if (data.success) setBuyers(data.buyers);
-        else alert("Failed to load buyers");
-      } catch (error) {
-        console.error("Error fetching buyers:", error);
-        alert("Error fetching buyer data");
+  const fetchBuyers = async () => {
+    try {
+      /* =========================
+         1️⃣ GET LOGGED-IN OWNER
+      ========================== */
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        console.error("No access token found");
+        return;
       }
-    };
-    fetchBuyers();
-  }, []);
+
+      const ownerRes = await fetch("http://localhost:5000/api/owner/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!ownerRes.ok) {
+        throw new Error("Failed to fetch owner profile");
+      }
+
+      const ownerData = await ownerRes.json();
+      const ownerEmail = ownerData.email; // ✅ ONLY EMAIL
+
+      /* =========================
+         2️⃣ FETCH BUYERS
+      ========================== */
+      const response = await fetch("http://localhost:5000/api/buyer");
+      if (!response.ok) {
+        throw new Error("Failed to fetch buyers");
+      }
+
+      const data = await response.json();
+
+      let buyersArray = [];
+      if (data.success && Array.isArray(data.buyers)) {
+        buyersArray = data.buyers;
+      } else if (Array.isArray(data)) {
+        buyersArray = data;
+      }
+
+      /* =========================
+         3️⃣ FILTER BY ownerEmail
+      ========================== */
+      const ownerBuyers = buyersArray.filter(
+        (b) => b.ownerEmail === ownerEmail
+      );
+
+      setBuyers(ownerBuyers);
+    } catch (error) {
+      console.error("Error fetching buyers:", error);
+      alert("Error fetching buyer data");
+    }
+  };
+
+  fetchBuyers();
+}, []);
+
 
   // Search filter
   const filteredBuyers = buyers.filter((buyer) =>
@@ -198,6 +244,12 @@ export default function Dashboard() {
               </h3>
               <p className="text-xl sm:text-2xl font-bold text-purple-600 mt-1 sm:mt-2">
                 {totalOnlinePayments}
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition">
+              <h3 className="text-xs font-medium text-gray-500">Total Payments</h3>
+              <p className="text-xl font-bold text-purple-600 mt-1">
+                ₹ {buyers.reduce((sum, b) => sum + (Number(b.priceRange) || 0), 0)}
               </p>
             </div>
           </div>

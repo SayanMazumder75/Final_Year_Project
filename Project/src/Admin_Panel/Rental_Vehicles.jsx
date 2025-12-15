@@ -15,27 +15,69 @@ export default function Dashboard() {
 
   // Fetch rentals from backend
   useEffect(() => {
-    const fetchRentals = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("http://localhost:5000/api/rental");
-        const data = await res.json();
-        if (data.success && Array.isArray(data.rentals)) {
-          setRentals(data.rentals.reverse()); 
-        } else if (Array.isArray(data)) {
-          // in case backend returns raw array
-          setRentals(data.reverse());
-        } else {
-          console.warn("Unexpected rentals response shape:", data);
-        }
-      } catch (err) {
-        console.error("Error fetching rentals:", err);
-      } finally {
+  const fetchRentals = async () => {
+    try {
+      setLoading(true);
+
+      /* =========================
+         1️⃣ GET LOGGED-IN OWNER
+      ========================== */
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        console.error("No access token found");
         setLoading(false);
+        return;
       }
-    };
-    fetchRentals();
-  }, []);
+
+      const ownerRes = await fetch("http://localhost:5000/api/owner/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!ownerRes.ok) {
+        throw new Error("Failed to fetch owner profile");
+      }
+
+      const ownerData = await ownerRes.json();
+      const ownerEmail = ownerData.email; // ✅ ONLY EMAIL
+
+      /* =========================
+         2️⃣ FETCH RENTALS
+      ========================== */
+      const rentalRes = await fetch("http://localhost:5000/api/rental");
+      if (!rentalRes.ok) {
+        throw new Error("Failed to fetch rentals");
+      }
+
+      const rentalData = await rentalRes.json();
+
+      let rentalsArray = [];
+      if (rentalData.success && Array.isArray(rentalData.rentals)) {
+        rentalsArray = rentalData.rentals;
+      } else if (Array.isArray(rentalData)) {
+        rentalsArray = rentalData;
+      }
+
+      /* =========================
+         3️⃣ FILTER BY ownerEmail
+         (NO adType filter needed)
+      ========================== */
+      const ownerRentals = rentalsArray.filter(
+        (r) => r.ownerEmail === ownerEmail
+      );
+
+      setRentals(ownerRentals.reverse());
+    } catch (err) {
+      console.error("Error fetching rentals:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchRentals();
+}, []);
 
   // Filter by search: match common fields
   const filtered = rentals.filter((r) => {
@@ -79,49 +121,127 @@ export default function Dashboard() {
 
   // PDF generation for a rental row
   const downloadPDF = (rental) => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const imgWidth = 40;
-    const imgHeight = 20;
-    const imgX = (pageWidth - imgWidth) / 2;
-    const imgY = 10;
+  const doc = new jsPDF("p", "mm", "a4");
 
-    try {
-      doc.addImage(logo, "PNG", imgX, imgY, imgWidth, imgHeight);
-    } catch (err) {
-      console.warn("logo addImage failed:", err);
-    }
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
 
-    doc.setFontSize(18);
-    doc.setTextColor(40, 40, 40);
-    doc.text(
-      "Car Rental Confirmation / Summary",
-      pageWidth / 2,
-      imgY + imgHeight + 10,
-      { align: "center" }
-    );
+  /* ================= PAGE BACKGROUND ================= */
+  doc.setFillColor(15, 23, 42); // dark slate
+  doc.rect(0, 0, pageWidth, pageHeight, "F");
 
-    autoTable(doc, {
-      startY: imgY + imgHeight + 20,
-      head: [["Field", "Details"]],
-      body: [
-        ["Customer Name", rental.name || ""],
-        ["Phone", rental.phone || ""],
-        ["Email", rental.email || ""],
-        ["Car", rental.car || ""],
-        ["Pickup Date", rental.pickupDate || ""],
-        ["Pickup Time", rental.pickupTime || ""],
-        ["Dropoff Date", rental.dropoffDate || ""],
-        ["Payment Method", rental.payment || ""],
-        ["Submitted At", rental.createdAt || rental._id?.toString() || ""],
+  /* ================= LOGO ================= */
+  const imgWidth = 36;
+  const imgHeight = 18;
+  const imgX = 20;
+  const imgY = 18;
+
+  try {
+    doc.addImage(logo, "PNG", imgX, imgY, imgWidth, imgHeight);
+  } catch (err) {
+    console.warn("Logo load failed:", err);
+  }
+
+  /* ================= HEADER ================= */
+  doc.setFontSize(18);
+  doc.setTextColor(255, 255, 255);
+  doc.text("CAR RENTAL CONFIRMATION", pageWidth - 20, 30, {
+    align: "right",
+  });
+
+  doc.setFontSize(10);
+  doc.setTextColor(180, 180, 180);
+  doc.text(
+    `Generated on: ${new Date().toLocaleString()}`,
+    pageWidth - 20,
+    36,
+    { align: "right" }
+  );
+
+  /* ================= MAIN CARD ================= */
+  doc.setFillColor(30, 41, 59);
+  doc.roundedRect(15, 50, pageWidth - 30, 200, 8, 8, "F");
+
+  /* ================= SECTION TITLE ================= */
+  doc.setFontSize(13);
+  doc.setTextColor(56, 189, 248);
+  doc.text("RENTAL SUMMARY", 25, 70);
+
+  /* ================= TABLE ================= */
+  autoTable(doc, {
+    startY: 80,
+    margin: { left: 25, right: 25 },
+    theme: "grid",
+    head: [["Field", "Details"]],
+    body: [
+      ["Customer Name", rental.name || "-"],
+      ["Phone", rental.phone || "-"],
+      ["Email", rental.email || "-"],
+      ["Car", rental.car || "-"],
+      ["Pickup Date", rental.pickupDate || "-"],
+      ["Pickup Time", rental.pickupTime || "-"],
+      ["Dropoff Date", rental.dropoffDate || "-"],
+      ["Payment Method", rental.payment || "-"],
+      ["Total Amount", `₹ ${rental.totalAmount || "-"}`],
+      [
+        "Submitted At",
+        rental.createdAt
+          ? new Date(rental.createdAt).toLocaleString()
+          : rental._id || "-",
       ],
-      styles: { fontSize: 11 },
-      headStyles: { fillColor: [41, 128, 185] },
-    });
+    ],
+    styles: {
+      fontSize: 11,
+      textColor: [226, 232, 240],
+      fillColor: [30, 41, 59],
+      lineColor: [71, 85, 105],
+    },
+    headStyles: {
+      fillColor: [15, 118, 110],
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+    },
+    alternateRowStyles: {
+      fillColor: [28, 36, 50],
+    },
+  });
 
-    const fileName = `${(rental.name || "rental").replace(/\s+/g, "_")}_rental.pdf`;
-    doc.save(fileName);
-  };
+  /* ================= STATUS BADGE ================= */
+  const badgeY = doc.lastAutoTable.finalY + 15;
+
+  doc.setFillColor(34, 197, 94);
+  doc.roundedRect(pageWidth - 75, badgeY, 50, 14, 6, 6, "F");
+
+  doc.setFontSize(11);
+  doc.setTextColor(255, 255, 255);
+  doc.text("CONFIRMED", pageWidth - 50, badgeY + 9, {
+    align: "center",
+  });
+
+  /* ================= FOOTER ================= */
+  doc.setFontSize(10);
+  doc.setTextColor(148, 163, 184);
+  doc.text(
+    "This document confirms your car rental booking.",
+    pageWidth / 2,
+    pageHeight - 25,
+    { align: "center" }
+  );
+
+  doc.text(
+    "Thank you for choosing our Car Rental Service.",
+    pageWidth / 2,
+    pageHeight - 18,
+    { align: "center" }
+  );
+
+  /* ================= SAVE ================= */
+  const fileName = `${(rental.name || "rental")
+    .replace(/\s+/g, "_")
+    .toLowerCase()}_rental_confirmation.pdf`;
+
+  doc.save(fileName);
+};
 
   return (
     <div className="flex h-screen bg-gray-700 overflow-hidden">
@@ -178,7 +298,8 @@ export default function Dashboard() {
                     <th className="py-2 px-3 border-b">Car</th>
                     <th className="py-2 px-3 border-b">Dropoff Date</th>
                     <th className="py-2 px-3 border-b">Pickup Date/Time</th>
-                    <th className="py-2 px-3 border-b">Payment</th>
+                    <th className="py-2 px-3 border-b">Payment Type</th>
+                    <th className="py-2 px-3 border-b">Amount</th>
                     <th className="py-2 px-3 border-b">Action</th>
                   </tr>
                 </thead>
@@ -205,6 +326,7 @@ export default function Dashboard() {
                           {r.pickupDate || ""} {r.pickupTime ? ` / ${r.pickupTime}` : ""}
                         </td>
                         <td className="py-2 px-3">{r.payment}</td>
+                        <td className="py-2 px-3">{r.totalAmount}</td>
                         <td className="py-2 px-3">
                           <button
                             onClick={() => downloadPDF(r)}
@@ -270,6 +392,12 @@ export default function Dashboard() {
               <h3 className="text-xs font-medium text-gray-500">Online Payments</h3>
               <p className="text-xl font-bold text-purple-600 mt-1">
                 {rentals.filter(r => r.payment && r.payment.toLowerCase() !== "cash").length}
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition">
+              <h3 className="text-xs font-medium text-gray-500">Total Payments</h3>
+              <p className="text-xl font-bold text-purple-600 mt-1">
+                ₹ {rentals.reduce((sum, r) => sum + (Number(r.totalAmount) || 0), 0)}
               </p>
             </div>
           </div>

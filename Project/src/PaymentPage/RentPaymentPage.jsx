@@ -38,12 +38,12 @@ export const RentPaymentPage = () => {
     // Safely fetch price
 let amount = 0;
 
-if (formData.price !== undefined && formData.price !== null) {
-  if (typeof formData.price === "string") {
-    const priceValue = formData.price.replace(/[^0-9]/g, "");
+if (formData.totalAmount !== undefined && formData.totalAmount !== null) {
+  if (typeof formData.totalAmount === "string") {
+    const priceValue = formData.totalAmount.replace(/[^0-9]/g, "");
     amount = parseInt(priceValue, 10) * 100; // convert to paise
-  } else if (typeof formData.price === "number") {
-    amount = formData.price * 100; // already a number, just convert to paise
+  } else if (typeof formData.totalAmount === "number") {
+    amount = formData.totalAmount * 100; // already a number, just convert to paise
   }
 }
 
@@ -205,10 +205,11 @@ export const RentPaymentSuccess = () => {
     doc.setTextColor(235, 235, 235);
     doc.text(`Car: ${formData.car}`, 25, 130);
     doc.text(`Pickup Date: ${formData.pickupDate}`, 25, 138);
+    doc.text(`ownerEmail: ${formData.ownerEmail}`, 25, 146);
 
     /* ================= PAYMENT SUMMARY ================= */
     doc.setDrawColor(71, 85, 105);
-    doc.line(25, 148, 185, 148);
+    doc.line(25, 148, 185, 150);
 
     doc.setFontSize(13);
     doc.setTextColor(56, 189, 248);

@@ -15,28 +15,95 @@ export default function Payments() {
   const itemsPerPage = 5; // items per page for pagination
 
   // Rented Vehicles
-  const rentedVehicles = [
-    { id: 1, customerId: "CUST-R01", name: "Toyota Innova", dailyRate: 50, rentedDays: 12, customer: "John Doe", startDate: "2025-08-01", endDate: "2025-08-12", paymentStatus: "Paid" },
-    { id: 2, customerId: "CUST-R02", name: "Honda City", dailyRate: 40, rentedDays: 15, customer: "Jane Smith", startDate: "2025-08-03", endDate: "2025-08-17", paymentStatus: "Unpaid" },
-    { id: 3, customerId: "CUST-R03", name: "Maruti Suzuki Swift", dailyRate: 30, rentedDays: 20, customer: "Alice Johnson", startDate: "2025-08-05", endDate: "2025-08-25", paymentStatus: "Paid" },
-    { id: 4, customerId: "CUST-R04", name: "Hyundai Creta", dailyRate: 45, rentedDays: 10, customer: "Bob Marley", startDate: "2025-08-07", endDate: "2025-08-17", paymentStatus: "Paid" },
-    { id: 5, customerId: "CUST-R05", name: "Ford EcoSport", dailyRate: 35, rentedDays: 8, customer: "Emma Watson", startDate: "2025-08-08", endDate: "2025-08-16", paymentStatus: "Unpaid" },
-    { id: 6, customerId: "CUST-R06", name: "Kia Seltos", dailyRate: 50, rentedDays: 12, customer: "Chris Evans", startDate: "2025-08-01", endDate: "2025-08-12", paymentStatus: "Paid" },
-    { id: 7, customerId: "CUST-R07", name: "Mahindra XUV", dailyRate: 60, rentedDays: 5, customer: "Scarlett Johanson", startDate: "2025-08-02", endDate: "2025-08-07", paymentStatus: "Paid" },
-    { id: 8, customerId: "CUST-R08", name: "Honda Amaze", dailyRate: 30, rentedDays: 14, customer: "Tom Hanks", startDate: "2025-08-05", endDate: "2025-08-19", paymentStatus: "Unpaid" },
-    { id: 9, customerId: "CUST-R09", name: "Toyota Fortuner", dailyRate: 70, rentedDays: 3, customer: "Leonardo Dicaprio", startDate: "2025-08-10", endDate: "2025-08-13", paymentStatus: "Paid" },
-  ];
+  const [rentedVehicles, setRentedVehicles] = useState([]);
+  const [soldVehicles, setSoldVehicles] = useState([]);
+useEffect(() => {
+  const fetchPayments = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return;
 
-  // Sold Vehicles
-  const soldVehicles = [
-    { id: 1, customerId: "CUST-101", name: "Tesla Model 3", price: 100000, customer: "Mark Lee", soldDate: "2025-08-05", paymentStatus: "Paid" },
-    { id: 2, customerId: "CUST-102", name: "BMW X5", price: 120000, customer: "Sara Khan", soldDate: "2025-08-10", paymentStatus: "Unpaid" },
-    { id: 3, customerId: "CUST-103", name: "Audi A6", price: 90000, customer: "Tom Cruise", soldDate: "2025-08-12", paymentStatus: "Paid" },
-    { id: 4, customerId: "CUST-104", name: "Mercedes C-Class", price: 110000, customer: "Emma Stone", soldDate: "2025-08-15", paymentStatus: "Paid" },
-    { id: 5, customerId: "CUST-105", name: "Jaguar XE", price: 95000, customer: "Brad Pitt", soldDate: "2025-08-18", paymentStatus: "Unpaid" },
-    { id: 6, customerId: "CUST-106", name: "Lexus RX", price: 115000, customer: "Angelina Jolie", soldDate: "2025-08-20", paymentStatus: "Paid" },
-    
-  ];
+      /* ==========================
+         1️⃣ FETCH LOGGED-IN OWNER
+      ========================== */
+      const ownerRes = await fetch("http://localhost:5000/api/owner/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!ownerRes.ok) throw new Error("Owner fetch failed");
+
+      const ownerData = await ownerRes.json();
+      const ownerEmail = ownerData.email;
+
+      /* ==========================
+         2️⃣ FETCH RENT PAYMENTS
+         (from car rentals DB)
+      ========================== */
+      const rentRes = await fetch("http://localhost:5000/api/rental");
+      const rentData = await rentRes.json();
+
+      let rentArray = [];
+      if (rentData.success && Array.isArray(rentData.rentals)) {
+        rentArray = rentData.rentals;
+      } else if (Array.isArray(rentData)) {
+        rentArray = rentData;
+      }
+
+      const ownerRentPayments = rentArray
+        .filter(r => r.ownerEmail === ownerEmail)
+        .map(r => ({
+          id: r._id,
+          customerId: r._id.slice(-6),
+          name: r.car,
+          dailyRate: r.price || 0,
+          rentedDays: r.totalDays || 1,
+          customer: r.name,
+          startDate: r.pickupDate,
+          endDate: r.dropoffDate,
+          paymentStatus: r.payment?.toLowerCase() === "cash" ? "Unpaid" : "Paid",
+        }));
+
+      setRentedVehicles(ownerRentPayments);
+
+      /* ==========================
+         FETCH SELL PAYMENTS
+         (buyers DB)
+      ========================== */
+      const sellRes = await fetch("http://localhost:5000/api/buyer");
+      const sellData = await sellRes.json();
+
+      let sellArray = [];
+      if (sellData.success && Array.isArray(sellData.buyers)) {
+        sellArray = sellData.buyers;
+      } else if (Array.isArray(sellData)) {
+        sellArray = sellData;
+      }
+
+      const ownerSellPayments = sellArray
+        .filter(b => b.ownerEmail === ownerEmail)
+        .map(b => ({
+          id: b._id,
+          customerId: b._id.slice(-6),
+          name: b.car,
+          price: b.price || 0,
+          customer: b.name,
+          soldDate: b.createdAt?.split("T")[0],
+          paymentStatus: b.payment?.toLowerCase() === "cash" ? "Unpaid" : "Paid",
+        }));
+
+      setSoldVehicles(ownerSellPayments);
+
+    } catch (err) {
+      console.error("Payment fetch error:", err);
+    }
+  };
+
+  fetchPayments();
+}, []);
+
 
   // Compute revenue & paid amounts
   const rentedWithRevenue = rentedVehicles.map(v => ({

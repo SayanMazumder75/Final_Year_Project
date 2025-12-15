@@ -20,6 +20,7 @@ const CarRentalForm = () => {
     pickupTime: "",
     payment: "",
     ownerEmail: carData.ownerEmail || "",
+    totalAmount: "",
   });
 
   const paymentOptions = [
@@ -86,25 +87,11 @@ const CarRentalForm = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/rental", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          price: totalAmount, // send total price
-        }),
-      });
-
-      if (!res.ok) throw new Error("Failed to save rental");
-
-      const data = await res.json();
-      console.log("Rental saved:", data);
-
       navigate("/RentPaymentPage", {
         state: {
           formData: {
             ...formData,
-            price: totalAmount,
+            totalAmount: totalAmount,
           },
         },
       });

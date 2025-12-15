@@ -11,6 +11,7 @@ const CarRentalSchema = new mongoose.Schema(
     pickupTime: { type: String, required: true },
     payment: { type: String, required: true },
     ownerEmail: { type: String, required: true},
+    totalAmount: { type: Number, required: true },
 
   },
   { timestamps: true }

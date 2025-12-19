@@ -186,10 +186,130 @@
 //   );
 // }
 // ....................
+// import React, { useState, useEffect } from "react";
+// import { Link, useLocation } from "react-router-dom";
+// import Footer from "../Homepage/Footer";
+// import RelatedProducts from "../RelatedProducts/RelatedProducts";
+
+// export default function Details() {
+//   const location = useLocation();
+//   const carData = location.state?.carData || {};
+
+//   const photos = Array.isArray(carData.photos)
+//     ? carData.photos
+//     : carData.photos
+//     ? [carData.photos]
+//     : ["https://via.placeholder.com/1200x600?text=No+Image+Available"];
+
+//   const [currentIndex, setCurrentIndex] = useState(0);
+
+//   useEffect(() => {
+//     if (photos.length <= 1) return;
+//     const interval = setInterval(() => {
+//       setCurrentIndex((prev) => (prev + 1) % photos.length);
+//     }, 4000);
+//     return () => clearInterval(interval);
+//   }, [photos]);
+
+//   const handlePrev = () =>
+//     setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
+//   const handleNext = () =>
+//     setCurrentIndex((prev) => (prev + 1) % photos.length);
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 px-4 py-6">
+//       {/* Back link */}
+//       <Link
+//         to="/User_Dashboard"
+//         className="inline-block mb-6 text-blue-600 hover:underline"
+//       >
+//         ← Back to Dashboard
+//       </Link>
+
+//       {/* Layout */}
+//       <div className="grid grid-cols-1 lg:grid-cols-[45%_55%] gap-10 max-w-7xl mx-auto">
+//         {/* LEFT — Images */}
+//         <div>
+//           <img
+//             src={photos[currentIndex]}
+//             alt="Car"
+//             className="w-full h-[420px] object-cover rounded-lg"
+//           />
+//         </div>
+
+//         {/* RIGHT — Details */}
+//         <div className="space-y-6">
+//           <h1 className="text-3xl font-semibold">
+//             {carData.brand || carData.title}{" "}
+//             {carData.year ? `(${carData.year})` : ""}
+//           </h1>
+
+//           <p className="text-green-600 text-xl font-medium">
+//             Rental Price: ₹{carData.price}
+//           </p>
+
+//           <p className="text-gray-600">
+//             {carData.description || "No description available"}
+//           </p>
+
+//           {/* Features */}
+//           <div>
+//             <h3 className="text-xl font-semibold mb-3">Key Features</h3>
+//             <div className="grid grid-cols-2 gap-2 text-gray-700">
+//               <div>✓ GPS Navigation</div>
+//               <div>✓ Bluetooth Connectivity</div>
+//               <div>✓ Automatic Climate Control</div>
+//               <div>✓ Rearview Camera</div>
+//               <div>✓ Cruise Control</div>
+//               <div>✓ Keyless Entry</div>
+//             </div>
+//           </div>
+
+//           {/* Specifications */}
+//           <div>
+//             <h3 className="text-xl font-semibold mb-3">Specifications</h3>
+//             <div className="grid grid-cols-2 gap-y-3 text-gray-700">
+//               <div><strong>Transmission:</strong> {carData.transmission}</div>
+//               <div><strong>Fuel Type:</strong> {carData.fuel}</div>
+//               <div><strong>KMs Driven:</strong> {carData.kmsDriven}</div>
+//               <div><strong>Year:</strong> {carData.year}</div>
+//             </div>
+//           </div>
+
+//           {/* ✅ SAME RENT BUTTON AS Rent.jsx */}
+//           <Link
+//             to="/booking"
+//             state={{
+//               carData: {
+//                 name: carData.brand || carData.title,
+//                 price: carData.price,
+//                 ownerEmail:
+//                   carData.ownerEmail || carData.email || "",
+//                 carId: carData.carId,
+//               },
+//             }}
+//           >
+//             <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+//               Rent This Car
+//             </button>
+//           </Link>
+//         </div>
+//       </div>
+
+//       {/* Related */}
+//       <div className="mt-12">
+//         <RelatedProducts type="rent" />
+//       </div>
+
+//       <Footer />
+//     </div>
+//   );
+// }
+// .........................
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Footer from "../Homepage/Footer";
-import RelatedProducts from "../RelatedProducts/RelatedProducts";
+import RelatedRentVehicles from "../RelatedProducts/RelatedRentVehicles";
 
 export default function Details() {
   const location = useLocation();
@@ -276,7 +396,7 @@ export default function Details() {
             </div>
           </div>
 
-          {/* ✅ SAME RENT BUTTON AS Rent.jsx */}
+          {/* SAME RENT BUTTON AS Rent.jsx */}
           <Link
             to="/booking"
             state={{
@@ -298,11 +418,10 @@ export default function Details() {
 
       {/* Related */}
       <div className="mt-12">
-        <RelatedProducts type="rent" />
+        <RelatedRentVehicles type="rent" />
       </div>
 
       <Footer />
     </div>
   );
 }
-

@@ -24,6 +24,7 @@ import { PaymentPage, PaymentSuccess } from './PaymentPage/PaymentPage';
 import { RentPaymentPage, RentPaymentSuccess } from "./PaymentPage/RentPaymentPage";
 import BuyDetails from "./Pages/BuyDetails";
 import Details from "./Pages/Details";
+import RentDetails from "./Pages/RentDetails";
 
 // Import chatbot images
 import sendIcon from "./assets/send-icon.png";
@@ -404,6 +405,7 @@ function App() {
             {/* Details */}
             <Route path="/Details" element={<Details/>} />
             <Route path="/BuyDetails" element={<BuyDetails/>} />
+            <Route path="/rentdetails" element={<RentDetails />} />
             
             
             

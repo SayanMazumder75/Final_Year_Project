@@ -1,0 +1,24 @@
+/* .my-cars-section {
+  padding: 10px 0;
+}
+
+.car-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.car-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.stat-card {
+  background: #1f2937;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal styles */
+/* .fixed {
+  z-index: 1000;
+} */

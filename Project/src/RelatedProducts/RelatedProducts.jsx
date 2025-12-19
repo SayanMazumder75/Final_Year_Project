@@ -1,63 +1,90 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './RelatedProducts.css';
-
-const relatedCars = [
-    {
-        id: 2,
-        name: "BMW 5 Series",
-        image: "https://i2.wp.com/www.ispravochnik.com/cdn/pictures/1_5ecfd6273fa1a.jpg",
-        rent_price: 120,
-        buy_price: "55,000"
-    },
-    {
-        id: 3,
-        name: "Honda Civic",
-        image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=800&q=80",
-        rent_price: 50,
-        buy_price: "22,000"
-    },
-    {
-        id: 4,
-        name: "Audi A6",
-        image: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=800&q=80",
-        rent_price: 150,
-        buy_price: "60,000"
-    }
-];
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./RelatedProducts.css";
 
 const RelatedProducts = () => {
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const handleItemClick = (carId) => {
-    console.log("Navigating to car:", carId); // Debug log
-    navigate(`/car/${carId}`);
-    // Scroll to top after navigation (optional)
+  // Fetched cars from backend
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/product/get");
+        if (!res.ok) throw new Error("Failed to fetch cars");
+        const data = await res.json();
+
+        // Only show cars available for selling (Buy)
+        const relatedCars = data
+          .filter((car) => car.adType === "sell")
+          .slice(0, 6); //suggestions limit right here
+
+        setCars(relatedCars);
+      } catch (err) {
+        console.error("Error fetching related cars:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
+
+  // Navigate to BuyDetails page with state
+  const handleItemClick = (car) => {
+    navigate("/buydetails", {
+      state: {
+        carData: {
+          name: car.brand || car.title,
+          price: car.price,
+          ownerEmail: car.owner?.email || car.email || "",
+          description: car.description,
+          adTitle: car.adTitle,
+          carId: car._id,
+          brand: car.brand,
+          year: car.year,
+          fuel: car.fuel,
+          transmission: car.transmission,
+          kmsDriven: car.kmsDriven,
+          noOfOwners: car.noOfOwners,
+          photos: car.photos,
+          state: car.state,
+          phoneNumber: car.phoneNumber,
+        },
+      },
+    });
+
     window.scrollTo(0, 0);
   };
 
+  if (loading) return <p className="text-center">Loading related vehicles...</p>;
+
   return (
-    <div className='relatedproducts'>
-        <h2 className="relatedproducts-title">Related Vehicles</h2>
-        <hr className="relatedproducts-divider" />
-        <div className="relatedproducts-item">
-            {relatedCars.map((item, i) => {
-                return (
-                  <div 
-                    key={i} 
-                    className="related-item clickable-item"
-                    onClick={() => handleItemClick(item.id)}
-                  >
-                    <img src={item.image} alt={item.name} className="item-image" />
-                    <h3 className="item-name">{item.name}</h3>
-                    <p className="item-price rent-price">Rent: ${item.rent_price}/day</p>
-                    <p className="item-price buy-price">Buy: ${item.buy_price}</p>
-                  </div>
-                )
-            })}
-        </div>
+    <div className="relatedproducts">
+      <h2 className="relatedproducts-title">Related Vehicles</h2>
+      <hr className="relatedproducts-divider" />
+
+      <div className="relatedproducts-item">
+        {cars.map((car) => (
+          <div
+            key={car._id}
+            className="related-item clickable-item"
+            onClick={() => handleItemClick(car)}
+          >
+            <img
+              src={car.photos?.[0] || "https://via.placeholder.com/300"}
+              alt={car.brand || car.title}
+              className="item-image"
+            />
+            <h3 className="item-name">{car.brand || car.title}</h3>
+            <p className="item-price buy-price">Buy: ₹{car.price}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
+
 
 export default RelatedProducts;

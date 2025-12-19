@@ -17,8 +17,6 @@ import Preloader from "./Preloader";
 import AdminSignup from "./Login_Signup/AdminSignup";
 import AdminLogin from "./Login_Signup/AdminLogin";
 import PostAd from "./Admin_Panel/PostAd";
-import Wishlist from "./User_Dashboard/Wishlist";
-
 import WebOwnerLogin from "./Login_Signup/WebOwnerLogin";
 import WebOwnerDashboard from "./Admin_Control/WebOwnerDashboard";
 import AfterLogin from "./User_Dashboard/AfterLogin";
@@ -395,7 +393,6 @@ function App() {
 
             {/* User Dashboard routes */}
             <Route path="/User_Dashboard" element={<User_Dashboard />} />
-            <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/AfterLogin" element={<AfterLogin />} />
             <Route path="/Buy" element={<Buy />} />
             <Route path="/Rent" element={<Rent />} />

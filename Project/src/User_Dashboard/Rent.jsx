@@ -5,15 +5,9 @@ import rental2 from "./rental2.jpg";
 
 export default function Rent() {
   const [cars, setCars] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Load wishlist from localStorage
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem("vehicleWishlist");
-    if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
-  }, []);
 
   // Fetch rent cars from backend
   useEffect(() => {
@@ -35,17 +29,7 @@ export default function Rent() {
     fetchCars();
   }, []);
 
-  // Toggle wishlist
-  const toggleWishlist = (id) => {
-    const idStr = id.toString();
-    const updated = wishlist.includes(idStr)
-      ? wishlist.filter((i) => i !== idStr)
-      : [...wishlist, idStr];
-    setWishlist(updated);
-    localStorage.setItem("vehicleWishlist", JSON.stringify(updated));
-  };
-
-  const isInWishlist = (id) => wishlist.includes(id.toString());
+ 
 
   if (loading) return <p className="text-center mt-10">Loading cars...</p>;
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
@@ -84,14 +68,7 @@ export default function Rent() {
               key={car._id}
               className="bg-white rounded-2xl shadow-lg overflow-hidden relative hover:shadow-2xl transition"
             >
-              {/* Wishlist */}
-              <button
-                onClick={() => toggleWishlist(car._id)}
-                className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md text-2xl"
-              >
-                {isInWishlist(car._id) ? "❤" : "🤍"}
-              </button>
-
+              
               {/* Car Image */}
               <img
                 src={car.photos && car.photos[0]}
@@ -168,11 +145,6 @@ export default function Rent() {
           enjoy a seamless rental experience for any occasion — short trips,
           weekend getaways, or just for fun.
         </p>
-        <Link to="/Wishlist">
-          <button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 rounded-xl text-lg transition-shadow shadow-lg hover:shadow-xl">
-            Your Wishlist Awaits
-          </button>
-        </Link>
       </section>
 
       {/* Footer */}

@@ -183,11 +183,6 @@ export default function User_Dashboard() {
         <p className="mb-8 text-lg md:text-xl max-w-2xl mx-auto">
           Explore our premium collection of cars and make your journey unforgettable. Whether it's renting for a weekend getaway or buying your ultimate ride, we make it seamless and hassle-free.
         </p>
-        <Link to="/wishlist">
-          <button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-4 rounded-xl text-lg transition-shadow shadow-lg hover:shadow-xl">
-            Explore Wishlist
-          </button>
-        </Link>
       </section>
 
 
@@ -204,7 +199,7 @@ export default function User_Dashboard() {
             <h4 className="text-lg font-semibold text-white mb-3">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li><Link to="/User_Dashboard" className="hover:text-white">Home</Link></li>
-              <li><Link to="/wishlist" className="hover:text-white">My Wishlist</Link></li>
+              {/* <li><Link to="/wishlist" className="hover:text-white">My Wishlist</Link></li> */}
               <li><Link to="/booking" className="hover:text-white">Rent a Car</Link></li>
               <li><Link to="/buying" className="hover:text-white">Buy a Car</Link></li>
             </ul>

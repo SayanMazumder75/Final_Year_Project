@@ -106,7 +106,7 @@ export default function Rent() {
                       carData: {
                         name: car.brand || car.title,
                         price: car.price,
-                        ownerEmail: car.owner?.email || "",
+                        ownerEmail: car.email || car.ownerEmail || "",
                         description: car.description,
                         adTitle: car.adTitle,
                         carId: car._id,

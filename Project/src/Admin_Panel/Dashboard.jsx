@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
-import Sidebar from "./Sidebar";
 import Footer from "../Homepage/Footer";
 import { useNavigate } from "react-router-dom";
 import {
@@ -73,7 +72,7 @@ export default function Dashboard() {
     fetchAds();
   }, []);
 
-    // Edit ad
+  // Edit ad
   const handleEdit = (ad) => {
     localStorage.setItem("editAd", JSON.stringify(ad));
     navigate("/PostAd");
@@ -96,162 +95,150 @@ export default function Dashboard() {
     }
   };
   return (
-  <div className="flex h-screen bg-gray-700 overflow-hidden">
-    {/* Sidebar */}
-    <div className="md:sticky md:top-0 h-screen">
-      <Sidebar open={open} setOpen={setOpen} />
-    </div>
-
-    {/* Overlay (mobile only) */}
-    {open && (
+    <div className="flex h-screen bg-gray-700 overflow-hidden">
+      
+      {/* Main scrollable area */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
-        onClick={() => setOpen(false)}
-      ></div>
-    )}
-
-    {/* Main scrollable area */}
-    <div
-      className={`flex-1 flex flex-col overflow-y-auto overflow-x-hidden transition-opacity duration-300 ${
-        open
-          ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
-          : "opacity-100"
-      }`}
-    >
-      {/* Header */}
-      {!open && (
-        <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">
-          <Header />
-        </div>
-      )}
-
-      {/* Dashboard Content */}
-      <main className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Owner Ads Section */}
-        <div className="md:col-span-2">
-          <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-gray-800">My Ads</h2>
-              <button
-                onClick={handleAdd}
-                className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
-              >
-                Add New Ad
-              </button>
-            </div>
-
-            {loadingAds ? (
-              <p className="text-gray-500">Loading...</p>
-            ) : errorAds ? (
-              <p className="text-red-500">{errorAds}</p>
-            ) : ads.length === 0 ? (
-              <p className="text-gray-600">No ads found</p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {ads.map((ad) => (
-                  /* ======= UPDATED PROFESSIONAL AD CARD ======= */
-                  <div
-                    key={ad._id}
-                    className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 p-5 flex flex-col justify-between"
-                  >
-                    {/* Top Section */}
-                    <div>
-                      {/* Header */}
-                      <div className="flex justify-between items-start mb-3">
-                        <h3 className="text-lg font-semibold text-gray-800 truncate">
-                          {ad.title}
-                        </h3>
-
-                        <span
-                          className={`px-3 py-1 text-xs font-medium rounded-full ${
-                            ad.adType === "rent"
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-green-100 text-green-700"
-                          }`}
-                        >
-                          {ad.adType.toUpperCase()}
-                        </span>
-                      </div>
-
-                      {/* Info Grid */}
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-600">
-                        <p>
-                          <span className="font-medium text-gray-700">
-                            Brand:
-                          </span>{" "}
-                          {ad.brand}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-700">
-                            Year:
-                          </span>{" "}
-                          {ad.year}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-700">
-                            Fuel:
-                          </span>{" "}
-                          {ad.fuel}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-700">
-                            Gear:
-                          </span>{" "}
-                          {ad.transmission}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-700">
-                            KMs:
-                          </span>{" "}
-                          {ad.kmsDriven}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-700">
-                            Owners:
-                          </span>{" "}
-                          {ad.noOfOwners}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-700">
-                            State:
-                          </span>{" "}
-                          {ad.state}
-                        </p>
-                        <p>
-                          <span className="font-medium text-gray-700">
-                            Phone:
-                          </span>{" "}
-                          {ad.mobilePhone}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Bottom Section */}
-                    <div className="mt-5 flex items-center justify-between border-t pt-4">
-                      {/* Price */}
-                      <div>
-                        <p className="text-xs text-gray-500">Price</p>
-                        <p className="text-xl font-bold text-blue-600">
-                          ₹{ad.price}
-                        </p>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => handleDelete(ad._id)}
-                          className="px-4 py-1.5 text-sm rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white transition"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+        className={`flex-1 flex flex-col overflow-y-auto overflow-x-hidden transition-opacity duration-300 ${
+          open
+            ? "opacity-30 pointer-events-none md:opacity-100 md:pointer-events-auto"
+            : "opacity-100"
+        }`}
+      >
+        {/* Header */}
+        {!open && (
+          <div className="md:w-full shadow-md sticky top-0 z-10 bg-white">
+            <Header />
           </div>
-        </div>
+        )}
+
+        {/* Dashboard Content */}
+        <main className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Owner Ads Section */}
+          <div className="md:col-span-2">
+            <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-gray-800">My Ads</h2>
+                <button
+                  onClick={handleAdd}
+                  className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                  Add New Ad
+                </button>
+              </div>
+
+              {loadingAds ? (
+                <p className="text-gray-500">Loading...</p>
+              ) : errorAds ? (
+                <p className="text-red-500">{errorAds}</p>
+              ) : ads.length === 0 ? (
+                <p className="text-gray-600">No ads found</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {ads.map((ad) => (
+                    /* ======= UPDATED PROFESSIONAL AD CARD ======= */
+                    <div
+                      key={ad._id}
+                      className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 p-5 flex flex-col justify-between"
+                    >
+                      {/* Top Section */}
+                      <div>
+                        {/* Header */}
+                        <div className="flex justify-between items-start mb-3">
+                          <h3 className="text-lg font-semibold text-gray-800 truncate">
+                            {ad.title}
+                          </h3>
+
+                          <span
+                            className={`px-3 py-1 text-xs font-medium rounded-full ${
+                              ad.adType === "rent"
+                                ? "bg-blue-100 text-blue-700"
+                                : "bg-green-100 text-green-700"
+                            }`}
+                          >
+                            {ad.adType.toUpperCase()}
+                          </span>
+                        </div>
+
+                        {/* Info Grid */}
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-600">
+                          <p>
+                            <span className="font-medium text-gray-700">
+                              Brand:
+                            </span>{" "}
+                            {ad.brand}
+                          </p>
+                          <p>
+                            <span className="font-medium text-gray-700">
+                              Year:
+                            </span>{" "}
+                            {ad.year}
+                          </p>
+                          <p>
+                            <span className="font-medium text-gray-700">
+                              Fuel:
+                            </span>{" "}
+                            {ad.fuel}
+                          </p>
+                          <p>
+                            <span className="font-medium text-gray-700">
+                              Gear:
+                            </span>{" "}
+                            {ad.transmission}
+                          </p>
+                          <p>
+                            <span className="font-medium text-gray-700">
+                              KMs:
+                            </span>{" "}
+                            {ad.kmsDriven}
+                          </p>
+                          <p>
+                            <span className="font-medium text-gray-700">
+                              Owners:
+                            </span>{" "}
+                            {ad.noOfOwners}
+                          </p>
+                          <p>
+                            <span className="font-medium text-gray-700">
+                              State:
+                            </span>{" "}
+                            {ad.state}
+                          </p>
+                          <p>
+                            <span className="font-medium text-gray-700">
+                              Phone:
+                            </span>{" "}
+                            {ad.mobilePhone}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Bottom Section */}
+                      <div className="mt-5 flex items-center justify-between border-t pt-4">
+                        {/* Price */}
+                        <div>
+                          <p className="text-xs text-gray-500">Price</p>
+                          <p className="text-xl font-bold text-blue-600">
+                            ₹{ad.price}
+                          </p>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleDelete(ad._id)}
+                            className="px-4 py-1.5 text-sm rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white transition"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Company Growth */}
           <div className="bg-white rounded-lg shadow-md p-5 space-y-6">
@@ -276,7 +263,9 @@ export default function Dashboard() {
 
           {/* Last 12 Months Sales (Donut Chart) */}
           <section className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
-            <h2 className="text-xl font-semibold text-gray-700">Last 12 Months Sales</h2>
+            <h2 className="text-xl font-semibold text-gray-700">
+              Last 12 Months Sales
+            </h2>
 
             <div className="w-full h-80 sales-graph relative">
               <ResponsiveContainer>
@@ -346,7 +335,10 @@ export default function Dashboard() {
                     }
                   >
                     {salesData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={`url(#color${entry.month})`} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={`url(#color${entry.month})`}
+                      />
                     ))}
                   </Pie>
 
@@ -363,7 +355,9 @@ export default function Dashboard() {
 
               {/* Center text inside donut */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-lg font-semibold text-gray-600">Total</span>
+                <span className="text-lg font-semibold text-gray-600">
+                  Total
+                </span>
                 <span className="text-2xl font-bold text-gray-800">
                   {salesData.reduce((acc, cur) => acc + cur.sales, 0)}
                 </span>
@@ -373,8 +367,6 @@ export default function Dashboard() {
         </main>
         <Footer />
       </div>
-    
     </div>
-    
   );
 }

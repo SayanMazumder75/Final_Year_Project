@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Footer from "../Homepage/Footer";
 
@@ -15,7 +14,7 @@ export default function Dashboard() {
   const fetchBuyers = async () => {
     try {
       /* =========================
-         1️⃣ GET LOGGED-IN OWNER
+         GET LOGGED-IN OWNER
       ========================== */
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -38,7 +37,7 @@ export default function Dashboard() {
       const ownerEmail = ownerData.email; // ✅ ONLY EMAIL
 
       /* =========================
-         2️⃣ FETCH BUYERS
+         FETCH BUYERS
       ========================== */
       const response = await fetch("http://localhost:5000/api/buyer");
       if (!response.ok) {
@@ -55,7 +54,7 @@ export default function Dashboard() {
       }
 
       /* =========================
-         3️⃣ FILTER BY ownerEmail
+       FILTER BY ownerEmail
       ========================== */
       const ownerBuyers = buyersArray.filter(
         (b) => b.ownerEmail === ownerEmail
@@ -100,17 +99,7 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-gray-700 overflow-hidden">
       {/* Sidebar */}
-      <div className="md:sticky md:top-0 h-screen">
-        <Sidebar open={open} setOpen={setOpen} />
-      </div>
-
-      {/* Overlay for small screens */}
-      {open && (
-        <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
-          onClick={() => setOpen(false)}
-        />
-      )}
+      
 
       {/* Main Content */}
       <div

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "../Homepage/Footer";
-import Sidebar from "./Sidebar";
 import Update from "./Update";
 
 export default function Profile() {
@@ -126,7 +125,6 @@ export default function Profile() {
 
   return (
     <div className="flex h-screen bg-gray-700">
-      <Sidebar open={open} setOpen={setOpen} />
       <div className="flex-1 flex flex-col">
         <Header />
         <div className="bg-gray-700 flex items-center justify-center p-6">

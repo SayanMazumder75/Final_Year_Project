@@ -37,9 +37,17 @@ export default function Login() {
       console.log("Response:", data);
 
       if (response.ok) {
-      
-        window.location.href = "/User_Dashboard";
-      } else {
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      email: data?.user?.email || form.email,
+    })
+  );
+
+  window.location.href = "/User_Dashboard";
+}
+ else {
         alert(data.msg || "Login failed. Please try again.");
       }
     } catch (error) {

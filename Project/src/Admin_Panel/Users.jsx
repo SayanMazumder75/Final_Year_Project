@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Footer from "../Homepage/Footer";
 
@@ -59,16 +58,8 @@ export default function Users() {
   return (
     <div className="flex h-screen bg-gray-700 overflow-hidden">
       {/* Sidebar */}
-      <div className="md:sticky md:top-0 h-screen">
-        <Sidebar open={open} setOpen={setOpen} />
-      </div>
-
-      {open && (
-        <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
-          onClick={() => setOpen(false)}
-        ></div>
-      )}
+      
+      
 
       <div
         className={`flex-1 flex flex-col overflow-y-auto overflow-x-hidden transition-opacity duration-300 ${

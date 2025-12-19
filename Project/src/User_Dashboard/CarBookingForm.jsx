@@ -7,10 +7,14 @@ const CarRentalForm = () => {
   const location = useLocation();
   const carData = location.state?.carData || {};
 
+  // Get logged-in user name
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const userName = userData?.email ;
+  
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    email: "",
+    email: userName,
     car: carData.name || "",
     price: carData.price || "",
     pickupLocation: "",
@@ -24,11 +28,9 @@ const CarRentalForm = () => {
   });
 
   const paymentOptions = [
-    "Credit Card",
-    "Debit Card",
-    "UPI",
+    
     "Net Banking",
-    "Cash",
+    
   ];
 
   const handleChange = (e) => {
@@ -166,18 +168,18 @@ const CarRentalForm = () => {
             <input
               type="email"
               name="email"
-              placeholder="john@example.com"
               value={formData.email}
               onChange={handleChange}
+              disabled
               required
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 text-gray-300 focus:ring-indigo-500 outline-none"
+className="w-full px-4 py-3 border rounded-lg text-gray-300 bg-gray-600 cursor-not-allowed"
             />
           </div>
 
           {/* Owner Email */}
           <div className="md:col-span-2">
             <label className="block text-gray-300 font-medium mb-2">
-              Owner Email
+              Car Owner Email
             </label>
             <input
               type="email"

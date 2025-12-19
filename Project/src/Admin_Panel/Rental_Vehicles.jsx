@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Footer from "../Homepage/Footer";
 import jsPDF from "jspdf";
@@ -20,7 +19,7 @@ export default function Dashboard() {
       setLoading(true);
 
       /* =========================
-         1️⃣ GET LOGGED-IN OWNER
+         GET LOGGED-IN OWNER
       ========================== */
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -43,9 +42,8 @@ export default function Dashboard() {
       const ownerData = await ownerRes.json();
       const ownerEmail = ownerData.email; // ✅ ONLY EMAIL
 
-      /* =========================
-         2️⃣ FETCH RENTALS
-      ========================== */
+      
+        //  ️FETCH RENTALS
       const rentalRes = await fetch("http://localhost:5000/api/rental");
       if (!rentalRes.ok) {
         throw new Error("Failed to fetch rentals");
@@ -60,10 +58,7 @@ export default function Dashboard() {
         rentalsArray = rentalData;
       }
 
-      /* =========================
-         3️⃣ FILTER BY ownerEmail
-         (NO adType filter needed)
-      ========================== */
+      // FILTER BY ownerEmail
       const ownerRentals = rentalsArray.filter(
         (r) => r.ownerEmail === ownerEmail
       );
@@ -126,11 +121,11 @@ export default function Dashboard() {
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
 
-  /* ================= PAGE BACKGROUND ================= */
+  // PAGE BACKGROUND
   doc.setFillColor(15, 23, 42); // dark slate
   doc.rect(0, 0, pageWidth, pageHeight, "F");
 
-  /* ================= LOGO ================= */
+  //LOGO
   const imgWidth = 36;
   const imgHeight = 18;
   const imgX = 20;
@@ -142,7 +137,7 @@ export default function Dashboard() {
     console.warn("Logo load failed:", err);
   }
 
-  /* ================= HEADER ================= */
+  // HEADER
   doc.setFontSize(18);
   doc.setTextColor(255, 255, 255);
   doc.text("CAR RENTAL CONFIRMATION", pageWidth - 20, 30, {
@@ -158,7 +153,7 @@ export default function Dashboard() {
     { align: "right" }
   );
 
-  /* ================= MAIN CARD ================= */
+  // MAIN CARD
   doc.setFillColor(30, 41, 59);
   doc.roundedRect(15, 50, pageWidth - 30, 200, 8, 8, "F");
 
@@ -245,9 +240,6 @@ export default function Dashboard() {
 
   return (
     <div className="flex h-screen bg-gray-700 overflow-hidden">
-      <div className="md:sticky md:top-0 h-screen">
-        <Sidebar open={open} setOpen={setOpen} />
-      </div>
 
       {open && (
         <div

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "../Admin_Panel/Header";
+import Header from "./Header";
 import { Link, useNavigate } from "react-router-dom";
 import rental2 from "./rental2.jpg";
 

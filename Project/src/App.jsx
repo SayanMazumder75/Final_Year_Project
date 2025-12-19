@@ -5,11 +5,9 @@ import CarBuyForm from "./User_Dashboard/CurBuyForm";
 import Homepage from './Homepage/Homepage';
 import Dashboard from "./Admin_Panel/Dashboard";
 import Profile from "./Admin_Panel/Profile";
-import Setting from "./Admin_Panel/Setting";
 import Users from "./Admin_Panel/Users";
 import Sell_Vehicles from "./Admin_Panel/Sell_Vehicles";
 import Rental_Vehicles from "./Admin_Panel/Rental_Vehicles";
-import Payments from "./Admin_Panel/Payments";
 import User_Dashboard from "./User_Dashboard/User_Dashboard";
 import Signup from "./Login_Signup/Signup";
 import Login from "./Login_Signup/Login";
@@ -384,11 +382,9 @@ function App() {
             {/* Admin Panel routes */}
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/Users" element={<Users />} />
-            <Route path="/Setting" element={<Setting />} />
             <Route path="/Profile" element={<Profile />} />
             <Route path="/Sell_Vehicles" element={<Sell_Vehicles />} />
             <Route path="/Rental_Vehicles" element={<Rental_Vehicles />} />
-            <Route path="/Payments" element={<Payments />} />
 
             {/* Web_Admin_Control */}
             <Route path="/WebOwnerDashboard" element={<WebOwnerDashboard />} />

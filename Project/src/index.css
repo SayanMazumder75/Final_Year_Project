@@ -52,7 +52,7 @@ body, html {
   border-radius: 20px;
   box-shadow: var(--shadow-heavy);
   z-index: 10000;
-  display: none;
+  display: flex;
   flex-direction: column;
   border: 1px solid rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
@@ -397,4 +397,60 @@ body, html {
     bottom: 20px;
     right: 20px;
   }
+}
+
+/* ================= CHATBOT QUICK OPTIONS ================= */
+
+/* Wrapper */
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Welcome card */
+.welcome-card {
+  background: #ffffff;
+  padding: 14px 18px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-light);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Buttons container */
+.quick-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Individual option button */
+.quick-btn {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0066cc 100%);
+  color: white;
+  border: none;
+  border-radius: 22px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-light);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+/* Hover */
+.quick-btn:hover {
+  background: linear-gradient(135deg, var(--primary-blue-hover) 0%, #0052a3 100%);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Active */
+.quick-btn:active {
+  transform: scale(0.97);
 }

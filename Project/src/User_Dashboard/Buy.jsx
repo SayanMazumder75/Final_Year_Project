@@ -134,12 +134,12 @@ export default function Buy() {
            {/* Call to Action */}
            <section className="py-20 bg-gradient-to-r from-gray-700 via-gray-900 to-black text-center text-white px-6">
              <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
-               Rent Your Dream Car Today
+               Buy Your Dream Car Today
              </h2>
              <p className="mb-8 text-lg md:text-xl max-w-2xl mx-auto">
                Experience the thrill of driving premium cars without the commitment
                of ownership. Choose from our handpicked selection of vehicles and
-               enjoy a seamless rental experience for any occasion — short trips,
+               enjoy a seamless buying experience for any occasion — short trips,
                weekend getaways, or just for fun.
              </p>
            </section>

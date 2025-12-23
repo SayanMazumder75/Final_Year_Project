@@ -70,58 +70,9 @@ const carsData = [
 ];
 
 export default function User_Dashboard() {
-  const [wishlist, setWishlist] = useState([]);
-
-  // Load wishlist from localStorage on component mount
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem('vehicleWishlist');
-    if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
-    }
-  }, []);
-
-  const toggleWishlist = (vehicleId) => {
-    const idStr = vehicleId.toString(); // Make sure ID is always a string
-    let updatedWishlist;
-
-    if (wishlist.includes(idStr)) {
-      updatedWishlist = wishlist.filter(id => id !== idStr);
-    } else {
-      updatedWishlist = [...wishlist, idStr];
-    }
-
-    setWishlist(updatedWishlist);
-    localStorage.setItem('vehicleWishlist', JSON.stringify(updatedWishlist));
-
-    console.log("Updated Wishlist:", updatedWishlist); // Debug log
-  };
-
-
-  const isInWishlist = (vehicleId) => wishlist.includes(vehicleId.toString());
-
-
+  
   return (
     <div className="min-h-screen w-full mx-auto font-sans bg-gray-50 text-gray-900">
-      {/* Header with Wishlist Navigation */}
-      <div className="w-full shadow-md sticky top-0 z-10 bg-white">
-        <Header />
-
-        {/* Wishlist Navigation Bar */}
-        {/* <div className="bg-yellow-500 py-3 px-6">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <span className="text-black font-bold text-lg">
-              ❤ My Wishlist: {wishlist.length} {wishlist.length === 1 ? 'item' : 'items'}
-            </span>
-            <Link
-              to="/wishlist"
-              className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold transition duration-300"
-            >
-              View Wishlist
-            </Link>
-          </div>
-        </div> */}
-      </div>
-
       {/* Hero Section */}
       <section
         className="relative w-full h-[28rem] flex items-center justify-center"
@@ -143,7 +94,7 @@ export default function User_Dashboard() {
         </div>
       </section>
 
-      {/* Popular Cars Section with Wishlist Buttons */}
+      {/* Popular Cars Section */}
       <section className="py-16 px-6 sm:px-12 md:px-20 bg-gray-400 ">
         <AfterLogin />
       </section>
